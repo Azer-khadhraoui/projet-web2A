@@ -2,19 +2,17 @@
 
 class User {
     private $cin;
-    private $name;
-    private $prenom;
-    private $email;
+    private $fname;
+    private $lname;
     private $password;
     private $num;
     private $role;
 
     // Constructor
-    public function __construct($cin, $name, $prenom, $email, $password, $num, $role) {
+    public function __construct($cin, $fname, $lname, $password, $num, $role) {
         $this->cin = $cin;
-        $this->name = $name;
-        $this->prenom = $prenom;
-        $this->email = $email;
+        $this->fname = $fname;
+        $this->lname = $lname;
         $this->password = $password;
         $this->num = $num;
         $this->role = $role;
@@ -25,16 +23,12 @@ class User {
         return $this->cin;
     }
 
-    public function getName() {
-        return $this->name;
+    public function getFname() {
+        return $this->fname;
     }
 
-    public function getPrenom() {
-        return $this->prenom;
-    }
-
-    public function getEmail() {
-        return $this->email;
+    public function getLname() {
+        return $this->lname;
     }
 
     public function getPassword() {
@@ -54,16 +48,12 @@ class User {
         $this->cin = $cin;
     }
 
-    public function setName($name) {
-        $this->name = $name;
+    public function setFname($fname) {
+        $this->fname = $fname;
     }
 
-    public function setPrenom($prenom) {
-        $this->prenom = $prenom;
-    }
-
-    public function setEmail($email) {
-        $this->email = $email;
+    public function setLname($lname) {
+        $this->lname = $lname;
     }
 
     public function setPassword($password) {
