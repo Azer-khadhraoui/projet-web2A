@@ -107,26 +107,34 @@
                            <div class="col-md-3" style="margin-bottom: 40px;">
                               <label for="fname">First Name</label>
                               <input class="contactus" id="fname" placeholder="First Name" type="text" name="fname">
+                              <p id="fn" style="color: red;"></p>
                            </div>
+
                            <div class="col-md-3" style="margin-bottom: 40px;">
                               <label for="lname">Last Name</label>
                               <input class="contactus" id="lname" placeholder="Last Name" type="text" name="lname">
+                              <p id="ln" style="color: red;"></p>
                            </div>
                            <div class="col-md-3" style="margin-bottom:40px;">
                               <label for="cin">CIN</label>
                               <input class="contactus" id="cin" placeholder="CIN" type="text" name="cin">
+                              <p id="cinp" style="color: red;"></p>
                            </div>
                            <div class="col-md-3" style="margin-bottom: 40px;">
                               <label for="number">Number</label>
                               <input class="contactus" id="number" placeholder="Number" type="text" name="number">
+                              <p id="num" style="color: red;"></p>
                            </div>
+
                            <div class="col-md-3">
                               <label for="password">Password</label>
                               <input class="contactus" id="password" placeholder="Password" type="password" name="password">
+                              <p id="pwd" style="color: red;"></p>
                            </div>
                            <div class="col-md-3">
                               <label for="retype-password">Retype Password</label>
                               <input class="contactus" id="retype-password" placeholder="Retype Password" type="password" name="retype-password">
+                              <p id="pwd2" style="color: red;"></p>
                            </div>
                            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12">
                               <ul class="social_icon">
@@ -139,11 +147,109 @@
                         </div>
                         <div class="row">
                            <div class="col-md-12" style="text-align: center; margin-top: 40px;">
-                              <button class="send_btn">Sign UP</button>
+                              <button class="send_btn" type="submit">Sign UP</button>
                            </div>
                         </div>
                      </form>
                   </div>
+
+
+                  <script>
+
+         var form = document.getElementById("request");
+        var fname = document.getElementById("fname");
+        var lname = document.getElementById("lname");
+        var cin = document.getElementById("cin");
+        var num = document.getElementById("number");
+        var pwd = document.getElementById("password");
+        var pwd2 = document.getElementById("retype-password");
+
+
+
+
+
+
+        form.addEventListener("submit", function(e) {
+            let isValid = true;
+
+            // Validation for First Name
+            if (!/^[a-zA-Z]+$/.test(fname.value)) {
+                isValid = false;
+                document.getElementById("fn").innerText = "First Name must contain only letters.";
+            } else {
+                document.getElementById("fn").innerText = "";
+            }
+
+            // Validation for Last Name
+            if (!/^[a-zA-Z]+$/.test(lname.value)) {
+                isValid = false;
+                document.getElementById("ln").innerText = "Last Name must contain only letters.";
+            } else {
+                document.getElementById("ln").innerText = "";
+            }
+
+            // Validation for CIN
+            if (!/^\d+$/.test(cin.value)) {
+                isValid = false;
+                document.getElementById("cinp").innerText = "CIN must contain only numbers.";
+            } else {
+                document.getElementById("cinp").innerText = "";
+            }
+
+            // Validation for Number
+            if (!/^\d+$/.test(num.value)) {
+                isValid = false;
+                document.getElementById("num").innerText = "Number must contain only numbers.";
+            } else {
+                document.getElementById("num").innerText = "";
+            }
+
+            // Validation for Password
+            if (pwd.value.length < 6) {
+                isValid = false;
+                document.getElementById("pwd").innerText = "Password must be at least 6 characters long.";
+            } else {
+                document.getElementById("pwd").innerText = "";
+            }
+
+            // Validation for Retype Password
+            if (pwd.value !== pwd2.value) {
+                isValid = false;
+                document.getElementById("pwd2").innerText = "Passwords do not match.";
+            } else {
+                document.getElementById("pwd2").innerText = "";
+            }
+
+            
+            if (!isValid) {
+                e.preventDefault(); 
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                  </script>
+
+
+
                   
                   <div class="col-md-3 border_right">
                      <ul class="location_icon">
