@@ -1,4 +1,8 @@
 <?php
+
+include '../../Controller/usercontroller.php';
+
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $fname = $_POST['fname'];
     $lname = $_POST['lname'];
@@ -7,13 +11,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
     $retype_password = $_POST['retype-password'];
 
-    echo "<h1>Form Data</h1>";
-    echo "<p><strong>First Name:</strong> $fname</p>";
-    echo "<p><strong>Last Name:</strong> $lname</p>";
-    echo "<p><strong>CIN:</strong> $cin</p>";
-    echo "<p><strong>Number:</strong> $number</p>";
-    echo "<p><strong>Password:</strong> $password</p>";
-    echo "<p><strong>Retype Password:</strong> $retype_password</p>";
+   
+    $usr = new User($cin, $fname, $lname, $password, $number,0); 
+
+    
+    $controller = new usercontroller();
+    
+    
+    $controller->adduser($usr);
+
+    
+    echo "User added successfully.";
 } else {
     echo "No data received.";
 }
