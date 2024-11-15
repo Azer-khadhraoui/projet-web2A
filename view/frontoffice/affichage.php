@@ -3,31 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Affichage des Utilisateurs</title>
+    <title>User List</title>
     <!-- BOOTSTRAP STYLES-->
     <link href="assets/css/bootstrap.css" rel="stylesheet" />
     <!-- FONTAWESOME STYLES-->
     <link href="assets/css/font-awesome.css" rel="stylesheet" />
     <!-- CUSTOM STYLES-->
     <link href="assets/css/custom.css" rel="stylesheet" />
+    <style>
+        .navbar-custom {
+            background-color: #4CAF50;
+            padding: 7px 0;
+        }
+        .navbar-custom .navbar-brand img {
+            width: 70px;
+            height: auto;
+            margin-top: -18px;
+        }
+        .navbar-custom .navbar-text {
+            color: #fff;
+            font-size: 50px;
+            margin-left: 380px;
+        }
+        .table-custom {
+            margin-top: 100px;
+        }
+        .table-custom th, .table-custom td {
+            text-align: center;
+            vertical-align: middle;
+        }
+        .btn-custom {
+            margin: 0 5px;
+        }
+    </style>
 </head>
 <body>
-    <!-- Bande verte avec le logo -->
-    <div class="navbar navbar-inverse navbar-fixed-top" style="background-color: #4CAF50; padding: 10px 0;">
+    <!-- Bande verte avec le logo et le titre -->
+    <div class="navbar navbar-inverse navbar-fixed-top navbar-custom">
         <div class="container">
             <div class="navbar-header">
                 <a class="navbar-brand" href="#">
-                    <img src="assets/img/logoweb.jpg" style="width: 50px; height: auto;" alt="Logo" />
+                    <img src="assets/img/logoweb.jpg" alt="Logo" />
                 </a>
+                <span class="navbar-text">
+                    Users List
+                </span>
             </div>
         </div>
     </div>
-    <!-- Fin de la bande verte avec le logo -->
+    <!-- Fin de la bande verte avec le logo et le titre -->
 
-    <div class="container" style="margin-top: 70px;">
+    <div class="container table-custom">
         <div class="row">
             <div class="col-lg-12">
-                <h2 class="text-center">Liste des Utilisateurs</h2>
                 <table class="table table-bordered table-striped">
                     <thead class="thead-dark">
                         <tr>
@@ -62,8 +90,8 @@
                                     <td>{$pwd}</td>
                                     <td>{$role}</td>
                                     <td>
-                                        <a href='delete.php?cin={$cin}' class='btn btn-danger btn-sm' onclick=\"return confirm('Êtes-vous sûr de supprimer cet utilisateur ?');\">Supprimer</a>
-                                        <a href='edit.php?cin={$cin}' class='btn btn-primary btn-sm'>Modifier</a>
+                                        <a href='delete.php?cin={$cin}' class='btn btn-danger btn-sm btn-custom' onclick=\"return confirm('Are you sure you want to delete this user?');\">Delete</a>
+                                        <a href='edit.php?cin={$cin}' class='btn btn-primary btn-sm btn-custom'>Edit</a>
                                     </td>
                                   </tr>";
                         }
