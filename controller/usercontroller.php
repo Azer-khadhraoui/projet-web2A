@@ -38,10 +38,9 @@ class usercontroller
         }
     }
 
-    // Méthode pour supprimer un utilisateur
-   /* public function deleteUser($cin)
+   public function deleteUser($cin)
     {
-        $sql = "DELETE FROM users WHERE cin = :cin";
+        $sql = "DELETE FROM utilisateur WHERE cin = :cin";
         $db = config::getConnexion();
         try {
             $query = $db->prepare($sql);
@@ -52,7 +51,7 @@ class usercontroller
     }
 
     // Méthode pour mettre à jour un utilisateur
-    public function updateUser($user)
+    /*public function updateUser($user)
     {
         $sql = "UPDATE users SET fname = :fname, lname = :lname, password = :password, num = :num, role = :role WHERE cin = :cin";
         $db = config::getConnexion();
