@@ -50,24 +50,38 @@ class usercontroller
         }
     }
 
-    // Méthode pour mettre à jour un utilisateur
-    /*public function updateUser($user)
+    
+    public function updateUser($user)
     {
-        $sql = "UPDATE users SET fname = :fname, lname = :lname, password = :password, num = :num, role = :role WHERE cin = :cin";
+        $sql = "UPDATE utilisateur SET nom = :nom, prenom = :prenom, pwd = :pwd, numero = :numero, role = :role WHERE cin = :cin";
         $db = config::getConnexion();
         try {
             $query = $db->prepare($sql);
             $query->execute([
                 'cin' => $user->getCin(),
-                'fname' => $user->getFname(),
-                'lname' => $user->getLname(),
-                'password' => $user->getPassword(),
-                'num' => $user->getNum(),
+                'nom' => $user->getFname(),
+                'prenom' => $user->getLname(),
+                'pwd' => $user->getPassword(),
+                'numero' => $user->getNum(),
                 'role' => $user->getRole()
             ]);
         } catch (Exception $e) {
             die('Erreur: ' . $e->getMessage());
         }
-    }*/
+    }
+
+    // Méthode pour récupérer un utilisateur par son CIN
+    public function getUserByCin($cin)
+    {
+        $sql = "SELECT * FROM utilisateur WHERE cin = :cin";
+        $db = config::getConnexion();
+        try {
+            $query = $db->prepare($sql);
+            $query->execute(['cin' => $cin]);
+            return $query->fetch();
+        } catch (Exception $e) {
+            die('Erreur: ' . $e->getMessage());
+        }
+    }
 }
 ?>
