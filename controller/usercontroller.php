@@ -70,7 +70,7 @@ class usercontroller
         }
     }
 
-    // Méthode pour récupérer un utilisateur par son CIN
+    
     public function getUserByCin($cin)
     {
         $sql = "SELECT * FROM utilisateur WHERE cin = :cin";

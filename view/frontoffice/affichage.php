@@ -13,20 +13,20 @@
     <style>
         .navbar-custom {
             background-color: #4CAF50;
-            padding: 7px 0;
+            padding: 10px 0;
         }
         .navbar-custom .navbar-brand img {
-            width: 70px;
-            height: auto;
-            margin-top: -18px;
+            margin-top: -17px; 
+            width: 60px;
+            height: 60px;
         }
         .navbar-custom .navbar-text {
             color: #fff;
-            font-size: 50px;
-            margin-left: 380px;
+            font-size: 48px;
+            margin-left: 400px;
         }
         .table-custom {
-            margin-top: 100px;
+            margin-top: 120px; 
         }
         .table-custom th, .table-custom td {
             text-align: center;
@@ -35,22 +35,26 @@
         .btn-custom {
             margin: 0 5px;
         }
+        .ml-auto {
+            margin-left: 1100px;
+        }
     </style>
 </head>
 <body>
     <!-- Bande verte avec le logo et le titre -->
-    <div class="navbar navbar-inverse navbar-fixed-top navbar-custom">
+    <nav class="navbar navbar-expand-lg navbar-custom navbar-fixed-top">
         <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#">
-                    <img src="assets/img/logoweb.jpg" alt="Logo" />
-                </a>
-                <span class="navbar-text">
-                    Users List
-                </span>
+            <a class="navbar-brand" href="#">
+                <img src="assets/img/logoweb.jpg" alt="Logo" />
+            </a>
+            <span class="navbar-text">
+                Users List
+            </span>
+            <div class="ml-auto">
+                <a href="../backoffice/bs-simple-admin/index.html" class="btn btn-primary">Return to Dashboard</a>
             </div>
         </div>
-    </div>
+    </nav>
     <!-- Fin de la bande verte avec le logo et le titre -->
 
     <div class="container table-custom">
