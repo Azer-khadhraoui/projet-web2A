@@ -1,6 +1,6 @@
 <?php
 
-class TravelOffer {
+class prod_mang {
     private ?int $id;
     private ?string $nom_prod;
     private ?string $description;

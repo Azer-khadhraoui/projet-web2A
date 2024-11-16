@@ -1,10 +1,10 @@
 <?php
 include (__DIR__.'/../config.php');
-include (__DIR__.'/../model/product_mod.php');
+include (__DIR__.'/../model/products_mod.php');
 
 class TravelOfferController {
-    public function showTravelOffer($offer) {
-        public function listoffre() {
+    public function showoffer($offer) {
+        public function list() {
             $sql="SELECT * FROM produits";
             $db=config :: getConnexion();
             try{
