@@ -1,5 +1,5 @@
 <?php
-class Response {
+class response {
     private $id_response;
     private $id_question;
     private $id_responder;
@@ -25,11 +25,28 @@ class Response {
         ]);
         $this->id_response = $pdo->lastInsertId(); // Set the id after inserting
     }
+    public static function getByQuestionId($pdo, $id_question) {
+        $stmt = $pdo->prepare("SELECT * FROM response WHERE id_question = ? ORDER BY created_at ASC");
+        $stmt->execute([$id_question]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
     // Static method to get all responses for a specific question
     public static function getAllForQuestion($pdo, $id_question) {
         $stmt = $pdo->prepare("SELECT * FROM response WHERE id_question = ? ORDER BY created_at ASC");
         $stmt->execute([$id_question]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // New method to get comments for questions marked as suggestions
+    public static function getCommentsForSuggestions($pdo) {
+        $stmt = $pdo->query("
+            SELECT response.*
+            FROM response
+            JOIN question ON response.id_question = question.id
+            WHERE question.is_suggestion = 1
+            ORDER BY response.created_at ASC
+        ");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 

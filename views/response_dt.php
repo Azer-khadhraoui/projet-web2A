@@ -1,6 +1,7 @@
 <?php
-include 'config.php';
-include 'Response.php';
+require_once __DIR__ . '/../config.php';
+
+include 'response.php';
 
 $pdo = config::getConnexion();
 $question_id = isset($_GET['question_id']) ? (int)$_GET['question_id'] : 0;
@@ -26,6 +27,7 @@ $responses = Response::getAllForQuestion($pdo, $question_id);
     <meta charset="UTF-8">
     <title>Responses</title>
 </head>
+
 <body>
     <h1>Responses for Question #<?= $question_id ?></h1>
     <form method="POST" action="response_dt.php?question_id=<?= $question_id ?>">

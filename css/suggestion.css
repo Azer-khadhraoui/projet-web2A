@@ -1,0 +1,119 @@
+/* Base styling for the page */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Header styling */
+header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    margin: 0;
+}
+
+/* Navigation links */
+nav {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+nav a {
+    color: #4CAF50;
+    text-decoration: none;
+    font-weight: bold;
+    margin: 0 10px;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+/* Main container styling */
+.container {
+    width: 80%;
+    max-width: 800px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Section title styling */
+h2 {
+    color: #4CAF50;
+    margin-top: 0;
+}
+
+/* Form styling */
+.suggestion-form {
+    margin-bottom: 20px;
+}
+
+.suggestion-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    resize: vertical;
+    margin-bottom: 10px;
+}
+
+.suggestion-form button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.suggestion-form button:hover {
+    background-color: #45a049;
+}
+
+/* Styling for the list of suggestions */
+.suggestions-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.suggestion-item {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+    background-color: #f1f8f4;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.suggestion-item p {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.suggestion-item hr {
+    border: 0;
+    height: 1px;
+    background: #ddd;
+    margin: 10px 0;
+}
+
+/* Styling for emphasized text within suggestions */
+.suggestion-item p strong {
+    color: #4CAF50;
+}
