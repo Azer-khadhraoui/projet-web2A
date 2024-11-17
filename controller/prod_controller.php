@@ -1,6 +1,7 @@
 <?php
-include(__DIR__ . '/../config.php');
-include(__DIR__ . '/../model/products_mod.php');
+include_once __DIR__ . '/../config.php';
+include_once __DIR__ . '/../model/products_mod.php';
+
 
 class TravelOfferController {
     // Retrieve all products
@@ -17,7 +18,7 @@ class TravelOfferController {
 
     // Create a new product
     public function createProduct($nom_prod, $description, $prix, $qte, $url_img, $cat) {
-        $sql = "INSERT INTO produits (nom_prod, description, prix, qte, url_img, cat) 
+        $sql = "INSERT INTO produits (nom_prod, description, prix, qte, url_img, categorie) 
                 VALUES (:nom_prod, :description, :prix, :qte, :url_img, :cat)";
         $db = config::getConnexion();
         try {
@@ -36,12 +37,12 @@ class TravelOfferController {
                     prix = :prix, 
                     qte = :qte, 
                     url_img = :url_img, 
-                    cat = :cat 
-                WHERE id = :id";
+                    categorie = :cat 
+                WHERE id_prod = :id_prod";
         $db = config::getConnexion();
         try {
             $query = $db->prepare($sql);
-            $query->execute(compact('id', 'nom_prod', 'description', 'prix', 'qte', 'url_img', 'cat'));
+            $query->execute(compact('id', 'nom_prod', 'description', 'prix', 'qte', 'url_img', 'categorie'));
         } catch (Exception $e) {
             die("Error: " . $e->getMessage());
         }
