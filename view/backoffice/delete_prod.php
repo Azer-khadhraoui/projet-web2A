@@ -2,9 +2,9 @@
 include('../../controller/prod_controller.php'); 
 
 
-if (isset($_GET['id'])) {
+if (isset($_POST['id'])) {
     $controller = new TravelOfferController();
-    $controller->deleteProduct($_GET['id']);
+    $controller->deleteProduct($_POST['id_prod']);
     header('Location: list_products.php');
     exit();
 }

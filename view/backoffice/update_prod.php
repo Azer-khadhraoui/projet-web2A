@@ -3,12 +3,12 @@ include('../../controller/prod_controller.php');
 
 $controller = new TravelOfferController();
 
-if (isset($_GET['id'])) {
-    $product = $controller->getProductById($_GET['id_prod']);
+if (isset($_POST['id_prod'])) {
+    $product = $controller->getProductById($_POST['id_prod']);
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $id = $_POST['id'];
+    $id = $_POST['id_prod'];
     $nom_prod = $_POST['nom_prod'];
     $description = $_POST['description'];
     $prix = $_POST['prix'];
@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <h1>Update Product</h1>
     <form method="POST">
-        <input type="hidden" name="id" value="<?= htmlspecialchars($product['id']); ?>">
+        <input type="hidden" name="id" value="<?= htmlspecialchars($product['id_prod']); ?>">
 
         <label>Product Name:</label>
         <input type="text" name="nom_prod" value="<?= htmlspecialchars($product['nom_prod']); ?>" required>

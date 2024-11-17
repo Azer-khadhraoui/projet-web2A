@@ -10,7 +10,7 @@ class TravelOfferController {
         $db = config::getConnexion();
         try {
             $list = $db->query($sql);
-            return $list->fetchAll(PDO::FETCH_ASSOC); // Fetch data as associative array
+            return $list->fetchAll(PDO::FETCH_ASSOC); 
         } catch (Exception $e) {
             die("Error: " . $e->getMessage());
         }
