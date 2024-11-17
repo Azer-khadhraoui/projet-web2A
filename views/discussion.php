@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../config.php';
-require_once __DIR__ . '/../models/Question.php';
+require_once __DIR__ . '/../models/question.php';
 require_once __DIR__ . '/../models/response.php'; // Ensure Response class is available for handling responses
 
 // Enregistrer une nouvelle question
@@ -47,6 +47,8 @@ $questions = Question::getAll($pdo);
                 <li>
                     <strong>Question #<?= $q['id_question'] ?>:</strong> <?= htmlspecialchars($q['question_text']) ?>
                     <em>(Posté le : <?= $q['created_at'] ?>)</em>
+                    <a href="views/updateQuestion.php?id=<?= $q['id_question'] ?>">Modifier</a>
+                    <a href="views/deleteQuestion.php?id=<?= $q['id_question'] ?>" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette question ?');">Supprimer</a>
 
                     <!-- Display responses for each question -->
                     <?php
@@ -56,8 +58,12 @@ $questions = Question::getAll($pdo);
                     ?>
                         <ul>
                             <?php foreach ($responses as $response): ?>
-                                <li><strong>Réponse:</strong> <?= htmlspecialchars($response['response_text']) ?> 
-                                <em>(Posté le : <?= $response['created_at'] ?>)</em></li>
+                                <li>
+                                    <strong>Réponse:</strong> <?= htmlspecialchars($response['response_text']) ?>
+                                    <em>(Posté le : <?= $response['created_at'] ?>)</em>
+                                    <a href="views/updateResponse.php?id=<?= $response['id_response'] ?>">Modifier</a>
+                                    <a href="views/deleteResponse.php?id=<?= $response['id_response'] ?>" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette réponse ?');">Supprimer</a>
+                                </li>
                             <?php endforeach; ?>
                         </ul>
                     <?php endif; ?>

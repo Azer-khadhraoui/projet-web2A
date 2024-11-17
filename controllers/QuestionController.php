@@ -24,5 +24,26 @@ class QuestionController {
         $pdo = config::getConnexion();
         return Question::getAll($pdo);
     }
+    public function updateQuestion($questionText, $id) {
+        $pdo = config::getConnexion();
+        $query = "UPDATE question SET question_text = '$questionText' WHERE id_question = $id";
+        $pdo->exec($query);
+    }
+    
+    
+    public function deleteQuestion($id) {
+        $pdo = config::getConnexion();
+        $sql = "DELETE FROM question WHERE id_question = :id";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([':id' => $id]);
+    }
+    public function getQuestionById($id) {
+        $pdo = config::getConnexion();
+        $query = $pdo->query("SELECT * FROM question WHERE id_question = $id");
+        return $query->fetch();
+    }
+    
+    
+    
 }
 ?>
