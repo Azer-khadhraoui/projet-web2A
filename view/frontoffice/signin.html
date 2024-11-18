@@ -137,16 +137,19 @@
                                 <div class="col-md-6" style="margin-bottom: 40px;">
                                     <label for="cin">CIN</label>
                                     <input class="contactus" id="cin" placeholder="CIN" type="text" name="cin" required>
+                                    <p id="cin_error" style="color: red;"></p>
                                 </div>
                                 <div class="col-md-6" style="margin-bottom: 40px;">
                                     <label for="password">Password</label>
                                     <input class="contactus" id="password" placeholder="Password" type="password" name="password" required>
+                                    <p id="password_error" style="color: red;"></p>
                                 </div>
                                 <div class="col-md-12" style="text-align: center; margin-top: 20px;">
                                     <button class="send_btn" type="submit">Sign In</button>
                                 </div>
                             </div>
                         </form>
+                        <div id="message" style="text-align: center; color: red; margin-top: 20px;"></div>
                     </div>
                 </div>
             </div>
@@ -175,5 +178,23 @@
     <script src="js/bootstrap.bundle.min.js"></script>
     <!-- CUSTOM SCRIPTS -->
     <script src="js/custom.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const message = urlParams.get('message');
+            const cinError = urlParams.get('cin_error');
+            const passwordError = urlParams.get('password_error');
+
+            if (message) {
+                alert(message);
+            }
+            if (cinError) {
+                document.getElementById('cin_error').innerText = cinError;
+            }
+            if (passwordError) {
+                document.getElementById('password_error').innerText = passwordError;
+            }
+        });
+    </script>
 </body>
 </html>
