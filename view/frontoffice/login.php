@@ -11,9 +11,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($user && $user['pwd'] === $password) {
         $fname = $user['nom'];
         $lname = $user['prenom'];
-        $message = "Login successful! Welcome, $fname $lname.";
-        header("Location: signin.html?message=" . urlencode($message));
-        exit();
+        $role = $user['role'];
+        if ($role == 1) {
+            header("Location: ../backoffice/bs-simple-admin/index.html");
+            exit();
+        } else {
+            $message = "Login successful! Welcome, $fname $lname.";
+            header("Location: signin.html?message=" . urlencode($message));
+            exit();
+        }
     } else {
         $cin_error = "";
         $password_error = "";
