@@ -1,11 +1,16 @@
 <?php
 include('../../controller/prod_controller.php'); 
 
-
-if (isset($_POST['id'])) {
+if (isset($_GET['id'])) { // Récupérer l'ID depuis l'URL
     $controller = new TravelOfferController();
-    $controller->deleteProduct($_POST['id_prod']);
+    
+    $id = $_GET['id'];
+    $controller->deleteProduct($id);
+    
     header('Location: list_products.php');
+    exit();
+} else {
+    echo "Product ID is missing.";
     exit();
 }
 ?>

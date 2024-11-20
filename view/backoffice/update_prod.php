@@ -3,25 +3,33 @@ include('../../controller/prod_controller.php');
 
 $controller = new TravelOfferController();
 
-if (isset($_POST['id_prod'])) {
-    $product = $controller->getProductById($_POST['id_prod']);
+// Check if the product ID is passed via GET
+if (isset($_GET['id'])) {
+    $product = $controller->getProductById($_GET['id']);
+    if (!$product) {
+        echo "Product not found.";
+        exit();
+    }
+} else {
+    echo "Product ID is missing.";
+    exit();
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+// Handle form submission for updating the product
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = $_POST['id_prod'];
     $nom_prod = $_POST['nom_prod'];
     $description = $_POST['description'];
     $prix = $_POST['prix'];
     $qte = $_POST['qte'];
     $url_img = $_POST['url_img'];
-    $cat = $_POST['cat'];
+    $cat = $_POST['categorie'];
 
     $controller->updateProduct($id, $nom_prod, $description, $prix, $qte, $url_img, $cat);
     header('Location: list_products.php');
     exit();
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -78,27 +86,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <h1>Update Product</h1>
     <form method="POST">
-        <input type="hidden" name="id" value="<?= htmlspecialchars($product['id_prod']); ?>">
+        <input type="hidden" name="id_prod" value="<?= htmlspecialchars($product['id_prod']); ?>">
 
         <label>Product Name:</label>
-        <input type="text" name="nom_prod" value="<?= htmlspecialchars($product['nom_prod']); ?>" required>
+        <input type="text" name="nom_prod" value="<?= htmlspecialchars($product['nom_prod']); ?>">
 
         <label>Description:</label>
-        <textarea name="description" required><?= htmlspecialchars($product['description']); ?></textarea>
+        <textarea name="description"><?= htmlspecialchars($product['description']); ?></textarea>
 
         <label>Price:</label>
-        <input type="number" step="0.01" name="prix" value="<?= htmlspecialchars($product['prix']); ?>" required>
+        <input type="number" step="0.01" name="prix" value="<?= htmlspecialchars($product['prix']); ?>">
 
         <label>Quantity:</label>
-        <input type="number" name="qte" value="<?= htmlspecialchars($product['qte']); ?>" required>
+        <input type="number" name="qte" value="<?= htmlspecialchars($product['qte']); ?>">
 
         <label>Image URL:</label>
-        <input type="text" name="url_img" value="<?= htmlspecialchars($product['url_img']); ?>" required>
+        <input type="text" name="url_img" value="<?= htmlspecialchars($product['url_img']); ?>">
 
         <label>Category:</label>
-        <input type="number" name="cat" value="<?= htmlspecialchars($product['cat']); ?>" required>
+        <input type="number" name="categorie" value="<?= htmlspecialchars($product['categorie']); ?>">
 
         <button type="submit">Update Product</button>
+        <script src="script.js"></script>
     </form>
 </body>
 </html>

@@ -27,6 +27,7 @@
       <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+      <link rel="stylesheet" href="style.css">
    </head>
    <!-- body -->
    <body class="main-layout">
@@ -47,9 +48,9 @@
                   <div class="col-md-9">
                      <nav class="navigation">
                         <ul class="nav">
-                           <li><a href="index.html" style="font-size: 20px;"><i class="fa fa-home nav-icon" style="color: #4CAF50; font-size: 24px; margin-right: 8px;"></i> Home</a></li>
+                           <li><a href="index.php" style="font-size: 20px;"><i class="fa fa-home nav-icon" style="color: #4CAF50; font-size: 24px; margin-right: 8px;"></i> Home</a></li>
                            <li><a href="#about" style="font-size: 20px;"><i class="fa fa-info-circle nav-icon" style="color: #4CAF50; font-size: 24px; margin-right: 8px;"></i> About Us</a></li>
-                           <li><a href="products.html" style="font-size: 20px;"><i class="fa fa-leaf nav-icon" style="color: #4CAF50; font-size: 24px; margin-right: 8px;"></i> Products</a></li>
+                           <li><a href="products.php" style="font-size: 20px;"><i class="fa fa-leaf nav-icon" style="color: #4CAF50; font-size: 24px; margin-right: 8px;"></i> Products</a></li>
                            <li><a href="#contact" style="font-size: 20px;"><i class="fa fa-envelope nav-icon" style="color: #4CAF50; font-size: 24px; margin-right: 8px;"></i> Contact</a></li>
                         </ul>
                      </nav>

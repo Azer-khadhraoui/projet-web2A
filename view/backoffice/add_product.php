@@ -1,5 +1,6 @@
 <?php
 include('../../controller/prod_controller.php'); 
+include_once('../../config.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $controller = new TravelOfferController();
@@ -70,28 +71,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             background-color: #45a049;
         }
     </style>
+    
 </head>
 <body>
     <h1>Add a New Product</h1>
     <form method="POST">
         <label>Product Name:</label>
-        <input type="text" name="nom_prod" required>
+        <input type="text" name="nom_prod" >
 
         <label>Description:</label>
-        <textarea name="description" required></textarea>
+        <textarea name="description" ></textarea>
 
         <label>Price:</label>
-        <input type="number" step="0.01" name="prix" required>
+        <input type="number" step="0.01" name="prix" >
 
         <label>Quantity:</label>
-        <input type="number" name="qte" required>
+        <input type="number" name="qte" >
 
         <label>Image URL:</label>
-        <input type="text" name="url_img" required>
+        <input type="text" name="url_img" >
 
         <label>Category:</label>
-        <input type="number" name="cat" required>
+        <input type="number" name="cat" >
 
+        <script src="script.js"></script>
         <button type="submit">Add Product</button>
     </form>
 </body>

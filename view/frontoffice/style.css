@@ -1,0 +1,334 @@
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Arial', sans-serif;
+    font-weight: 600;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+    transition: color 0.3s ease;
+}
+
+a:hover{
+    color:#d57b20;
+}
+
+/* Header */
+header {
+   
+    padding: 20px 0;
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+header .logo img {
+    max-width: 100px;  /* Adjusted to make the logo smaller */
+}
+
+header .navigation ul {
+    display: flex;
+    justify-content: flex-end;
+    list-style: none;
+    padding: 0;
+    gap: 20px;
+}
+
+header .navigation ul li a {
+    font-size: 18px;
+    transition: color 0.3s ease;
+}
+
+header .navigation ul li a:hover {
+    color: #fff;
+}
+
+
+/* Banner */
+.banner_main {
+    background: url('images/banner.jpg') no-repeat center center/cover;
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+}
+
+.banner_main h1 {
+    font-size: 60px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.banner_main p {
+    font-size: 20px;
+    margin-bottom: 30px;
+}
+
+.banner_main a {
+    background-color: white;
+    color: #4CAF50;
+    padding: 12px 30px;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-radius: 25px;
+    font-size: 18px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.banner_main a:hover {
+    background-color: #4CAF50;
+    color: white;
+    transform: scale(1.05);
+}
+
+/* Section Titles */
+.titlepage h2 {
+    font-size: 30px;
+    color: #4CAF50;
+    text-align: center;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.titlepage h2::after {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 2px;
+    background-color: #4CAF50;
+    margin: 15px auto 0;
+}
+
+/* Three Box Section */
+.three_box {
+    display: flex;
+    justify-content: space-between;
+    padding: 80px 0;
+    gap: 30px;
+}
+
+.three_box .box_text {
+    flex: 1;
+    text-align: center;
+    background-color: white;
+    border-radius: 10px;
+    padding: 40px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.three_box .box_text:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.three_box .box_text img {
+    max-width: 100%;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.three_box .box_text h3 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.three_box .box_text p {
+    color: #777;
+}
+
+/* Product Section */
+.product {
+    padding: 80px 0;
+    background-color: #f9f9f9;
+}
+
+.product .product_box {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 30px;
+}
+
+.product .product_box:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.product .product_box figure {
+    margin: 0;
+    padding: 30px;
+}
+
+.product .product_box h3 {
+    font-size: 22px;
+    margin-top: 20px;
+    color: #333;
+}
+
+.product .product_box p {
+    font-size: 16px;
+    color: #777;
+    margin: 10px 0;
+}
+
+/* Choose Us Section */
+.choose {
+    background-color: #1a1919;
+    padding: 80px 0;
+}
+
+.choose_box {
+    background-color: white;
+    border-radius: 12px;
+    padding: 40px;
+    text-align: center;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.choose_box:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.choose_box i {
+    font-size: 40px;
+    color: #4CAF50;
+    margin-bottom: 20px;
+}
+
+.choose_box h3 {
+    font-size: 24px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.choose_box p {
+    color: #777;
+    font-size: 16px;
+}
+
+/* Footer */
+footer {
+    background-color: #333;
+    color: white;
+    padding: 30px 0;
+    text-align: center;
+}
+
+/* Contact Section */
+.contact {
+    padding: 80px 0;
+    background-color: #fff;
+    text-align: center;
+}
+
+.contact p {
+    font-size: 18px;
+    color: #555;
+    margin-top: 20px;
+}
+
+.contact h2 {
+    font-size: 28px;
+    color: #4CAF50;
+    margin-bottom: 30px;
+}
+
+/* Carousel */
+.carousel-inner .carousel-item {
+    padding: 60px 0;
+}
+
+.carousel-caption .test_box {
+    text-align: center;
+    font-size: 18px;
+    color: #444;
+}
+
+.carousel-caption .test_box i img {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
+
+.carousel-caption h4 {
+    font-size: 20px;
+    margin-top: 10px;
+}
+
+/* Button */
+.read_more {
+    display: inline-block;
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 30px;
+    font-size: 18px;
+    text-decoration: none;
+    border-radius: 30px;
+    margin-top: 20px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.read_more:hover {
+    background-color: #333;
+    transform: scale(1.05);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    header .navigation ul {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .three_box {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .choose_box {
+        margin-bottom: 30px;
+    }
+
+    .product .product_box {
+        flex: 1 1 100%;
+    }
+
+    .banner_main {
+        height: 60vh;
+    }
+
+    .banner_main h1 {
+        font-size: 40px;
+    }
+
+    .banner_main p {
+        font-size: 16px;
+    }
+}

@@ -1,10 +1,13 @@
 <?php
-include('../../controller/prod_controller.php'); 
+include '../../config.php';  // Adjust the path to the config file
+include '../../model/products_mod.php'; // Adjust the path to the model
+include '../../controller/prod_controller.php'; // Adjust the path to the controller
 
 $controller = new TravelOfferController();
+
+// Fetch all products
 $products = $controller->getAllProducts();
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -52,36 +55,40 @@ $products = $controller->getAllProducts();
         a:hover {
             text-decoration: underline;
         }
-    </style>
-</head>
+    </style></head>
 <body>
-    <h1>Product List</h1>
-    <table>
+<h1>Product List</h1>
+<table border="1">
+    <thead>
         <tr>
             <th>ID</th>
-            <th>Product Name</th>
+            <th>Name</th>
             <th>Description</th>
             <th>Price</th>
             <th>Quantity</th>
-            <th>Image URL</th>
             <th>Category</th>
+            <th>Image</th>
             <th>Actions</th>
         </tr>
-        <?php foreach ($products as $product): ?>
+    </thead>
+    <tbody>
+        <?php foreach ($products as $product) { ?>
         <tr>
-            <td><?= htmlspecialchars($product['id_prod']); ?></td>
-            <td><?= htmlspecialchars($product['nom_prod']); ?></td>
-            <td><?= htmlspecialchars($product['description']); ?></td>
-            <td>$<?= number_format($product['prix'], 2); ?></td>
-            <td><?= htmlspecialchars($product['qte']); ?></td>
-            <td><a href="<?= htmlspecialchars($product['url_img']); ?>" target="_blank">View Image</a></td>
-            <td><?= htmlspecialchars($product['categorie']); ?></td>
+            <td><?= $product['id_prod']; ?></td>
+            <td><?= $product['nom_prod']; ?></td>
+            <td><?= $product['description']; ?></td>
+            <td><?= $product['prix']; ?> €</td>
+            <td><?= $product['qte']; ?></td>
+            <td><?= $product['categorie']; ?></td>
+            <td><img src="images/<?= $product['url_img']; ?>" width="50" alt="<?= $product['nom_prod']; ?>"></td>
             <td>
-                <a href="update_prod.php?id=<?= $product['id_prod']; ?>">Update</a> |
-                <a href="delete_prod.php?id=<?= $product['id_prod']; ?>">Delete</a>
+                <a href="update_prod.php?id=<?= $product['id_prod']; ?>">Edit</a> |
+                <a href="delete_prod.php?id=<?= $product['id_prod']; ?>" onclick="return confirm('Are you sure?');">Delete</a>
             </td>
         </tr>
-        <?php endforeach; ?>
-    </table>
+        <?php } ?>
+    </tbody>
+</table>
+<a href="add_product.php">Add New Product</a>
 </body>
 </html>
