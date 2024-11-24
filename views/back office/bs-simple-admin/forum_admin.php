@@ -1,12 +1,30 @@
+<?php
+require_once __DIR__ . '/../../../config.php';
+require_once __DIR__ . '/../../../controllers/QuestionController.php';
+require_once __DIR__ . '/../../../controllers/ResponseController.php';
+
+// Initialize controllers
+$questionController = new QuestionController();
+$responseController = new ResponseController();
+
+// Fetch questions and responses
+$questions = $questionController->getAllQuestions();
+$responses = $responseController->getAllResponses();
+?>
+
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Forum Management</title>
+    <!-- BOOTSTRAP STYLES -->
     <link href="assets/css/bootstrap.css" rel="stylesheet" />
+    <!-- FONTAWESOME STYLES -->
     <link href="assets/css/font-awesome.css" rel="stylesheet" />
+    <!-- CUSTOM STYLES -->
     <link href="assets/css/custom.css" rel="stylesheet" />
+    <!-- GOOGLE FONTS -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />
 </head>
 <body>
@@ -41,21 +59,16 @@
                         <h2>Forum Management</h2>
                         <hr />
                         
-                        <!-- Questions Table -->
+                        <!-- Questions Management -->
                         <div class="panel panel-default">
                             <div class="panel-heading">Questions Management</div>
                             <div class="panel-body">
-                                <?php
-                                require_once __DIR__ . '/../../../controllers/QuestionController.php';
-                                require_once __DIR__ . '/../../../config.php';
-                                $questionController = new QuestionController();
-                                $questions = $questionController->getAllQuestions();
-                                ?>
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
                                             <th>ID</th>
                                             <th>Question</th>
+                                            <th>Type</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -65,8 +78,11 @@
                                                 <td><?= htmlspecialchars($q['id_question']) ?></td>
                                                 <td><?= htmlspecialchars($q['question_text']) ?></td>
                                                 <td>
-                                                    <a href="<?= BASE_URL ?>views/back office/bs-simple-admin/updateQuestion.php?id=<?= $q['id_question'] ?>&context=admin" class="btn btn-primary">Modifier</a>
-                                                    <a href="<?= BASE_URL ?>views/back office/bs-simple-admin/deleteQuestion.php?id=<?= $q['id_question'] ?>&context=admin" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette question ?');">Supprimer</a>
+                                                    <?= $q['is_suggestion'] == 1 ? '<span class="label label-success">Suggestion</span>' : '<span class="label label-primary">Question</span>' ?>
+                                                </td>
+                                                <td>
+                                                    <a href="updateQuestion.php?id=<?= $q['id_question'] ?>&context=admin" class="btn btn-primary">Modifier</a>
+                                                    <a href="deleteQuestion.php?id=<?= $q['id_question'] ?>" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette question ?');">Supprimer</a>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
@@ -74,21 +90,17 @@
                                 </table>
                             </div>
                         </div>
-                        
-                        <!-- Responses Table -->
+
+                        <!-- Responses Management -->
                         <div class="panel panel-default">
                             <div class="panel-heading">Responses Management</div>
                             <div class="panel-body">
-                                <?php
-                                require_once __DIR__ . '/../../../controllers/ResponseController.php';
-                                $responseController = new ResponseController();
-                                $responses = $responseController->getAllResponses();
-                                ?>
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
                                             <th>ID</th>
                                             <th>Response</th>
+                                            <th>Question ID</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -97,9 +109,10 @@
                                             <tr>
                                                 <td><?= htmlspecialchars($r['id_response']) ?></td>
                                                 <td><?= htmlspecialchars($r['response_text']) ?></td>
+                                                <td><?= htmlspecialchars($r['id_question']) ?></td>
                                                 <td>
                                                     <a href="updateResponse.php?id=<?= $r['id_response'] ?>&context=admin" class="btn btn-primary">Modifier</a>
-                                                    <a href="deleteResponse.php?id=<?= $r['id_response'] ?>&context=admin" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette réponse ?');">Supprimer</a>
+                                                    <a href="deleteResponse.php?id=<?= $r['id_response'] ?>" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette réponse ?');">Supprimer</a>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>

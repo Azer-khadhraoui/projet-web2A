@@ -1,30 +1,22 @@
 <?php
 require_once __DIR__ . '/../../config.php';
-require_once __DIR__ . '/../../models/question.php';
-require_once __DIR__ . '/../../models/response.php';
 require_once __DIR__ . '/../../controllers/QuestionController.php';
+require_once __DIR__ . '/../../controllers/ResponseController.php';
 
-$pdo = config::getConnexion();
+// Initialize controllers
+$questionController = new QuestionController();
+$responseController = new ResponseController();
 
-// Enregistrer une nouvelle question
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['question_text'])) {
-    $question_text = trim($_POST['question_text']);
-    if (!empty($question_text)) {
-        $question = new Question(1, $question_text); // Example: Client ID is 1
-        $question->save($pdo);
-        header("Location: discussion.php");
-        exit;
-    } else {
-        echo "La question ne peut pas être vide.";
-    }
-}
+// Fetch only questions
+$questions = $questionController->getAllQuestions();
 
-// Récupérer toutes les questions
-try {
-    $questions = Question::getAll($pdo);
-} catch (Exception $e) {
-    echo "Erreur lors de la récupération des questions : " . $e->getMessage();
-    $questions = [];
+// Add a response logic
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['question_id'], $_POST['response_text'])) {
+    $question_id = (int) $_GET['question_id'];
+    $response_text = $_POST['response_text'];
+    $responseController->addResponse($question_id, 1, $response_text); // Use user ID 1 as default
+    header("Location: " . BASE_URL . "index.php?action=discussion");
+    exit;
 }
 ?>
 
@@ -33,8 +25,7 @@ try {
 <head>
     <meta charset="UTF-8">
     <title>Partie Discussion</title>
-    <!-- Corrected CSS Paths -->
-    <link rel="stylesheet" href="<?= BASE_URL ?>css/forum.css.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>css/forum.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>css/discussion.css">
 </head>
 <body>
@@ -42,10 +33,8 @@ try {
         <h1>Forum - Discussion</h1>
     </header>
     <nav>
-    <nav>
-         <a href="<?= BASE_URL ?>index.php?action=forum">Retour au Forum</a>
-        |<a href="<?= BASE_URL ?>index.php?action=suggestion">Partie Suggestion</a>
-</nav>
+        <a href="<?= BASE_URL ?>index.php?action=forum">Retour au Forum</a>
+        | <a href="<?= BASE_URL ?>index.php?action=suggestion">Partie Suggestion</a>
     </nav>
 
     <main class="discussion-main">
@@ -59,22 +48,13 @@ try {
         <ul>
             <?php foreach ($questions as $q): ?>
                 <li>
-                    <strong>Question #<?= htmlspecialchars($q['id_question']) ?>:</strong> <?= htmlspecialchars($q['question_text']) ?>
+                    <strong>Question #<?= $q['id_question'] ?>:</strong> <?= htmlspecialchars($q['question_text']) ?>
                     <em>(Posté le : <?= $q['created_at'] ?>)</em>
-                    <!-- Corrected Paths for Admin -->
-                    <a href="<?= BASE_URL ?>views/back office/bs-simple-admin/updateQuestion.php?id=<?= $q['id_question'] ?>&context=user">Modifier</a>
-                    <a href="<?= BASE_URL ?>views/back office/bs-simple-admin/deleteQuestion.php?id=<?= $q['id_question'] ?>&context=user" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette question ?');">Supprimer</a>
 
-                    <!-- Fetch Responses for Each Question -->
+                    <!-- Responses -->
                     <?php
-                    try {
-                        $responses = Response::getByQuestionId($pdo, $q['id_question']);
-                    } catch (Exception $e) {
-                        echo "Erreur lors de la récupération des réponses : " . $e->getMessage();
-                        $responses = [];
-                    }
-
-                    if ($responses):
+                    $responses = $responseController->getResponsesByQuestion($q['id_question']);
+                    if (!empty($responses)):
                     ?>
                         <ul>
                             <?php foreach ($responses as $response): ?>
@@ -86,8 +66,8 @@ try {
                         </ul>
                     <?php endif; ?>
 
-                    <!-- Form to Add a New Response -->
-                    <form action="discussion.php?action=addResponse&question_id=<?= $q['id_question'] ?>" method="POST">
+                    <!-- Add a Response -->
+                    <form action="<?= BASE_URL ?>index.php?action=discussion&question_id=<?= $q['id_question'] ?>" method="POST">
                         <textarea name="response_text" rows="2" cols="50" placeholder="Tapez votre réponse ici..." required></textarea><br>
                         <button type="submit">Soumettre la Réponse</button>
                     </form>

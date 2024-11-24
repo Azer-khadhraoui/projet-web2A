@@ -20,26 +20,22 @@ class QuestionController {
 
     // Get all suggestions
     public function getAllSuggestions() {
-        try {
-            $pdo = config::getConnexion();
-            $stmt = $pdo->query("SELECT * FROM question WHERE is_suggestion = 1 ORDER BY created_at DESC");
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (Exception $e) {
-            echo "Error fetching suggestions: " . $e->getMessage();
-            return [];
-        }
+        $pdo = config::getConnexion();
+        $stmt = $pdo->query("SELECT * FROM question WHERE is_suggestion = 1 ORDER BY created_at DESC");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     // Get all questions
     public function getAllQuestions() {
         try {
             $pdo = config::getConnexion();
-            return Question::getAll($pdo);
+            $stmt = $pdo->query("SELECT * FROM question ORDER BY created_at DESC");
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
-            echo "Error fetching questions: " . $e->getMessage();
-            return [];
+            die("Error fetching questions: " . $e->getMessage());
         }
     }
+    
 
     // Update a question by ID
     public function updateQuestion($questionText, $id) {

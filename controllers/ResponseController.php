@@ -1,71 +1,70 @@
 <?php
-require_once __DIR__ . '/../config.php';
 require_once __DIR__ . '/../models/response.php';
 
 class ResponseController {
-    // Add a new response
-    public function addResponse($id_question, $id_responder, $response_text) {
-        try {
-            $db = config::getConnexion();
-            $sql = "INSERT INTO response (id_question, id_responder, response_text, created_at) VALUES (:id_question, :id_responder, :response_text, NOW())";
-            $stmt = $db->prepare($sql);
-            $stmt->execute([
-                'id_question' => $id_question,
-                'id_responder' => $id_responder,
-                'response_text' => $response_text,
-            ]);
-        } catch (Exception $e) {
-            echo "Error adding response: " . $e->getMessage();
-        }
-    }
 
-    // Fetch all responses
+    // Fetch all responses globally (for admin panel)
     public function getAllResponses() {
         try {
-            $db = config::getConnexion();
-            $stmt = $db->query("SELECT * FROM response ORDER BY created_at DESC");
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $pdo = config::getConnexion();
+            return Response::getAll($pdo); // Use the model method to fetch all responses
         } catch (Exception $e) {
-            echo "Error fetching responses: " . $e->getMessage();
-            return [];
+            die("Error fetching all responses: " . $e->getMessage());
         }
     }
 
-    // Fetch a single response by ID
-    public function getResponseById($id) {
+    // Fetch responses for a specific question
+    public function getResponsesByQuestion($question_id) {
         try {
-            $db = config::getConnexion();
-            $stmt = $db->prepare("SELECT * FROM response WHERE id_response = :id");
-            $stmt->execute(['id' => $id]);
-            return $stmt->fetch(PDO::FETCH_ASSOC);
+            $pdo = config::getConnexion();
+            return Response::getAllForQuestion($pdo, $question_id);
         } catch (Exception $e) {
-            echo "Error fetching response: " . $e->getMessage();
-            return null;
+            die("Error fetching responses: " . $e->getMessage());
+        }
+    }
+
+    // Add a new response
+    public function addResponse($question_id, $id_responder, $response_text) {
+        try {
+            $pdo = config::getConnexion();
+            $response = new Response($question_id, $id_responder, $response_text);
+            $response->save($pdo);
+        } catch (Exception $e) {
+            die("Error adding response: " . $e->getMessage());
         }
     }
 
     // Update a response
     public function updateResponse($response_text, $id) {
         try {
-            $db = config::getConnexion();
-            $stmt = $db->prepare("UPDATE response SET response_text = :response_text WHERE id_response = :id");
-            $stmt->execute([
-                'response_text' => $response_text,
-                'id' => $id,
-            ]);
+            $pdo = config::getConnexion();
+            $stmt = $pdo->prepare("UPDATE response SET response_text = ? WHERE id_response = ?");
+            $stmt->execute([$response_text, $id]);
         } catch (Exception $e) {
-            echo "Error updating response: " . $e->getMessage();
+            die("Error updating response: " . $e->getMessage());
         }
     }
 
     // Delete a response
     public function deleteResponse($id) {
         try {
-            $db = config::getConnexion();
-            $stmt = $db->prepare("DELETE FROM response WHERE id_response = :id");
-            $stmt->execute(['id' => $id]);
+            $pdo = config::getConnexion();
+            $stmt = $pdo->prepare("DELETE FROM response WHERE id_response = ?");
+            $stmt->execute([$id]);
         } catch (Exception $e) {
-            echo "Error deleting response: " . $e->getMessage();
+            die("Error deleting response: " . $e->getMessage());
+        }
+    }
+
+    // Fetch a single response by ID
+    public function getResponseById($id) {
+        try {
+            $pdo = config::getConnexion();
+            $stmt = $pdo->prepare("SELECT * FROM response WHERE id_response = ?");
+            $stmt->execute([$id]);
+            return $stmt->fetch();
+        } catch (Exception $e) {
+            die("Error fetching response: " . $e->getMessage());
         }
     }
 }

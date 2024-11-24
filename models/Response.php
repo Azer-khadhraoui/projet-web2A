@@ -49,6 +49,15 @@ class response {
         ");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    public static function getAll($pdo) {
+        try {
+            $stmt = $pdo->query("SELECT * FROM response ORDER BY created_at ASC");
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            die("Error fetching all responses: " . $e->getMessage());
+        }
+    }
+    
 
     // Getters
     public function getIdResponse(): int {

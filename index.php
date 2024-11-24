@@ -57,6 +57,23 @@ switch ($action) {
             echo "Erreur : Données invalides.";
         }
         break;
+        
+        case 'addSuggestion':
+            if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['suggestion_text'])) {
+                try {
+                    $suggestion_text = $_POST['suggestion_text'];
+                    $id_client = 1; // Example: Replace with the actual client ID logic
+                    $questionController->addQuestion($id_client, $suggestion_text, true); // Mark as suggestion
+                    header("Location: " . BASE_URL . "index.php?action=suggestion");
+                    exit;
+                } catch (Exception $e) {
+                    echo "Erreur : " . $e->getMessage();
+                }
+            } else {
+                echo "Erreur : Données invalides.";
+            }
+            break;
+        
 
     default:
         // Default case: Redirect to the forum page
