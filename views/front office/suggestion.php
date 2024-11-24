@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/../config.php';
-require_once __DIR__ . '/../controllers/QuestionController.php';
+require_once __DIR__ . '/../../config.php';
+require_once __DIR__ . '/../../controllers/QuestionController.php';
 
 // Initialize controller
 $questionController = new QuestionController();

@@ -1,4 +1,6 @@
 <?php
+define('BASE_URL', '/PROJET MODULE/'); // Update this if your project path changes
+
 class config {
     private static $pdo = null;
 
@@ -19,5 +21,6 @@ class config {
         }
         return self::$pdo;
     }
+
 }
 ?>
