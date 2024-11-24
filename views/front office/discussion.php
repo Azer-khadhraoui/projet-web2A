@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['question_id'], $_POST[
 
     if (strlen($response_text) >= 2) { // Validation côté serveur (min. 2 caractères)
         $responseController->addResponse($question_id, 1, $response_text); // Use user ID 1 as default
-        header("Location: " . BASE_URL . "index.php?action=discussion");
+        header("Location: " . BASE_URL . "views/front office/index.php?action=discussion");
         exit;
     } else {
         echo "<script>alert('La réponse doit contenir au moins 2 caractères.');</script>";
@@ -32,6 +32,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['question_id'], $_POST[
     <title>Partie Discussion</title>
     <link rel="stylesheet" href="<?= BASE_URL ?>css/forum.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>css/discussion.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>css/background-animation.css">
+   
     <script src="<?= BASE_URL ?>js/validation.js"></script> <!-- Include validation script -->
 </head>
 <body>
@@ -39,8 +41,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['question_id'], $_POST[
         <h1>Forum - Discussion</h1>
     </header>
     <nav>
-        <a href="<?= BASE_URL ?>index.php?action=forum">Retour au Forum</a>
-        | <a href="<?= BASE_URL ?>index.php?action=suggestion">Partie Suggestion</a>
+          <a href="<?= BASE_URL ?>views/front office/index.php?action=forum">Retour au Forum</a>
+        | <a href="<?= BASE_URL ?>views/front office/index.php?action=suggestion">Partie Suggestion</a>
+    </nav>
     </nav>
 
     <main class="discussion-main">

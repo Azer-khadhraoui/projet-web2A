@@ -13,22 +13,25 @@ $suggestions = $questionController->getAllSuggestions();
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Partie Suggestion</title>
     <link rel="stylesheet" href="<?= BASE_URL ?>css/forum.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>css/suggestion.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>css/background-animation.css">
 </head>
 <body>
     <header>
         <h1>Forum - Suggestions</h1>
     </header>
     <nav>
-        <a href="<?= BASE_URL ?>index.php?action=forum">Retour au Forum</a>
-        | <a href="<?= BASE_URL ?>index.php?action=discussion">Partie Discussion</a>
+        <!-- Corrected links to reflect the new position of index.php -->
+        <a href="<?= BASE_URL ?>views/front office/index.php?action=forum">Retour au Forum</a>
+        | <a href="<?= BASE_URL ?>views/front office/index.php?action=discussion">Partie Discussion</a>
     </nav>
 
     <main class="suggestion-main">
         <h2>Ajouter une Nouvelle Suggestion</h2>
-        <form action="<?= BASE_URL ?>index.php?action=addSuggestion" method="POST">
+        <form action="<?= BASE_URL ?>views/front office/index.php?action=addSuggestion" method="POST">
             <textarea name="suggestion_text" rows="3" cols="50" required placeholder="Tapez votre suggestion ici..."></textarea><br>
             <button type="submit">Soumettre la Suggestion</button>
         </form>

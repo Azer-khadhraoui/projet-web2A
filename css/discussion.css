@@ -1,7 +1,7 @@
-/* Base styling for the page */
+/* Général */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(180deg, #f5fdf6, #d5f3de);
     color: #333;
     margin: 0;
     padding: 0;
@@ -10,59 +10,56 @@ body {
     align-items: center;
 }
 
-/* Header styling */
+/* Header */
 header {
-    background-color: #4CAF50;
+    background-color: #388e3c; /* Vert moyen */
     color: white;
     padding: 20px;
     text-align: center;
     width: 100%;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 header h1 {
     margin: 0;
 }
 
-/* Navigation links */
+/* Navigation */
 nav {
-    margin-top: 10px;
-    margin-bottom: 20px;
+    margin: 20px 0;
+    font-weight: bold;
 }
 
 nav a {
-    color: #4CAF50;
+    color: #388e3c;
     text-decoration: none;
-    font-weight: bold;
-    margin: 0 10px;
+    margin: 0 15px;
+    font-size: 1.1em;
 }
 
 nav a:hover {
     text-decoration: underline;
 }
 
-/* Main container styling */
-.container {
+/* Section des Questions */
+main {
     width: 80%;
-    max-width: 800px;
+    max-width: 900px;
     background-color: white;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 40px;
 }
 
-/* Section title styling */
 h2 {
-    color: #4CAF50;
-    margin-top: 0;
+    color: #388e3c;
+    font-size: 1.6em;
+    border-bottom: 2px solid #c8e6c9;
+    padding-bottom: 5px;
 }
 
-/* Form styling */
-.suggestion-form {
-    margin-bottom: 20px;
-}
-
-.suggestion-form textarea {
+textarea {
     width: 100%;
     padding: 10px;
     border: 1px solid #ddd;
@@ -71,9 +68,8 @@ h2 {
     margin-bottom: 10px;
 }
 
-/* Button styling to match discussion.css */
-.suggestion-form button {
-    background-color: #4CAF50;  /* Same green color */
+button {
+    background-color: #388e3c;
     color: white;
     padding: 10px 20px;
     border: none;
@@ -83,39 +79,6 @@ h2 {
     transition: background-color 0.3s;
 }
 
-.suggestion-form button:hover {
-    background-color: #45a049;  /* Slightly darker green on hover */
-}
-
-/* Styling for the list of suggestions */
-.suggestions-list {
-    list-style-type: none;
-    padding: 0;
-}
-
-.suggestion-item {
-    padding: 15px;
-    border-bottom: 1px solid #ddd;
-    background-color: #f1f8f4;
-    border-radius: 4px;
-    margin-bottom: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.suggestion-item p {
-    margin: 0;
-    font-size: 16px;
-    color: #333;
-}
-
-.suggestion-item hr {
-    border: 0;
-    height: 1px;
-    background: #ddd;
-    margin: 10px 0;
-}
-
-/* Styling for emphasized text within suggestions */
-.suggestion-item p strong {
-    color: #4CAF50;
+button:hover {
+    background-color: #2e7d32;
 }
