@@ -1,17 +1,8 @@
 <?php
+require_once __DIR__ . '/../config.php'; // Ensure the config file is included
 require_once __DIR__ . '/../models/response.php';
 
 class ResponseController {
-
-    // Fetch all responses globally (for admin panel)
-    public function getAllResponses() {
-        try {
-            $pdo = config::getConnexion();
-            return Response::getAll($pdo); // Use the model method to fetch all responses
-        } catch (Exception $e) {
-            die("Error fetching all responses: " . $e->getMessage());
-        }
-    }
 
     // Fetch responses for a specific question
     public function getResponsesByQuestion($question_id) {
@@ -65,6 +56,17 @@ class ResponseController {
             return $stmt->fetch();
         } catch (Exception $e) {
             die("Error fetching response: " . $e->getMessage());
+        }
+    }
+
+    // Fetch all responses
+    public function getAllResponses() {
+        try {
+            $pdo = config::getConnexion();
+            $stmt = $pdo->query("SELECT * FROM response");
+            return $stmt->fetchAll();
+        } catch (Exception $e) {
+            die("Error fetching all responses: " . $e->getMessage());
         }
     }
 }
