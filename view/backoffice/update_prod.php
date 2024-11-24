@@ -3,7 +3,6 @@ include('../../controller/prod_controller.php');
 
 $controller = new TravelOfferController();
 
-// Check if the product ID is passed via GET
 if (isset($_GET['id'])) {
     $product = $controller->getProductById($_GET['id']);
     if (!$product) {
@@ -15,7 +14,7 @@ if (isset($_GET['id'])) {
     exit();
 }
 
-// Handle form submission for updating the product
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = $_POST['id_prod'];
     $nom_prod = $_POST['nom_prod'];
@@ -81,9 +80,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         button:hover {
             background-color: #45a049;
         }
+        a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
+<a href="list_products.php"><-----BACK </a>
     <h1>Update Product</h1>
     <form method="POST">
         <input type="hidden" name="id_prod" value="<?= htmlspecialchars($product['id_prod']); ?>">
@@ -101,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <input type="number" name="qte" value="<?= htmlspecialchars($product['qte']); ?>">
 
         <label>Image URL:</label>
-        <input type="text" name="url_img" value="<?= htmlspecialchars($product['url_img']); ?>">
+        <input type="file" name="url_img" value="<?= htmlspecialchars($product['url_img']); ?>">
 
         <label>Category:</label>
         <input type="number" name="categorie" value="<?= htmlspecialchars($product['categorie']); ?>">

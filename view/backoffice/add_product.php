@@ -2,19 +2,38 @@
 include('../../controller/prod_controller.php'); 
 include_once('../../config.php');
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $controller = new TravelOfferController();
+// Initialize the controller
+$controller = new TravelOfferController();
 
-    $nom_prod = $_POST['nom_prod'];
-    $description = $_POST['description'];
-    $prix = $_POST['prix'];
-    $qte = $_POST['qte'];
-    $url_img = $_POST['url_img'];
-    $cat = $_POST['cat'];
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Get form data
+    $nom_prod = $_POST['nom_prod'] ?? '';
+    $description = $_POST['description'] ?? '';
+    $prix = $_POST['prix'] ?? '';
+    $qte = $_POST['qte'] ?? '';
+    $cat = $_POST['cat'] ?? '';
 
-    $controller->createProduct($nom_prod, $description, $prix, $qte, $url_img, $cat);
-    header('Location: list_products.php');
-    exit();
+    // Validate form inputs
+    if (empty($nom_prod) || empty($description) || empty($prix) || empty($qte) || empty($cat)) {
+        echo "All fields must be filled out.";
+        exit();
+    }
+
+    // Handle file upload (using the controller's method)
+    $file = $_FILES['url_img'] ?? null;
+
+    if ($file && $file['error'] == 0) {
+        // Call the controller's createProduct method to handle file upload and insertion
+        $controller->createProduct($nom_prod, $description, $prix, $qte, $file, $cat);
+
+        // Redirect after successful creation
+        header('Location: list_products.php');
+        exit();
+    } else {
+        echo "Error: No file uploaded or file upload failed.";
+        exit();
+    }
 }
 ?>
 
@@ -70,31 +89,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         button:hover {
             background-color: #45a049;
         }
+        a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
     </style>
-    
 </head>
 <body>
+    <a href="list_products.php"><----- BACK </a>
     <h1>Add a New Product</h1>
-    <form method="POST">
-        <label>Product Name:</label>
-        <input type="text" name="nom_prod" >
+    <form method="POST" enctype="multipart/form-data">
+        <label for="nom_prod">Product Name:</label>
+        <input type="text" name="nom_prod" id="nom_prod" required>
 
-        <label>Description:</label>
-        <textarea name="description" ></textarea>
+        <label for="description">Description:</label>
+        <textarea name="description" id="description" required></textarea>
 
-        <label>Price:</label>
-        <input type="number" step="0.01" name="prix" >
+        <label for="prix">Price:</label>
+        <input type="number" step="0.01" name="prix" id="prix" required>
 
-        <label>Quantity:</label>
-        <input type="number" name="qte" >
+        <label for="qte">Quantity:</label>
+        <input type="number" name="qte" id="qte" required>
 
-        <label>Image URL:</label>
-        <input type="text" name="url_img" >
+        <label for="url_img">Product Image:</label>
+        <input type="file" name="url_img" id="url_img" required>
 
-        <label>Category:</label>
-        <input type="number" name="cat" >
+        <label for="cat">Category:</label>
+        <input type="number" name="cat" id="cat" required>
 
-        <script src="script.js"></script>
         <button type="submit">Add Product</button>
     </form>
 </body>

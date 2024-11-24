@@ -1,7 +1,7 @@
 <?php
-include '../../config.php';  // Adjust the path to the config file
-include '../../model/products_mod.php'; // Adjust the path to the model
-include '../../controller/prod_controller.php'; // Adjust the path to the controller
+include '../../config.php';  
+include '../../model/products_mod.php'; 
+include '../../controller/prod_controller.php'; 
 
 $controller = new TravelOfferController();
 
@@ -58,6 +58,7 @@ $products = $controller->getAllProducts();
     </style></head>
 <body>
 <h1>Product List</h1>
+<a href="bs-simple-admin/index.html"><-----DASHBOARD </a>
 <table border="1">
     <thead>
         <tr>

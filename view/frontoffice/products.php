@@ -2,27 +2,30 @@
 
 include_once '../../config.php';
 
-
-$categoryMapping = [
-    1 => 'Plants',
-    2 => 'Products',
-    3 => 'Materials'
-];
-
-
 $conn = config::getConnexion(); 
+
+
+$query = "SELECT id_categorie, nom_categorie FROM categorie ORDER BY nom_categorie";
+$stmt = $conn->prepare($query);
+$stmt->execute();
+
+
+$categories = [];
+while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    $categories[$row['id_categorie']] = $row['nom_categorie'];  
+}
 
 
 $query = "SELECT * FROM produits ORDER BY categorie";
 $stmt = $conn->prepare($query);
 $stmt->execute();
 
-
 $products = [];
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-    $categoryName = $categoryMapping[$row['categorie']] ?? 'Unknown'; // Map category number to name
-    $products[$categoryName][] = $row;
+    $categoryName = $categories[$row['categorie']] ?? 'Unknown';  
+    $products[$categoryName][] = $row; 
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -38,7 +41,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     <nav>
         <img src="images/green&purelogo.png" alt="Green & Pure Logo" class="logo">
         <ul>
-            <li><a href="index.html">HOME</a></li>
+            <li><a href="index.php">HOME</a></li>
             <li><a href="products.php">PRODUCTS</a></li>
             <li><a href="forum.php">FORUM</a></li>
             <li><a href="#about">ABOUT</a></li>
@@ -48,37 +51,37 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         </ul>
     </nav>
 
-  
+   
     <section class="category-list">
-        <button class="category-btn" onclick="showCategory('Plants')">Plants</button>
-        <button class="category-btn" onclick="showCategory('Products')">Products</button>
-        <button class="category-btn" onclick="showCategory('Materials')">Materials</button>
+        <?php foreach ($categories as $categoryId => $categoryName): ?>
+            <button class="category-btn" onclick="showCategory('<?= htmlspecialchars($categoryName) ?>')">
+                <?= htmlspecialchars($categoryName) ?>
+            </button>
+        <?php endforeach; ?>
     </section>
 
-   
+  
     <main class="product-main">
         <h1>Shop Now ....</h1>
 
         <?php foreach ($products as $category => $items): ?>
-       
-        <section class="product-category" id="<?= htmlspecialchars($category) ?>">
-            <h2><?= ucfirst(htmlspecialchars($category)) ?></h2>
-            <div class="product-catalog">
-                <?php foreach ($items as $product): ?>
-                <div class="product-card">
-                    <img src="<?= htmlspecialchars($product['image_url']) ?>" alt="<?= htmlspecialchars($product['nom_prod']) ?>" class="product-image">
-                    <h3><?= htmlspecialchars($product['nom_prod']) ?></h3>
-                    <p><?= htmlspecialchars($product['description']) ?></p>
-                    <p><strong>Price:</strong> $<?= htmlspecialchars($product['prix']) ?></p>
-                    <button>Add to Cart</button>
+            <section class="product-category" id="<?= htmlspecialchars($category) ?>">
+                
+                <div class="product-catalog">
+                    <?php foreach ($items as $product): ?>
+                        <div class="product-card">
+                            <img src="images/<?php echo $product['url_img']; ?>" alt="<?php echo $product['nom_prod']; ?>" class="product-image">
+                            <h3><?= htmlspecialchars($product['nom_prod']) ?></h3>
+                            <p><?= htmlspecialchars($product['description']) ?></p>
+                            <p><strong>Price:</strong> $<?= htmlspecialchars($product['prix']) ?></p>
+                            <button>Add to Cart</button>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
-                <?php endforeach; ?>
-            </div>
-        </section>
+            </section>
         <?php endforeach; ?>
     </main>
 
-   
     <footer>
         <p>&copy; 2024 Green&Pure - All rights reserved.</p>
     </footer>
