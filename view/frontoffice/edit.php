@@ -4,7 +4,7 @@ include '../../Controller/usercontroller.php';
 if (isset($_GET['cin'])) {
     $cin = $_GET['cin'];
 
-    $controller = new usercontroller();
+    $controller = new UserController();
     $user = $controller->getUserByCin($cin);
 
     if ($user) {
@@ -13,6 +13,8 @@ if (isset($_GET['cin'])) {
         $num = $user['numero'];
         $pwd = $user['pwd'];
         $role = $user['role'];
+        $mail = $user['mail'];
+        $statut = $user['statut'];
     } else {
         die("Utilisateur non trouvé.");
     }
@@ -104,6 +106,14 @@ if (isset($_GET['cin'])) {
                             <div class="form-group">
                                 <label for="role">Role</label>
                                 <input type="text" class="form-control" id="role" name="role" value="<?php echo $role; ?>" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="mail">Email</label>
+                                <input type="email" class="form-control" id="mail" name="mail" value="<?php echo $mail; ?>" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="statut">Statut</label>
+                                <input type="number" class="form-control" id="statut" name="statut" value="<?php echo $statut; ?>" required>
                             </div>
                             <button type="submit" class="btn btn-primary">Mettre à jour</button>
                         </form>

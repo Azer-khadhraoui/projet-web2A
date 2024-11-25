@@ -136,6 +136,12 @@
                               <input class="contactus" id="retype-password" placeholder="Retype Password" type="password" name="retype-password">
                               <p id="pwd2" style="color: red;"></p>
                            </div>
+                           <div class="col-md-3">
+                              
+                                 <label for="mail">Email</label>
+                                 <input class="contactus" id="mail" placeholder="Email" type="text" name="mail" >
+                                 <p id="zzz" style="color: red;"></p>
+                             </div>
                            <div class="col-md-12" style="text-align: center; margin-top: 40px;">
                               <button class="send_btn" type="submit">Sign UP</button>
                            </div>
@@ -153,6 +159,7 @@
         var num = document.getElementById("number");
         var pwd = document.getElementById("password");
         var pwd2 = document.getElementById("retype-password");
+        
 
 
 
@@ -208,6 +215,16 @@
                 document.getElementById("pwd2").innerText = "Passwords do not match.";
             } else {
                 document.getElementById("pwd2").innerText = "";
+            }
+            var email = document.getElementById('mail').value;
+            var emailError = document.getElementById('zzz');
+            var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!emailPattern.test(email)) {
+                isValid = false;
+                emailError.innerText = "Please enter a valid email address.";
+            } else {
+                emailError.innerText = "";
             }
 
             

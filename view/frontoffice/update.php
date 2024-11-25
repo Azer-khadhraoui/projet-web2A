@@ -8,8 +8,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $num = $_POST['num'];
     $pwd = $_POST['pwd'];
     $role = $_POST['role'];
+    $mail = $_POST['mail'];
+    $statut = $_POST['statut'];
 
-    $user = new User($cin, $fname, $lname, $pwd, $num, $role);
+    // Créez un utilisateur avec les nouveaux champs
+    $user = new User($cin, $fname, $lname, $pwd, $num, $role, $mail, $statut);
 
     $controller = new UserController();
     $controller->updateUser($user);

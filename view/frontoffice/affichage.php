@@ -69,6 +69,8 @@
                             <th>Number</th>
                             <th>Password</th>
                             <th>Role</th>
+                            <th>Mail</th>
+                            <th>Statut</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -85,6 +87,8 @@
                             $num = $row['numero'];
                             $pwd = $row['pwd'];
                             $role = $row['role'];
+                            $mail = $row['mail'];
+                            $statut = $row['statut'];
 
                             echo "<tr>
                                     <td>{$cin}</td>
@@ -93,6 +97,8 @@
                                     <td>{$num}</td>
                                     <td>{$pwd}</td>
                                     <td>{$role}</td>
+                                    <td>{$mail}</td>
+                                    <td>{$statut}</td>
                                     <td>
                                         <a href='delete.php?cin={$cin}' class='btn btn-danger btn-sm btn-custom' onclick=\"return confirm('Are you sure you want to delete this user?');\">Delete</a>
                                         <a href='edit.php?cin={$cin}' class='btn btn-primary btn-sm btn-custom'>Edit</a>
