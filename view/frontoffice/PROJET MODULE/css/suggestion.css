@@ -1,0 +1,105 @@
+/* Général */
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(180deg, #eafaf1, #d9f8eb);
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Header */
+header {
+    background-color: #00695c; /* Vert bleuté */
+    color: white;
+    padding: 20px;
+    text-align: center;
+    width: 100%;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+header h1 {
+    margin: 0;
+}
+
+/* Navigation */
+nav {
+    margin: 20px 0;
+    font-weight: bold;
+}
+
+nav a {
+    color: #00695c;
+    text-decoration: none;
+    margin: 0 15px;
+    font-size: 1.1em;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+/* Section des Suggestions */
+main {
+    width: 80%;
+    max-width: 900px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 40px;
+}
+
+h2 {
+    color: #00695c;
+    font-size: 1.6em;
+    border-bottom: 2px solid #b2dfdb;
+    padding-bottom: 5px;
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    resize: vertical;
+    margin-bottom: 10px;
+}
+
+button {
+    background-color: #00695c;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #004d40;
+}
+
+/* Liste des Suggestions */
+.suggestions-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.suggestion-item {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+    background-color: #e0f2f1;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.suggestion-item p {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+}

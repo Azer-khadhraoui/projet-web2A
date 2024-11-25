@@ -43,7 +43,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         <ul>
             <li><a href="index.php">HOME</a></li>
             <li><a href="products.php">PRODUCTS</a></li>
-            <li><a href="forum.php">FORUM</a></li>
+            <li><a href="../frontoffice/PROJET MODULE/views/front office/index.php">FORUM</a></li>
             <li><a href="#about">ABOUT</a></li>
             <li><a href="#contact">LOG IN</a></li>
             <li><a href="reclamation.php" id="gq">GET A QUOTE</a></li>

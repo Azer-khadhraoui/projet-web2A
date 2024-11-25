@@ -70,13 +70,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             text-decoration: underline;
         }
     </style>
+    <script>
+         function validate_cat(){
+        const cat = document.getElementById('nom_categorie').value.trim();
+
+        if (!expr.test(cat) || cat === "") {
+            alert("La categorie n'est pas valide. elle doit contenir uniquement des lettres et des espaces !! .");
+            test = false;
+        }
+        return test;
+    }
+    </script>
 </head>
-<body>
+<body onsubmit="return  validate_cat();">
 <a href="list_categories.php"><-----BACK </a>
     <h1>Add New Category</h1>
     <form method="POST">
         <label>Category Name:</label>
-        <input type="text" name="nom_categorie" required>
+        <input type="text" name="nom_categorie" >
 
         <button type="submit">Add Category</button>
     </form>

@@ -1,55 +1,64 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const form = document.querySelector("form");
+function validatefroms() {
+    // Récupérer les champs du formulaire
+    const titre = document.getElementById('nom_prod').value.trim();
+    const description = document.getElementById('description').value.trim();
+    const prix = document.getElementById('prix').value;
+    const qte = document.getElementById('qte').value.trim();
+    const  url_img= document.getElementById('url_img').value.trim();
+    const cat = document.getElementById('cat').value.trim();
 
-    form.addEventListener("submit", function (event) {
-        let isValid = true; // Start by assuming the form is valid
+// Validation
+let test = true;
 
-        // Clear previous error messages
-        const errorMessages = form.querySelectorAll(".error-message");
-        errorMessages.forEach(function (message) {
-            message.remove();
-        });
+// Validation du titre (doit contenir uniquement des lettres et espaces)
+let expr = /^[A-Za-z\s]+$/;
+if (!expr.test(titre) || titre === "") {
+    alert("Le titre n'est pas valide. Il doit contenir uniquement des lettres et des espaces !! .");
+    test = false;
+}
 
-        // Validate all required fields
-        const fields = form.querySelectorAll("input[required], textarea[required]");
-        fields.forEach(function (field) {
-            if (!field.value.trim()) { // If the field is empty
-                isValid = false;
+// Validation de la description (doit être remplie)
+else if (description === "" ) {
+    alert("La description ne peut pas être vide !! .");
+    test = false;
+}
 
-                // Create and insert error message
-                const errorMessage = document.createElement("div");
-                errorMessage.textContent = `${field.previousElementSibling.textContent} is required.`;
-                errorMessage.style.color = "red";
-                errorMessage.classList.add("error-message");
-                field.parentNode.insertBefore(errorMessage, field.nextSibling);
-            }
-        });
+// Validation de la catégorie (doit être remplie)
+else if (cat === "" || NaN(cat) ) {
+    alert("La catégorie ne peut pas etre validée !! .");
+    test = false;
+}
 
-        // Validate "price" field (positive number)
-        const priceField = form.querySelector("input[name='prix']");
-        if (priceField && (parseFloat(priceField.value) <= 0 || isNaN(priceField.value))) {
-            isValid = false;
-            const errorMessage = document.createElement("div");
-            errorMessage.textContent = "Price must be a positive number.";
-            errorMessage.style.color = "red";
-            errorMessage.classList.add("error-message");
-            priceField.parentNode.insertBefore(errorMessage, priceField.nextSibling);
+// Validation de l'image (doit être sélectionnée)
+else if (url_img === "") {
+    alert("Vous devez sélectionner une image !! .");
+    test = false;
+}
+
+// Validation du prix 
+else if (prix === "" || NaN(prix)) {
+    alert("le prix n'est pas validée !! .");
+    test = false;
+}
+
+// Validation du quantitée 
+else if (qte === "" || NaN(qte)) {
+    alert("Vous devez sélectionner une image.");
+    test = false;
+}
+
+// Retourne false si une validation échoue pour empêcher la soumission du formulaire
+return test;
+    }
+
+
+
+    function validate_cat(){
+        const cat = document.getElementById('nom_categorie').value.trim();
+
+        if (!expr.test(cat) || cat === "") {
+            alert("La categorie n'est pas valide. elle doit contenir uniquement des lettres et des espaces !! .");
+            test = false;
         }
-
-        // Validate "quantity" field (positive integer)
-        const quantityField = form.querySelector("input[name='qte']");
-        if (quantityField && (parseInt(quantityField.value, 10) <= 0 || isNaN(quantityField.value))) {
-            isValid = false;
-            const errorMessage = document.createElement("div");
-            errorMessage.textContent = "Quantity must be a positive number.";
-            errorMessage.style.color = "red";
-            errorMessage.classList.add("error-message");
-            quantityField.parentNode.insertBefore(errorMessage, quantityField.nextSibling);
-        }
-
-        // If any validation fails, prevent form submission
-        if (!isValid) {
-            event.preventDefault(); // Stops form from submitting
-        }
-    });
-});
+        return test;
+    }

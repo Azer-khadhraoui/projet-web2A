@@ -1,0 +1,20 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: url('../background.jpg') no-repeat center center fixed; /* Pour un chemin relatif */
+    background-size: cover; /* S'étend pour couvrir tout l'écran */
+    animation: smoothBackground 20s infinite linear; /* Animation infinie */
+}
+
+/* Animation de déplacement */
+@keyframes smoothBackground {
+    0% {
+        background-position: 0% 0%;
+    }
+    50% {
+        background-position: 50% 50%;
+    }
+    100% {
+        background-position: 0% 0%;
+    }
+}

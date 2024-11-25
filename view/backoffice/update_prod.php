@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     </style>
 </head>
-<body>
+<body onsubmit="return validatefroms() ;">
 <a href="list_products.php"><-----BACK </a>
     <h1>Update Product</h1>
     <form method="POST">
