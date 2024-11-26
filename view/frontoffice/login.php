@@ -8,32 +8,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $controller = new UserController();
     $user = $controller->getUserByCin($cin);
 
-    if ($user && $user['pwd'] === $password) {
-        $fname = $user['nom'];
-        $lname = $user['prenom'];
-        $role = $user['role'];
-        if ($role == 1) {
-            header("Location: ../backoffice/bs-simple-admin/index.html");
-            exit();
+    if ($user) {
+        if ($user['statut'] == 1) {
+            // Si le statut est 1, l'utilisateur est bloqué
+            echo "<div style='color: red; background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 10px; border-radius: 5px; text-align: center;'>
+                    Your account is blocked. Please contact the admin.
+                  </div>";
+        } elseif ($user['pwd'] === $password) {
+            $fname = $user['nom'];
+            $lname = $user['prenom'];
+            $role = $user['role'];
+            if ($role == 1) {
+                header("Location: ../backoffice/bs-simple-admin/index.html");
+                exit();
+            } else {
+                $message = "Login successful! Welcome, $fname $lname.";
+                header("Location: signin.html?message=" . urlencode($message));
+                exit();
+            }
         } else {
-            $message = "Login successful! Welcome, $fname $lname.";
-            header("Location: signin.html?message=" . urlencode($message));
-            exit();
+            echo "<div style='color: red; background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 10px; border-radius: 5px; text-align: center;'>
+                    Mot de passe incorrect.
+                  </div>";
         }
     } else {
-        $cin_error = "";
-        $password_error = "";
-        if (!$user) {
-            $cin_error = "Invalid CIN.";
-        }
-        if ($user && $user['pwd'] !== $password) {
-            $password_error = "Invalid password.";
-        }
-        header("Location: signin.html?cin_error=" . urlencode($cin_error) . "&password_error=" . urlencode($password_error));
-        exit();
+        echo "<div style='color: red; background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 10px; border-radius: 5px; text-align: center;'>
+                CIN incorrect.
+              </div>";
     }
 } else {
-    header("Location: signin.html?message=" . urlencode("Invalid request method."));
-    exit();
+    echo "<div style='color: red; background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 10px; border-radius: 5px; text-align: center;'>
+            Méthode de requête non valide.
+          </div>";
 }
 ?>
