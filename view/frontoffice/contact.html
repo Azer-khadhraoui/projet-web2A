@@ -25,6 +25,8 @@
       <!-- Tweaks for older IEs-->
       <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
+      <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+      
       <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
@@ -106,42 +108,45 @@
                         <div class="row">
                            <div class="col-md-3" style="margin-bottom: 40px;">
                               <label for="fname">First Name</label>
-                              <input class="contactus" id="fname" placeholder="First Name" type="text" name="fname">
+                              <input class="contactus" id="fname" placeholder="First Name" type="text" name="fname" required>
                               <p id="fn" style="color: red;"></p>
                            </div>
 
                            <div class="col-md-3" style="margin-bottom: 40px;">
                               <label for="lname">Last Name</label>
-                              <input class="contactus" id="lname" placeholder="Last Name" type="text" name="lname">
+                              <input class="contactus" id="lname" placeholder="Last Name" type="text" name="lname" required>
                               <p id="ln" style="color: red;"></p>
                            </div>
                            <div class="col-md-3" style="margin-bottom:40px;">
                               <label for="cin">CIN</label>
-                              <input class="contactus" id="cin" placeholder="CIN" type="text" name="cin">
+                              <input class="contactus" id="cin" placeholder="CIN" type="text" name="cin" required>
                               <p id="cinp" style="color: red;"></p>
                            </div>
                            <div class="col-md-3" style="margin-bottom: 40px;">
                               <label for="number">Number</label>
-                              <input class="contactus" id="number" placeholder="Number" type="text" name="number">
+                              <input class="contactus" id="number" placeholder="Number" type="text" name="number" required>
                               <p id="num" style="color: red;"></p>
                            </div>
 
                            <div class="col-md-3">
                               <label for="password">Password</label>
-                              <input class="contactus" id="password" placeholder="Password" type="password" name="password">
+                              <input class="contactus" id="password" placeholder="Password" type="password" name="password" required>
                               <p id="pwd" style="color: red;"></p>
                            </div>
                            <div class="col-md-3">
                               <label for="retype-password">Retype Password</label>
-                              <input class="contactus" id="retype-password" placeholder="Retype Password" type="password" name="retype-password">
+                              <input class="contactus" id="retype-password" placeholder="Retype Password" type="password" name="retype-password" required>
                               <p id="pwd2" style="color: red;"></p>
                            </div>
                            <div class="col-md-3">
                               
                                  <label for="mail">Email</label>
-                                 <input class="contactus" id="mail" placeholder="Email" type="text" name="mail" >
+                                 <input class="contactus" id="mail" placeholder="Email" type="email" name="mail" required>
                                  <p id="zzz" style="color: red;"></p>
                              </div>
+                             <div class="col-md-3" style="margin-bottom: 40px;">
+                              <div class="g-recaptcha" data-sitekey="6LfReIoqAAAAAAc2XD2D7GQaQzh29cEl72cUQlPo"></div>
+                          </div>
                            <div class="col-md-12" style="text-align: center; margin-top: 40px;">
                               <button class="send_btn" type="submit">Sign UP</button>
                            </div>
