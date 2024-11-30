@@ -14,6 +14,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $qte = $_POST['qte'] ?? '';
     $cat = $_POST['cat'] ?? '';
 
+    $query2 = "SELECT id_categorie, nom_categorie FROM categorie ORDER BY nom_categorie";
+$stmt2 = $conn->prepare($query2);
+$stmt2->execute();
+
+
+$categories = [];
+while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    $categories[$row['id_categorie']] = $row['nom_categorie'];  
+}
+
+
+$query = "SELECT * FROM produits ORDER BY categorie";
+$stmt = $conn->prepare($query);
+$stmt->execute();
+
+$products = [];
+while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    $categoryName = $categories[$row['categorie']] ?? 'Unknown';  
+    $products[$categoryName][] = $row; 
+}
+
     // Validate form inputs
     if (empty($nom_prod) || empty($description) || empty($prix) || empty($qte) || empty($cat)) {
         echo "All fields must be filled out.";
@@ -174,7 +195,10 @@ return test;
         <input type="file" name="url_img" id="url_img" >
 
         <label for="cat">Category:</label>
-        <input type="number" name="cat" id="cat" >
+        <select name="cat" id="cat">
+
+            <option value="1"></option>
+        </select>
 
         <button type="submit">Add Product</button>
     </form>

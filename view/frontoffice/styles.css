@@ -8,23 +8,31 @@
 
 body {
     color: #333;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
+/* Links */
 a {
     text-decoration: none;
     color: white;
 }
 
-a:hover{
-    color:#d57b20;
+a:hover {
+    color: #d57b20;
 }
-#gq{
+
+/* #gq Button */
+#gq {
     background-color: #d57b20;
-    padding: 15px ;
+    padding: 15px;
 }
-#gq:hover{
+
+#gq:hover {
     color: #0e0e0e;
 }
+
 /* Navigation Bar */
 nav {
     display: flex;
@@ -51,7 +59,6 @@ nav ul li {
 nav ul li a {
     font-weight: bold;
 }
-
 
 /* Hero Section */
 .hero {
@@ -117,46 +124,68 @@ footer {
     font-size: 0.9em;
 }
 
-
-/* Body and basic layout */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-}
-
-nav {
-    background-color: #0e0e0e;
+/* Search Bar Styles 
+.search-bar {
+    margin: 20px auto;
+    max-width: 600px; /* Set a max width for the search bar 
     padding: 10px;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
+    border: 2px solid #ccc;
+    border-radius: 25px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow for depth 
 }
 
-nav img {
-    height: 50px;
+.search-bar input {
+    width: 80%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    outline: none;
+    margin-right: 10px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition on focus 
 }
 
-nav ul {
-    list-style: none;
-    display: flex;
-    gap: 20px;
+.search-bar input:focus {
+    border-color: #4CAF50; /* Green color on focus 
+    box-shadow: 0 0 8px rgba(76, 175, 80, 0.5); /* Green glow effect on focus 
 }
 
-nav ul li {
-    display: inline;
-}
-
-nav ul li a {
+.search-bar button {
+    padding: 10px 20px;
+    background-color: #4CAF50; /* Green background for button 
     color: white;
-    text-decoration: none;
-    font-weight: bold;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.search-bar button:hover {
+    background-color: #45a049; /* Darker green on hover 
+}
+
+.search-bar button:active {
+    background-color: #388e3c; /* Even darker green when clicked */
+
+
+/* Search and Category Section 
+.search-and-category {
+    display: flex;
+    justify-content: spacebetween; /* Space between category buttons and search bar 
+    align-items: center; /* Vertically center both sections 
+    margin: 20px;
 }
 
 /* Category Buttons Section */
 .category-list {
-    margin: 20px;
-    text-align: center;
+    display: flex;
+    justify-content: flex-start; /* Align the categories to the left */
+    gap: 15px; /* Add some space between category buttons */
 }
 
 .category-btn {
@@ -167,6 +196,7 @@ nav ul li a {
     border: none;
     cursor: pointer;
     font-size: 16px;
+    transition: background-color 0.3s ease;
 }
 
 .category-btn:hover {
@@ -179,7 +209,7 @@ nav ul li a {
 }
 
 .product-category {
-    display: none;
+    display: none; /* Hidden by default, shown on category button click */
 }
 
 .product-catalog {
@@ -236,6 +266,8 @@ footer {
     padding: 10px;
     margin-top: 20px;
 }
+
+/* Cart Icon */
 .cart-icon {
     width: 30px; /* Adjust size */
     height: auto;
