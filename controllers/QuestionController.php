@@ -125,4 +125,15 @@ class QuestionController {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    public function updateQuestionStatus($questionId, $status) {
+        $validStatuses = ['open', 'answered', 'closed'];
+        if (!in_array($status, $validStatuses)) {
+            throw new Exception('Invalid status');
+        }
+    
+        $pdo = config::getConnexion();
+        $stmt = $pdo->prepare("UPDATE question SET status = ? WHERE id_question = ?");
+        $stmt->execute([$status, $questionId]);
+    }
+    
 }

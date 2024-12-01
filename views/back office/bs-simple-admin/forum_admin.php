@@ -7,6 +7,20 @@ require_once __DIR__ . '/../../../controllers/ResponseController.php';
 $questionController = new QuestionController();
 $responseController = new ResponseController();
 
+// Handle form submission for updating the question status
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['question_id']) && isset($_POST['status'])) {
+    try {
+        // Update the question status
+        $questionController->updateQuestionStatus($_POST['question_id'], $_POST['status']);
+        
+        // Redirect back to the same page (forum_admin.php)
+        header("Location: forum_admin.php");  // This ensures it redirects to the same page
+        exit;  // Ensure no further code is executed after the redirect
+    } catch (Exception $e) {
+        echo "Error updating status: " . $e->getMessage();
+    }
+}
+
 // Fetch questions and responses
 $questions = $questionController->getAllQuestions();
 $responses = $responseController->getAllResponses();
@@ -35,9 +49,6 @@ $responses = $responseController->getAllResponses();
                 <a class="navbar-brand" href="#">
                     <img src="assets/img/logo.png" alt="Logo" />
                 </a>
-                <span class="logout-spn">
-                    <a href="#" style="color:#fff;">LOGOUT</a>
-                </span>
             </div>
         </div>
         
@@ -69,6 +80,7 @@ $responses = $responseController->getAllResponses();
                                             <th>ID</th>
                                             <th>Question</th>
                                             <th>Type</th>
+                                            <th>Status</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -79,6 +91,18 @@ $responses = $responseController->getAllResponses();
                                                 <td><?= htmlspecialchars($q['question_text']) ?></td>
                                                 <td>
                                                     <?= $q['is_suggestion'] == 1 ? '<span class="label label-success">Suggestion</span>' : '<span class="label label-primary">Question</span>' ?>
+                                                </td>
+                                                <td>
+                                                    <!-- Update Status Form -->
+                                                    <form method="POST" action="forum_admin.php">
+                                                        <input type="hidden" name="question_id" value="<?= $q['id_question'] ?>">
+                                                         <select name="status">
+                                                             <option value="open" <?= $q['status'] == 'open' ? 'selected' : '' ?>>Open</option>
+                                                             <option value="answered" <?= $q['status'] == 'answered' ? 'selected' : '' ?>>Answered</option>
+                                                             <option value="closed" <?= $q['status'] == 'closed' ? 'selected' : '' ?>>Closed</option>
+                                                        </select>
+                                                        <button type="submit" class="btn btn-info">Update Status</button>
+                                                    </form>
                                                 </td>
                                                 <td>
                                                     <a href="updateQuestion.php?id=<?= $q['id_question'] ?>&context=admin" class="btn btn-primary">Modifier</a>
@@ -124,7 +148,6 @@ $responses = $responseController->getAllResponses();
                 </div>
             </div>
         </div>
-
         <!-- FOOTER -->
         <div class="footer">
             <div class="row">

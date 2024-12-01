@@ -21,7 +21,6 @@ $questions = $questionController->getQuestionsSorted('is_suggestion'); // Assumi
 
 // Fetch suggestions (which are flagged as 'is_suggestion' = 1)
 $suggestions = $questionController->getSuggestions(); // Assuming you have a method for fetching suggestions
-
 ?>
 
 <!DOCTYPE html>
@@ -74,25 +73,30 @@ $suggestions = $questionController->getSuggestions(); // Assuming you have a met
                         <a href="<?= BASE_URL ?>views/back office/bs-simple-admin/updateQuestion.php?id=<?= $q['id_question'] ?>&context=user" class="btn btn-primary">Modifier</a>
                         <a href="<?= BASE_URL ?>views/back office/bs-simple-admin/deleteQuestion.php?id=<?= $q['id_question'] ?>" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette question ?');">Supprimer</a>
 
-                        <!-- Display responses -->
-                        <?php
-                        $responses = $responseController->getResponsesByQuestion($q['id_question']);
-                        if (!empty($responses)):
-                        ?>
-                            <ul>
-                                <?php foreach ($responses as $response): ?>
-                                    <li>
-                                        <strong>Réponse : </strong> <?= htmlspecialchars($response['response_text']) ?>
-                                    </li>
-                                <?php endforeach; ?>
-                            </ul>
-                        <?php endif; ?>
+                        <!-- Check if the question status is 'open' before showing the reply form -->
+                        <?php if ($q['status'] != 'closed' && $q['status'] != 'answered'): ?>
+                            <!-- Display responses -->
+                            <?php
+                            $responses = $responseController->getResponsesByQuestion($q['id_question']);
+                            if (!empty($responses)):
+                            ?>
+                                <ul>
+                                    <?php foreach ($responses as $response): ?>
+                                        <li>
+                                            <strong>Réponse : </strong> <?= htmlspecialchars($response['response_text']) ?>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            <?php endif; ?>
 
-                        <!-- Add a response form -->
-                        <form action="<?= BASE_URL ?>views/front office/index.php?action=addResponse&question_id=<?= $q['id_question'] ?>" method="POST">
-                            <textarea name="response_text" placeholder="Votre réponse..." required></textarea>
-                            <button type="submit" class="btn btn-success">Répondre</button>
-                        </form>
+                            <!-- Add a response form -->
+                            <form action="<?= BASE_URL ?>views/front office/index.php?action=addResponse&question_id=<?= $q['id_question'] ?>" method="POST">
+                                <textarea name="response_text" placeholder="Votre réponse..." required></textarea>
+                                <button type="submit" class="btn btn-success">Répondre</button>
+                            </form>
+                        <?php else: ?>
+                            <p>Cette question est <?= $q['status'] ?> et ne peut pas recevoir de réponse.</p>
+                        <?php endif; ?>
                     </li>
                 <?php endif; ?>
             <?php endforeach; ?>
@@ -109,25 +113,30 @@ $suggestions = $questionController->getSuggestions(); // Assuming you have a met
                         <a href="<?= BASE_URL ?>views/back office/bs-simple-admin/updateQuestion.php?id=<?= $q['id_question'] ?>&context=user" class="btn btn-primary">Modifier</a>
                         <a href="<?= BASE_URL ?>views/back office/bs-simple-admin/deleteQuestion.php?id=<?= $q['id_question'] ?>" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette suggestion ?');">Supprimer</a>
 
-                        <!-- Display responses -->
-                        <?php
-                        $responses = $responseController->getResponsesByQuestion($q['id_question']);
-                        if (!empty($responses)):
-                        ?>
-                            <ul>
-                                <?php foreach ($responses as $response): ?>
-                                    <li>
-                                        <strong>Réponse : </strong> <?= htmlspecialchars($response['response_text']) ?>
-                                    </li>
-                                <?php endforeach; ?>
-                            </ul>
-                        <?php endif; ?>
+                        <!-- Check if the question status is 'open' before showing the reply form -->
+                        <?php if ($q['status'] != 'closed' && $q['status'] != 'answered'): ?>
+                            <!-- Display responses -->
+                            <?php
+                            $responses = $responseController->getResponsesByQuestion($q['id_question']);
+                            if (!empty($responses)):
+                            ?>
+                                <ul>
+                                    <?php foreach ($responses as $response): ?>
+                                        <li>
+                                            <strong>Réponse : </strong> <?= htmlspecialchars($response['response_text']) ?>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            <?php endif; ?>
 
-                        <!-- Add a response form -->
-                        <form action="<?= BASE_URL ?>views/front office/index.php?action=addResponse&question_id=<?= $q['id_question'] ?>" method="POST">
-                            <textarea name="response_text" placeholder="Votre réponse..." required></textarea>
-                            <button type="submit" class="btn btn-success">Répondre</button>
-                        </form>
+                            <!-- Add a response form -->
+                            <form action="<?= BASE_URL ?>views/front office/index.php?action=addResponse&question_id=<?= $q['id_question'] ?>" method="POST">
+                                <textarea name="response_text" placeholder="Votre réponse..." required></textarea>
+                                <button type="submit" class="btn btn-success">Répondre</button>
+                            </form>
+                        <?php else: ?>
+                            <p>Cette suggestion est <?= $q['status'] ?> et ne peut pas recevoir de réponse.</p>
+                        <?php endif; ?>
                     </li>
                 <?php endif; ?>
             <?php endforeach; ?>
