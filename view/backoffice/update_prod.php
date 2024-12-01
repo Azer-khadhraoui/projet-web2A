@@ -3,6 +3,9 @@ include('../../controller/prod_controller.php');
 
 $controller = new TravelOfferController();
 
+
+$conn = config::getConnexion();
+
 if (isset($_GET['id'])) {
     $product = $controller->getProductById($_GET['id']);
     if (!$product) {
@@ -11,6 +14,20 @@ if (isset($_GET['id'])) {
     }
 } else {
     echo "Product ID is missing.";
+    exit();
+}
+
+$categories = [];
+$query2 = "SELECT id_categorie, nom_categorie FROM categorie ORDER BY nom_categorie";
+$stmt2 = $conn->prepare($query2);
+
+try {
+    $stmt2->execute();
+    while ($row = $stmt2->fetch(PDO::FETCH_ASSOC)) {
+        $categories[$row['id_categorie']] = $row['nom_categorie'];
+    }
+} catch (Exception $e) {
+    echo "Error fetching categories: " . $e->getMessage();
     exit();
 }
 
@@ -111,8 +128,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <label>Image URL:</label>
         <input type="file" name="url_img" value="<?= htmlspecialchars($product['url_img']); ?>">
 
-        <label>Category:</label>
-        <input type="number" name="categorie" value="<?= htmlspecialchars($product['categorie']); ?>">
+        <label for="cat">Category:</label>
+        <select name="cat" id="cat">
+            <option value="">-- Select a Category --</option>
+            <?php foreach ($categories as $id => $name): ?>
+                <option value="<?= htmlspecialchars($id) ?>"><?= htmlspecialchars($name) ?></option>
+            <?php endforeach; ?>
+        </select>
 
         <button type="submit">Update Product</button>
         <script src="script.js"></script>
