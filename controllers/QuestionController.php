@@ -3,41 +3,49 @@ require_once __DIR__ . '/../config.php';
 require_once __DIR__ . '/../models/question.php';
 
 class QuestionController {
-    // Add a new question or suggestion
+    // Ajouter une nouvelle question ou suggestion
     public function addQuestion($id_client, $question_text, $is_suggestion = false) {
         try {
             $pdo = config::getConnexion();
             $stmt = $pdo->prepare("INSERT INTO question (id_client, question_text, is_suggestion, created_at) VALUES (:id_client, :question_text, :is_suggestion, NOW())");
-            $stmt->execute([
-                'id_client' => $id_client,
-                'question_text' => $question_text,
+            $stmt->execute([ 
+                'id_client' => $id_client, 
+                'question_text' => $question_text, 
                 'is_suggestion' => $is_suggestion ? 1 : 0
             ]);
+            
+            // Retourner l'ID de la question insérée
+            return $pdo->lastInsertId();
         } catch (Exception $e) {
             echo "Error adding question: " . $e->getMessage();
+            return null;
         }
     }
 
-    // Get all suggestions
-    public function getAllSuggestions() {
+    // Récupérer toutes les questions sans pagination ni tri
+    public function getAllQuestions() {
         $pdo = config::getConnexion();
-        $stmt = $pdo->query("SELECT * FROM question WHERE is_suggestion = 1 ORDER BY created_at DESC");
+
+        // Requête SQL pour récupérer toutes les questions sans tri ni pagination
+        $stmt = $pdo->query("SELECT * FROM question ORDER BY created_at DESC");
+        
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Get all questions
-    public function getAllQuestions() {
+    // Récupérer une question par son ID
+    public function getQuestionById($id) {
         try {
             $pdo = config::getConnexion();
-            $stmt = $pdo->query("SELECT * FROM question ORDER BY created_at DESC");
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $stmt = $pdo->prepare("SELECT * FROM question WHERE id_question = :id");
+            $stmt->execute(['id' => $id]);
+            return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
-            die("Error fetching questions: " . $e->getMessage());
+            echo "Error fetching question by ID: " . $e->getMessage();
+            return null;
         }
     }
-    
 
-    // Update a question by ID
+    // Mise à jour d'une question par ID
     public function updateQuestion($questionText, $id) {
         try {
             $pdo = config::getConnexion();
@@ -51,7 +59,7 @@ class QuestionController {
         }
     }
 
-    // Delete a question by ID
+    // Supprimer une question par ID
     public function deleteQuestion($id) {
         try {
             $pdo = config::getConnexion();
@@ -61,18 +69,15 @@ class QuestionController {
             echo "Error deleting question: " . $e->getMessage();
         }
     }
-
-    // Get a question by ID
-    public function getQuestionById($id) {
+    public function getAllSuggestions() {
         try {
             $pdo = config::getConnexion();
-            $stmt = $pdo->prepare("SELECT * FROM question WHERE id_question = :id");
-            $stmt->execute(['id' => $id]);
-            return $stmt->fetch(PDO::FETCH_ASSOC);
-        } catch (Exception $e) {
-            echo "Error fetching question by ID: " . $e->getMessage();
-            return null;
+            // Fetch only questions marked as suggestions
+            $stmt = $pdo->query("SELECT * FROM question WHERE is_suggestion = 1 ORDER BY created_at DESC");
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo 'Error: ' . $e->getMessage();
+            return [];
         }
     }
 }
-?>

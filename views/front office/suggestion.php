@@ -18,21 +18,21 @@ $suggestions = $questionController->getAllSuggestions();
     <link rel="stylesheet" href="<?= BASE_URL ?>css/forum.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>css/suggestion.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>css/background-animation.css">
+    <script src="<?= BASE_URL ?>js/validation.js"></script> <!-- Inclure le script de validation -->
 </head>
-<body>
+<body onsubmit =validateSuggestion();>
     <header>
         <h1>Forum - Suggestions</h1>
     </header>
     <nav>
-        <!-- Corrected links to reflect the new position of index.php -->
         <a href="<?= BASE_URL ?>views/front office/index.php?action=forum">Retour au Forum</a>
         | <a href="<?= BASE_URL ?>views/front office/index.php?action=discussion">Partie Discussion</a>
     </nav>
 
     <main class="suggestion-main">
         <h2>Ajouter une Nouvelle Suggestion</h2>
-        <form action="<?= BASE_URL ?>views/front office/index.php?action=addSuggestion" method="POST">
-            <textarea name="suggestion_text" rows="3" cols="50" required placeholder="Tapez votre suggestion ici..."></textarea><br>
+        <form action="<?= BASE_URL ?>views/front office/index.php?action=addSuggestion" method="POST" onsubmit="return validateSuggestion()"> <!-- Contrôle JS -->
+            <textarea name="suggestion_text" rows="3" cols="50" placeholder="Tapez votre suggestion ici..."></textarea><br>
             <button type="submit">Soumettre la Suggestion</button>
         </form>
 

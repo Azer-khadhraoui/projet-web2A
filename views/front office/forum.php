@@ -12,9 +12,7 @@ require_once __DIR__ . '/../../config.php';
 </head>
 <body>
     <header class="forum-header">
-        <div class="logo">
-            <img src="<?= BASE_URL ?>green&purelogo.png" alt="Green & Pure Logo">
-        </div>
+        
         <div class="header-text">
             <h1>Bienvenue dans le Forum</h1>
             <p>Choisissez une section pour continuer :</p>
@@ -23,10 +21,12 @@ require_once __DIR__ . '/../../config.php';
     
     <main class="forum-main">
         <div class="forum-options">
-            <!-- Update links to point correctly to index.php -->
+            <!-- Existing links for the forum sections -->
             <a href="<?= BASE_URL ?>views/front office/index.php?action=discussion" class="forum-link">Partie Discussion</a>
             <a href="<?= BASE_URL ?>views/front office/index.php?action=suggestion" class="forum-link">Partie Suggestion</a>
+            <a href="<?= BASE_URL ?>views/front office/index.php?action=AI" class="forum-link">Partie AI</a>
         </div>
-    </main>
+
+        
 </body>
 </html>

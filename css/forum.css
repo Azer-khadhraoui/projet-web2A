@@ -14,12 +14,24 @@ body {
 .forum-header {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start; /* Align items to the left */
     width: 100%;
     padding: 20px;
     background-color: #2e7d32; /* Vert foncé */
     color: white;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.logo img {
+    max-width: 150px !important;  /* Force the logo to be no wider than 150px */
+    height: auto !important;  /* Maintain the aspect ratio */
+    margin-right: 20px;  /* Add space between logo and text */
+}
+
+/* Header text */
+.header-text {
+    flex-grow: 1; /* This will allow the header text to take up the remaining space */
+    text-align: center; /* Ensure header text is centered */
 }
 
 .header-text h1 {
