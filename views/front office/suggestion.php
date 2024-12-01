@@ -4,6 +4,9 @@ require_once __DIR__ . '/../../controllers/QuestionController.php';
 
 // Initialize controller
 $questionController = new QuestionController();
+// discussion.php
+$questions = $questionController->getQuestionsSorted($sortBy);
+
 
 // Fetch only suggestions
 $suggestions = $questionController->getAllSuggestions();

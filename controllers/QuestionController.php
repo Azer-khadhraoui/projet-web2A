@@ -69,15 +69,60 @@ class QuestionController {
             echo "Error deleting question: " . $e->getMessage();
         }
     }
+
+    // Get all suggestions for a specific question
+    public function getSuggestionsByQuestion($questionId) {
+        try {
+            $pdo = config::getConnexion();
+            $stmt = $pdo->prepare("SELECT * FROM question WHERE is_suggestion = 1 AND related_question_id = :question_id ORDER BY created_at DESC");
+            $stmt->execute(['question_id' => $questionId]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo 'Error: ' . $e->getMessage();
+            return [];
+        }
+    }
+
+    // Get all suggestions (for the suggestion section)
     public function getAllSuggestions() {
         try {
             $pdo = config::getConnexion();
-            // Fetch only questions marked as suggestions
             $stmt = $pdo->query("SELECT * FROM question WHERE is_suggestion = 1 ORDER BY created_at DESC");
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             echo 'Error: ' . $e->getMessage();
             return [];
         }
+    }
+
+    // Get questions sorted by a specific field (use only valid sorting criteria)
+    public function getQuestionsSorted($sortBy) {
+        $pdo = config::getConnexion();
+
+        // Ensure we are only sorting by valid fields
+        $allowedSortColumns = ['is_suggestion', 'created_at', 'question_text'];
+        if (!in_array($sortBy, $allowedSortColumns)) {
+            $sortBy = 'is_suggestion'; // Default to sorting by 'is_suggestion' if an invalid sort is passed
+        }
+
+        // Prepare the SQL query with dynamic sorting
+        $stmt = $pdo->prepare("SELECT * FROM question ORDER BY $sortBy DESC");
+
+        // Execute the query
+        $stmt->execute();
+
+        // Fetch and return all the rows
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Get all suggestions (fixed)
+    public function getSuggestions() {
+        // Use the PDO connection instead of $this->db
+        $pdo = config::getConnexion();
+        // Query to fetch all questions marked as suggestions
+        $sql = "SELECT * FROM question WHERE is_suggestion = 1";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

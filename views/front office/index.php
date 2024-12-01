@@ -6,14 +6,22 @@ require_once __DIR__ . '/../../controllers/ResponseController.php';
 // Define the current directory base URL
 $baseUrl = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
 
-// Define default action
-$action = $_GET['action'] ?? 'forum'; // Default action is 'forum'
+// Get sorting criterion from the query string, default to 'created_at'
+$sortBy = isset($_GET['sortBy']) ? $_GET['sortBy'] : 'is_suggestion';
+$allowedSortColumns = ['is_suggestion'];
+
+// Verify that the sorting criterion is valid, otherwise default to 'created_at'
+if (!in_array($sortBy, $allowedSortColumns)) {
+    $sortBy = 'is_suggestion'; // Default sorting column
+}
 
 // Initialize controllers
 $questionController = new QuestionController();
 $responseController = new ResponseController();
 
 // Handle different actions
+$action = $_GET['action'] ?? 'forum'; // Default action is 'forum'
+
 switch ($action) {
     case 'forum':
         include __DIR__ . '/forum.php'; // Include the forum page
@@ -39,7 +47,7 @@ switch ($action) {
             } else {
                 // Add the question
                 $questionController->addQuestion(1, $questionText); // Assuming user ID is 1
-                header("Location: $baseUrl/index.php?action=discussion"); // Redirect to discussion page
+                header("Location: $baseUrl/index.php?action=discussion&sortBy=$sortBy"); // Redirect to discussion page with sortBy preserved
                 exit;
             }
         } else {
@@ -59,7 +67,7 @@ switch ($action) {
             } else {
                 // Add suggestion
                 $questionController->addQuestion(1, $suggestionText, true); // Assuming user ID is 1
-                header("Location: $baseUrl/index.php?action=suggestion"); // Redirect to suggestion page
+                header("Location: $baseUrl/index.php?action=suggestion&sortBy=$sortBy"); // Redirect to suggestion page with sortBy preserved
                 exit;
             }
         } else {
@@ -80,7 +88,7 @@ switch ($action) {
             } else {
                 // Add response to the specific question
                 $responseController->addResponse($questionId, 1, $responseText); // Assuming user ID is 1
-                header("Location: $baseUrl/index.php?action=discussion"); // Redirect back to discussion page
+                header("Location: $baseUrl/index.php?action=discussion&sortBy=$sortBy"); // Redirect back to discussion page with sortBy preserved
                 exit;
             }
         } else {
