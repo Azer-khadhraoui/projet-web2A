@@ -124,67 +124,13 @@ footer {
     font-size: 0.9em;
 }
 
-/* Search Bar Styles 
-.search-bar {
-    margin: 20px auto;
-    max-width: 600px; /* Set a max width for the search bar 
-    padding: 10px;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    border: 2px solid #ccc;
-    border-radius: 25px;
-    background-color: #f9f9f9;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow for depth 
-}
 
-.search-bar input {
-    width: 80%;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 25px;
-    outline: none;
-    margin-right: 10px;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition on focus 
-}
-
-.search-bar input:focus {
-    border-color: #4CAF50; /* Green color on focus 
-    box-shadow: 0 0 8px rgba(76, 175, 80, 0.5); /* Green glow effect on focus 
-}
-
-.search-bar button {
-    padding: 10px 20px;
-    background-color: #4CAF50; /* Green background for button 
-    color: white;
-    border: none;
-    border-radius: 25px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
-}
-
-.search-bar button:hover {
-    background-color: #45a049; /* Darker green on hover 
-}
-
-.search-bar button:active {
-    background-color: #388e3c; /* Even darker green when clicked */
-
-
-/* Search and Category Section 
-.search-and-category {
-    display: flex;
-    justify-content: spacebetween; /* Space between category buttons and search bar 
-    align-items: center; /* Vertically center both sections 
-    margin: 20px;
-}
 
 /* Category Buttons Section */
 .category-list {
     display: flex;
-    justify-content: flex-start; /* Align the categories to the left */
+    justify-content: center; 
+    align-items: center; /* Aligne verticalement si nécessaire */
     gap: 15px; /* Add some space between category buttons */
 }
 

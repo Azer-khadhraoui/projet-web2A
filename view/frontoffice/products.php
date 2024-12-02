@@ -1,9 +1,9 @@
 <?php
 include_once '../../config.php';
 
-$conn = config::getConnexion(); 
+$conn = config::getConnexion();
 
-
+// Récupération des catégories
 $categories = [];
 $query = "SELECT id_categorie, nom_categorie FROM categorie ORDER BY nom_categorie";
 $stmt = $conn->prepare($query);
@@ -17,46 +17,67 @@ try {
     echo "Erreur lors de la récupération des catégories : " . $e->getMessage();
 }
 
-$search = $_GET['search'] ?? ''; 
-$sortOrder = $_GET['sort_order'] ?? 'asc'; 
-$sortBy = $_GET['sort_by'] ?? 'prix'; 
+// Récupération des paramètres pour la recherche, tri et pagination
+$search = $_GET['search'] ?? '';
+$sortOrder = $_GET['sort_order'] ?? 'asc';
+$sortBy = $_GET['sort_by'] ?? 'prix';
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$limit = 6;
+$offset = ($page - 1) * $limit;
 
-
-$query = "SELECT p.*, c.nom_categorie FROM produits p
+// Requête principale
+$query = "SELECT p.*, c.nom_categorie 
+          FROM produits p 
           JOIN categorie c ON p.categorie = c.id_categorie";
 
 // Appliquer la recherche
 if ($search !== '') {
-    $query .= " WHERE p.nom_prod LIKE :search"; 
+    $query .= " WHERE p.nom_prod LIKE :search";
 }
 
-// Appliquer le tri 
-if ($sortBy) {
-    if ($sortBy === 'nom_categorie') {
-        
-        $query .= " ORDER BY p.nom_prod " . ($sortOrder === 'desc' ? 'DESC' : 'ASC');
-    } else {
-        $query .= " ORDER BY p." . $sortBy . " " . ($sortOrder === 'desc' ? 'DESC' : 'ASC');
-    }
+// Appliquer le tri
+if ($sortBy === 'nom_categorie') {
+    $query .= " ORDER BY c.nom_categorie " . ($sortOrder === 'desc' ? 'DESC' : 'ASC');
+} else {
+    $query .= " ORDER BY p." . $sortBy . " " . ($sortOrder === 'desc' ? 'DESC' : 'ASC');
 }
+
+// Ajouter la pagination
+$query .= " LIMIT :limit OFFSET :offset";
 
 $stmt = $conn->prepare($query);
 
-
+// Liaison des paramètres
 if ($search !== '') {
     $stmt->bindValue(':search', '%' . $search . '%');
 }
-
+$stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
 
 $filteredProducts = [];
-
 try {
     $stmt->execute();
-   
     $filteredProducts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (Exception $e) {
     echo "Erreur lors de la récupération des produits : " . $e->getMessage();
 }
+
+// Calcul du nombre total de produits pour la pagination
+$countQuery = "SELECT COUNT(*) as total 
+               FROM produits p 
+               JOIN categorie c ON p.categorie = c.id_categorie";
+
+if ($search !== '') {
+    $countQuery .= " WHERE p.nom_prod LIKE :search";
+}
+
+$countStmt = $conn->prepare($countQuery);
+if ($search !== '') {
+    $countStmt->bindValue(':search', '%' . $search . '%');
+}
+$countStmt->execute();
+$totalProducts = $countStmt->fetch(PDO::FETCH_ASSOC)['total'];
+$totalPages = ceil($totalProducts / $limit);
 
 // Regroupement des produits par catégorie
 $productsByCategory = [];
@@ -65,7 +86,6 @@ foreach ($filteredProducts as $product) {
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -73,73 +93,135 @@ foreach ($filteredProducts as $product) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Green&Pure - Products</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="script_prod.js"> </script>
+    <script src="script_prod.js">
+        
+    document.querySelectorAll('.add-to-cart').forEach(button => {
+        button.onclick = function () {
+            const productName = this.getAttribute('data-product-name');
+            const messageBox = document.getElementById('messageBox');
+            const messageContent = document.getElementById('messageContent');
+
+           
+            messageContent.textContent = `The product "${productName}" has been added to your cart!`;
+
+          
+            messageBox.style.display = 'block';
+        };
+    });
+
+   
+    function closeMessageBox() {
+        const messageBox = document.getElementById('messageBox');
+        messageBox.style.display = 'none';
+    }
+    </script>
     <style>
-        .search-bar {
+        .pagination {
             display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            margin: auto;
-            max-width: 600px;
-        }
-
-        .search-bar input {
-            width: 80%;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 25px;
-            outline: none;
-            margin-right: 10px;
-            transition: border-color 0.3s ease;
-        }
-
-        .search-bar input:focus {
-            border-color: #d57b20;
-        }
-
-        .search-bar button {
-            padding: 10px 20px;
-            background-color: #d57b20;
-            color: white;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-        }
-
-        .search-bar button:hover {
-            background-color: #efa55b;
-        }
-
-        .product-catalog {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .product-card {
-            border: 1px solid #ddd;
-            padding: 10px;
-            border-radius: 5px;
-            max-width: 200px;
-        }
-
-        .category-btn {
-            margin-bottom: 10px;
-            cursor: pointer;
-        }
-
-        .sort-dropdown {
-            padding: 10px;
+            justify-content: center;
             margin-top: 20px;
         }
+
+        .pagination a {
+            margin: 0 5px;
+            padding: 10px 15px;
+            text-decoration: none;
+            color: #d57b20;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .pagination a.active {
+            background-color: #d57b20;
+            color: white;
+        }
+
+        .pagination a:hover {
+            background-color: #efa55b;
+            color: white;
+        }
+        .search-sort-form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin: 20px auto;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+}
+
+.search-sort-form input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    max-width: 300px;
+}
+
+.search-sort-form select {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: white;
+    cursor: pointer;
+}
+
+.search-sort-form button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background-color: #d57b20;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-sort-form button:hover {
+    background-color: #efa55b;
+}
+.message-box {
+        display: none; 
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 300px;
+        padding: 20px;
+        background-color: #ffffff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        text-align: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+    }
+
+    .message-box button {
+        margin-top: 10px;
+        padding: 10px 15px;
+        background-color: #d57b20;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .message-box button:hover {
+        background-color: #efa55b;
+    }
+
     </style>
 </head>
 <body>
-
-    <nav>
+    
+<nav>
         <img src="images/green&purelogo.png" alt="Green & Pure Logo" class="logo">
         <ul>
             <li><a href="index.php">HOME</a></li>
@@ -151,28 +233,23 @@ foreach ($filteredProducts as $product) {
             <li><a href="panier.php"><img src="images/cart_icon.jpg" alt="Panier" class="cart-icon"></a></li>
         </ul>
     </nav>
-    <!--tri et recherche -->
+
+    <!-- Formulaire de recherche et tri -->
     <form method="GET" action="" class="search-sort-form">
- 
-    <input type="text" id="search" name="search" placeholder="Rechercher un produit..." value="<?= htmlspecialchars($search) ?>">
-
-    <
-    <select name="sort_by">
-        <option value="prix" <?= $sortBy === 'prix' ? 'selected' : '' ?>>Price</option>
-        <option value="nom_categorie" <?= $sortBy === 'nom_categorie' ? 'selected' : '' ?>>Name</option>
-    </select>
-
-   
-    <select name="sort_order">
-        <option value="asc" <?= $sortOrder === 'asc' ? 'selected' : '' ?>>low to high </option>
-        <option value="desc" <?= $sortOrder === 'desc' ? 'selected' : '' ?>>high to low</option>
-    </select>
-
-    <button type="submit" >Appliquer</button>
-</form>
-
-    <!-- Affichage des catégories -->
-    <section class="category-list">
+        <input type="text" id="search" name="search" placeholder="Rechercher un produit..." value="<?= htmlspecialchars($search) ?>">
+        <select name="sort_by">
+            <option value="prix" <?= $sortBy === 'prix' ? 'selected' : '' ?>>Price</option>
+            <option value="nom_categorie" <?= $sortBy === 'nom_categorie' ? 'selected' : '' ?>>Name</option>
+        </select>
+        <select name="sort_order">
+            <option value="asc" <?= $sortOrder === 'asc' ? 'selected' : '' ?>>Low to High</option>
+            <option value="desc" <?= $sortOrder === 'desc' ? 'selected' : '' ?>>High to Low</option>
+        </select>
+        <button type="submit">Apply</button>
+    </form>
+ <!-- Affichage des catégories -->
+ <section class="category-list" style=" justify-content: center; 
+    align-items: center;">
         <?php foreach ($categories as $categoryId => $categoryName): ?>
             <button class="category-btn" onclick="showCategory('<?= htmlspecialchars($categoryName) ?>')">
                 <?= htmlspecialchars($categoryName) ?>
@@ -221,73 +298,34 @@ foreach ($filteredProducts as $product) {
     </main>
 <?php endif; ?>
 
-<!-- Message Box -->
+
+    <!-- Pagination -->
+<div class="pagination">
+    <?php if ($page > 1): ?>
+        <a href="?page=<?= $page - 1 ?>&limit=<?= $limit ?>&search=<?= htmlspecialchars($search) ?>&sort_by=<?= htmlspecialchars($sortBy) ?>&sort_order=<?= htmlspecialchars($sortOrder) ?>">Previous</a>
+    <?php endif; ?>
+
+    <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+        <a href="?page=<?= $i ?>&limit=<?= $limit ?>&search=<?= htmlspecialchars($search) ?>&sort_by=<?= htmlspecialchars($sortBy) ?>&sort_order=<?= htmlspecialchars($sortOrder) ?>" 
+           class="<?= $i === $page ? 'active' : '' ?>">
+            <?= $i ?>
+        </a>
+    <?php endfor; ?>
+
+    <?php if ($page < $totalPages): ?>
+        <a href="?page=<?= $page + 1 ?>&limit=<?= $limit ?>&search=<?= htmlspecialchars($search) ?>&sort_by=<?= htmlspecialchars($sortBy) ?>&sort_order=<?= htmlspecialchars($sortOrder) ?>">Next</a>
+    <?php endif; ?>
+</div>
+
+    <!-- Message Box -->
 <div class="message-box" id="messageBox">
     <p id="messageContent"></p>
     <button onclick="closeMessageBox()">Close</button>
 </div>
 
-<style>
-    
-    .message-box {
-        display: none; 
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 300px;
-        padding: 20px;
-        background-color: #ffffff;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        text-align: center;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        z-index: 1000;
-    }
-
-    .message-box button {
-        margin-top: 10px;
-        padding: 10px 15px;
-        background-color: #d57b20;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-
-    .message-box button:hover {
-        background-color: #efa55b;
-    }
-</style>
-
-<script>
-   
-    document.querySelectorAll('.add-to-cart').forEach(button => {
-        button.onclick = function () {
-            const productName = this.getAttribute('data-product-name');
-            const messageBox = document.getElementById('messageBox');
-            const messageContent = document.getElementById('messageContent');
-
-           
-            messageContent.textContent = `The product "${productName}" has been added to your cart!`;
-
-          
-            messageBox.style.display = 'block';
-        };
-    });
-
-   
-    function closeMessageBox() {
-        const messageBox = document.getElementById('messageBox');
-        messageBox.style.display = 'none';
-    }
-
-</script>
-
-
     <footer>
         <p>&copy; 2024 Green&Pure - All rights reserved.</p>
     </footer>
-
 </body>
 </html>
+

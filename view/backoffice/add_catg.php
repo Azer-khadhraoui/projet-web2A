@@ -83,6 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </script>
 </head>
 <body onsubmit="return  validate_cat();">
+    
 <a href="list_categories.php"><-----BACK </a>
     <h1>Add New Category</h1>
     <form method="POST">

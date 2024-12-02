@@ -148,6 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 </script>
 <body>
+    
     <a href="list_products.php"><----- BACK </a>
     <h1>Add a New Product</h1>
     <form method="POST" enctype="multipart/form-data" onsubmit="return validateForms();">
