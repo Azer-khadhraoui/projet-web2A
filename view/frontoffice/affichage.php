@@ -38,6 +38,9 @@
         .ml-auto {
             margin-left: 1100px;
         }
+        .voice-recognition {
+            margin-top: 20px;
+        }
     </style>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -83,10 +86,42 @@
                     status: document.getElementById('status').value,
                     keyword: document.getElementById('keyword').value
                 };
+                console.log('Filters applied:', filters); // Log the applied filters
                 fetchUsers(filters);
             });
 
             fetchUsers(); // Initial fetch without filters
+
+            // Voice recognition setup
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = 'en-US';
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+
+            const voiceButton = document.getElementById('voiceButton');
+            const voiceOutput = document.getElementById('voiceOutput');
+
+            voiceButton.addEventListener('click', function() {
+                recognition.start();
+                console.log('Voice recognition started.');
+            });
+
+            recognition.addEventListener('result', function(event) {
+                const transcript = event.results[0][0].transcript;
+                console.log('Voice recognition result:', transcript);
+                voiceOutput.value = transcript;
+                document.getElementById('keyword').value = transcript;
+                fetchUsers({ keyword: transcript });
+            });
+
+            recognition.addEventListener('speechend', function() {
+                recognition.stop();
+                console.log('Voice recognition stopped.');
+            });
+
+            recognition.addEventListener('error', function(event) {
+                console.error('Voice recognition error:', event.error);
+            });
         });
     </script>
 </head>
@@ -146,6 +181,10 @@
                             </div>
                             <button type="submit" class="btn btn-primary">Search</button>
                         </form>
+                        <div class="voice-recognition">
+                            <button id="voiceButton" class="btn btn-secondary">Start Voice Recognition</button>
+                            <textarea id="voiceOutput" class="form-control" rows="2" readonly></textarea>
+                        </div>
                     </div>
                 </div>
                 <table class="table table-bordered table-striped">
