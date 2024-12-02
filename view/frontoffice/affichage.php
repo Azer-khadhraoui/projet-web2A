@@ -39,6 +39,56 @@
             margin-left: 1100px;
         }
     </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            function fetchUsers(filters = {}) {
+                const params = new URLSearchParams(filters);
+                fetch(`search.php?${params.toString()}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok ' + response.statusText);
+                        }
+                        return response.json();
+                    })
+                    .then(users => {
+                        console.log('Users fetched:', users); // Log the fetched users
+                        const userList = document.getElementById('userList');
+                        userList.innerHTML = ''; // Clear previous results
+                        users.forEach(user => {
+                            const userItem = document.createElement('tr');
+                            userItem.innerHTML = `
+                                <td>${user.cin}</td>
+                                <td>${user.nom}</td>
+                                <td>${user.prenom}</td>
+                                <td>${user.numero}</td>
+                                <td>${user.pwd}</td>
+                                <td>${user.role == 1 ? 'Admin' : 'User'}</td>
+                                <td>${user.mail}</td>
+                                <td>${user.statut == 0 ? 'Active' : 'Blocked'}</td>
+                                <td>
+                                    <a href='delete.php?cin=${user.cin}' class='btn btn-danger btn-sm btn-custom' onclick="return confirm('Are you sure you want to delete this user?');">Delete</a>
+                                    <a href='edit.php?cin=${user.cin}' class='btn btn-primary btn-sm btn-custom'>Edit</a>
+                                </td>
+                            `;
+                            userList.appendChild(userItem);
+                        });
+                    })
+                    .catch(error => console.error('Error fetching users:', error));
+            }
+
+            document.getElementById('searchForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                const filters = {
+                    role: document.getElementById('role').value,
+                    status: document.getElementById('status').value,
+                    keyword: document.getElementById('keyword').value
+                };
+                fetchUsers(filters);
+            });
+
+            fetchUsers(); // Initial fetch without filters
+        });
+    </script>
 </head>
 <body>
     <!-- Bande verte avec le logo et le titre -->
@@ -60,6 +110,44 @@
     <div class="container table-custom">
         <div class="row">
             <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        Advanced User Search
+                    </div>
+                    <div class="card-body">
+                        <form id="searchForm">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="role">Role</label>
+                                        <select id="role" class="form-control">
+                                            <option value="">All</option>
+                                            <option value="1">Admin</option>
+                                            <option value="0">User</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="status">Status</label>
+                                        <select id="status" class="form-control">
+                                            <option value="">All</option>
+                                            <option value="0">Active</option>
+                                            <option value="1">Blocked</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="keyword">Keyword</label>
+                                        <input type="text" id="keyword" class="form-control" placeholder="Search by name or email">
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Search</button>
+                        </form>
+                    </div>
+                </div>
                 <table class="table table-bordered table-striped">
                     <thead class="thead-dark">
                         <tr>
@@ -74,7 +162,7 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="userList">
                         <?php
                         include '../../Controller/usercontroller.php';
                         $controller = new UserController();

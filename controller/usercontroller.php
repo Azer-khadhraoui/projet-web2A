@@ -82,17 +82,46 @@ class usercontroller {
         }
     }
 
-
-        // Méthode pour obtenir tous les utilisateurs
-        public function getAllUsers() {
-            $sql = "SELECT statut, role FROM utilisateur";
-            $db = config::getConnexion();
-            try {
-                $query = $db->query($sql);
-                return $query->fetchAll();
-            } catch (Exception $e) {
-                die('Erreur: ' . $e->getMessage());
-            }
+    // Méthode pour obtenir tous les utilisateurs
+    public function getAllUsers() {
+        $sql = "SELECT statut, role FROM utilisateur";
+        $db = config::getConnexion();
+        try {
+            $query = $db->query($sql);
+            return $query->fetchAll();
+        } catch (Exception $e) {
+            die('Erreur: ' . $e->getMessage());
         }
+    }
+
+    // Méthode pour obtenir tous les utilisateurs avec filtres
+    public function getFilteredUsers($role = '', $status = '', $keyword = '') {
+        $sql = "SELECT * FROM utilisateur WHERE 1=1";
+        $params = [];
+
+        if ($role !== '') {
+            $sql .= " AND role = :role";
+            $params['role'] = $role;
+        }
+
+        if ($status !== '') {
+            $sql .= " AND statut = :status";
+            $params['status'] = $status;
+        }
+
+        if ($keyword !== '') {
+            $sql .= " AND (nom LIKE :keyword OR prenom LIKE :keyword OR mail LIKE :keyword)";
+            $params['keyword'] = '%' . $keyword . '%';
+        }
+
+        $db = config::getConnexion();
+        try {
+            $query = $db->prepare($sql);
+            $query->execute($params);
+            return $query->fetchAll();
+        } catch (Exception $e) {
+            die('Erreur: ' . $e->getMessage());
+        }
+    }
 }
 ?>
