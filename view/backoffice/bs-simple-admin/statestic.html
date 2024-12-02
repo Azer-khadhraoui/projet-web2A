@@ -12,107 +12,208 @@
     <link rel="stylesheet" href="assets/css/custom.css">
     <!-- CHART.JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .navbar {
+            background-color: #4CAF50;
+            padding: 5px 0;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+        .navbar-brand img {
+            width: 40px;
+            height: auto;
+        }
+        .navbar-text {
+            color: #fff;
+            font-size: 22px;
+        }
+        .logout-spn {
+            color: #fff;
+            position: absolute;
+            right: 20px;
+            top: 15px;
+        }
+        .return-dashboard {
+            color: #fff;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 15px;
+        }
+        .card {
+            margin-top: 20px;
+        }
+        .card-header {
+            background-color: #4CAF50;
+            color: #fff;
+        }
+        body {
+            padding-top: 60px; /* Adjust this value to ensure content is not hidden behind the navbar */
+        }
+    </style>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            fetch('../../frontoffice/stat.php')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok ' + response.statusText);
+            function fetchData(filters = {}) {
+                const params = new URLSearchParams(filters);
+                fetch(`../../frontoffice/stat.php?${params.toString()}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok ' + response.statusText);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Data fetched:', data); // Log the fetched data
+
+                        // Update Status Distribution Chart
+                        statusChart.data.datasets[0].data = [data.statusCounts.active, data.statusCounts.blocked];
+                        statusChart.update();
+
+                        // Update Role Distribution Chart
+                        roleChart.data.datasets[0].data = [data.roleCounts.admin, data.roleCounts.user];
+                        roleChart.update();
+                    })
+                    .catch(error => console.error('Error fetching data:', error));
+            }
+
+            const statusCtx = document.getElementById('statusChart').getContext('2d');
+            const statusChart = new Chart(statusCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['Active', 'Blocked'],
+                    datasets: [{
+                        label: 'Status Distribution',
+                        data: [0, 0],
+                        backgroundColor: ['rgba(75, 192, 192, 0.2)', 'rgba(255, 99, 132, 0.2)'],
+                        borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Status Distribution'
+                        }
                     }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Data fetched:', data); // Log the fetched data
+                }
+            });
 
-                    // Status Distribution Chart
-                    const statusCtx = document.getElementById('statusChart').getContext('2d');
-                    new Chart(statusCtx, {
-                        type: 'pie',
-                        data: {
-                            labels: ['Active', 'Blocked'],
-                            datasets: [{
-                                label: 'Status Distribution',
-                                data: [data.statusCounts.active, data.statusCounts.blocked],
-                                backgroundColor: ['rgba(75, 192, 192, 0.2)', 'rgba(255, 99, 132, 0.2)'],
-                                borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)'],
-                                borderWidth: 1
-                            }]
+            const roleCtx = document.getElementById('roleChart').getContext('2d');
+            const roleChart = new Chart(roleCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['Admin', 'User'],
+                    datasets: [{
+                        label: 'Role Distribution',
+                        data: [0, 0],
+                        backgroundColor: ['rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)'],
+                        borderColor: ['rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
                         },
-                        options: {
-                            responsive: true,
-                            plugins: {
-                                legend: {
-                                    position: 'top',
-                                },
-                                title: {
-                                    display: true,
-                                    text: 'Status Distribution'
-                                }
-                            }
+                        title: {
+                            display: true,
+                            text: 'Role Distribution'
                         }
-                    });
+                    }
+                }
+            });
 
-                    // Role Distribution Chart
-                    const roleCtx = document.getElementById('roleChart').getContext('2d');
-                    new Chart(roleCtx, {
-                        type: 'pie',
-                        data: {
-                            labels: ['Admin', 'User'],
-                            datasets: [{
-                                label: 'Role Distribution',
-                                data: [data.roleCounts.admin, data.roleCounts.user],
-                                backgroundColor: ['rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)'],
-                                borderColor: ['rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'],
-                                borderWidth: 1
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            plugins: {
-                                legend: {
-                                    position: 'top',
-                                },
-                                title: {
-                                    display: true,
-                                    text: 'Role Distribution'
-                                }
-                            }
-                        }
-                    });
-                })
-                .catch(error => console.error('Error fetching data:', error));
+            document.getElementById('filterForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                const filters = {
+                    role: document.getElementById('role').value,
+                    status: document.getElementById('status').value
+                };
+                fetchData(filters);
+            });
+
+            fetchData(); // Initial fetch without filters
         });
     </script>
 </head>
 <body>
     <div id="wrapper">
-        <div class="navbar navbar-inverse navbar-fixed-top" style="background-color: #4CAF50; padding: 6px 6;">
-            <div class="adjust-nav" style="display: flex; justify-content: space-between; align-items: center; width: 100%; position: relative;">
-                <div class="navbar-header" style="display: flex; align-items: center;">
-                    <a class="navbar-brand" href="#">
-                        <img src="assets/img/logoweb.jpg" style="width: 50px; height: auto;" alt="Logo">
-                    </a>
-                </div>
-                <span class="navbar-text" style="color: #fff; font-size: 22px; position: absolute; left: 50%; transform: translateX(-50%);">
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">
+                    <img src="assets/img/logoweb.jpg" alt="Logo">
+                </a>
+                <span class="navbar-text mx-auto">
                     Strategic Minds presents: GREEN & PURE
                 </span>
-                <span class="logout-spn" style="position: absolute; right: 60px; top: 5px;">
-                    <a href="#" style="color:#fff;">LOGOUT</a>
-                </span>
-                <span class="return-dashboard" style="position: absolute; right: 20px; top: 5px;">
-                    <a href="#" style="color:#fff;">RETURN TO DASHBOARD</a>
-                </span>
+                <a class="nav-link return-dashboard" href="index.html">RETURN TO DASHBOARD</a>
+                <a class="nav-link logout-spn" href="#">LOGOUT</a>
             </div>
-        </div>
-        <div class="container" style="margin-top: 70px;"> <!-- Adjusted margin-top to create space below the navbar -->
+        </nav>
+        <div class="container" style="margin-top: 80px;"> <!-- Adjusted margin-top to create space below the navbar -->
             <div class="row">
-                <div class="col-md-6">
-                    <h3>Status Distribution</h3>
-                    <canvas id="statusChart"></canvas>
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            Filters
+                        </div>
+                        <div class="card-body">
+                            <form id="filterForm">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="role">Role</label>
+                                            <select id="role" class="form-control">
+                                                <option value="">All</option>
+                                                <option value="1">Admin</option>
+                                                <option value="0">User</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="status">Status</label>
+                                            <select id="status" class="form-control">
+                                                <option value="">All</option>
+                                                <option value="0">Active</option>
+                                                <option value="1">Blocked</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Apply Filters</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-6">
-                    <h3>Role Distribution</h3>
-                    <canvas id="roleChart"></canvas>
+                    <div class="card">
+                        <div class="card-header">
+                            Status Distribution
+                        </div>
+                        <div class="card-body">
+                            <canvas id="statusChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            Role Distribution
+                        </div>
+                        <div class="card-body">
+                            <canvas id="roleChart"></canvas>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
