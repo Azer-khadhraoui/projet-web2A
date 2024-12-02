@@ -9,15 +9,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
     $retype_password = $_POST['retype-password'];
     $mail = $_POST['mail'];
-    $statut = 0; // Vous pouvez définir une valeur par défaut pour le statut
+    $statut = 0; 
 
-    // Vérifiez que les mots de passe correspondent
+    
     if ($password !== $retype_password) {
         echo "Les mots de passe ne correspondent pas.";
         exit();
     }
 
-    // Vérifiez reCAPTCHA
+   
     $recaptcha_secret = '6LfReIoqAAAAAA8SADFIG8K-05njBLYPBU4Q7syB';
     $recaptcha_response = $_POST['g-recaptcha-response'];
     $recaptcha_url = 'https://www.google.com/recaptcha/api/siteverify';
@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    // Créez un nouvel utilisateur avec les nouveaux champs
+    
     $usr = new User($cin, $fname, $lname, $password, $number, 0, $mail, $statut);
 
     $controller = new UserController();

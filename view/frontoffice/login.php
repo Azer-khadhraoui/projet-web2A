@@ -10,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($user) {
         if ($user['statut'] == 1) {
-            // Si le statut est 1, l'utilisateur est bloqué
+            
             echo "<div style='color: red; background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 10px; border-radius: 5px; text-align: center;'>
                     Your account is blocked. Please contact the admin.
                   </div>";

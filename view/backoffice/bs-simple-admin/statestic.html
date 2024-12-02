@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Statistics</title>
+    <!-- BOOTSTRAP STYLES-->
+    <link rel="stylesheet" href="assets/css/bootstrap.css">
+    <!-- FONTAWESOME STYLES-->
+    <link rel="stylesheet" href="assets/css/font-awesome.css">
+    <!-- CUSTOM STYLES-->
+    <link rel="stylesheet" href="assets/css/custom.css">
+    <!-- CHART.JS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .navbar {
+            background-color: #4CAF50;
+            padding: 10px 0;
+        }
+        .navbar-brand img {
+            width: 40px;
+            height: auto;
+        }
+        .navbar-text {
+            color: #fff;
+            font-size: 22px;
+        }
+        .logout-spn, .return-dashboard {
+            color: #fff;
+        }
+        .card {
+            margin-top: 20px;
+        }
+        .card-header {
+            background-color: #4CAF50;
+            color: #fff;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('../../frontoffice/stat.php')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Data fetched:', data); // Log the fetched data
+
+                    // Status Distribution Chart
+                    const statusCtx = document.getElementById('statusChart').getContext('2d');
+                    new Chart(statusCtx, {
+                        type: 'pie',
+                        data: {
+                            labels: ['Active', 'Blocked'],
+                            datasets: [{
+                                label: 'Status Distribution',
+                                data: [data.statusCounts.active, data.statusCounts.blocked],
+                                backgroundColor: ['rgba(75, 192, 192, 0.2)', 'rgba(255, 99, 132, 0.2)'],
+                                borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)'],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Status Distribution'
+                                }
+                            }
+                        }
+                    });
+
+                    // Role Distribution Chart
+                    const roleCtx = document.getElementById('roleChart').getContext('2d');
+                    new Chart(roleCtx, {
+                        type: 'pie',
+                        data: {
+                            labels: ['Admin', 'User'],
+                            datasets: [{
+                                label: 'Role Distribution',
+                                data: [data.roleCounts.admin, data.roleCounts.user],
+                                backgroundColor: ['rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)'],
+                                borderColor: ['rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Role Distribution'
+                                }
+                            }
+                        }
+                    });
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        });
+    </script>
+</head>
+<body>
+    <div id="wrapper">
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">
+                    <img src="assets/img/logoweb.jpg" alt="Logo">
+                </a>
+                <span class="navbar-text mx-auto">
+                    Strategic Minds presents: GREEN & PURE
+                </span>
+                <div class="d-flex">
+                    <a class="nav-link logout-spn" href="#">LOGOUT</a>
+                    <a class="nav-link return-dashboard" href="#">RETURN TO DASHBOARD</a>
+                </div>
+            </div>
+        </nav>
+        <div class="container" style="margin-top: 80px;"> <!-- Adjusted margin-top to create space below the navbar -->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            Status Distribution
+                        </div>
+                        <div class="card-body">
+                            <canvas id="statusChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            Role Distribution
+                        </div>
+                        <div class="card-body">
+                            <canvas id="roleChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

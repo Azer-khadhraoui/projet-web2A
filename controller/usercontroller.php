@@ -81,5 +81,18 @@ class usercontroller {
             die('Erreur: ' . $e->getMessage());
         }
     }
+
+
+        // Méthode pour obtenir tous les utilisateurs
+        public function getAllUsers() {
+            $sql = "SELECT statut, role FROM utilisateur";
+            $db = config::getConnexion();
+            try {
+                $query = $db->query($sql);
+                return $query->fetchAll();
+            } catch (Exception $e) {
+                die('Erreur: ' . $e->getMessage());
+            }
+        }
 }
 ?>
