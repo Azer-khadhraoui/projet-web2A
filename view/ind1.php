@@ -5,14 +5,9 @@ require_once '../controller/ReponseController.php';
 
 $questionController = new QuestionController();
 $reponseController = new ReponseController();
-
-$deletedCount = $reponseController->deleteResponsesWithBadWords(); // Bad words filtering
-if ($deletedCount > 0) {
-    echo "<script>console.log('Deleted $deletedCount responses containing bad words.');</script>";
-}
-
-
 $questions = $questionController->listPublicationsSortedByTitle('ASC');
+
+
 $totalQuestions = $questionController->countQuestions();
 $totalResponses = $reponseController->countResponses();
 $avgResponses = $totalResponses > 0 ? round($totalResponses / $totalQuestions, 2) : 0;
@@ -354,9 +349,3 @@ button:hover {
     </script>
 </body>
 </html>
-
-
-
-
-
-

@@ -64,6 +64,17 @@ class ReponseController {
             return false;
         }
     }
+    public function countResponses() {
+        try {
+            $query = $this->db->prepare("SELECT COUNT(*) AS total FROM response");
+            $query->execute();
+            $result = $query->fetch(PDO::FETCH_ASSOC);
+            return $result['total'];
+        } catch (PDOException $e) {
+            die("Error counting responses: " . $e->getMessage());
+        }
+    }
+    
 
     public function updateResponse($id_response, $contenue, $id_user) {
         if ($this->isUserResponseOwner($id_response, $id_user)) {
@@ -83,4 +94,35 @@ class ReponseController {
             return false;  // Return false if user is not authorized
         }
     }
+    private function deleteResponseById($id_reponse) {
+        $deleteQuery = "DELETE FROM response WHERE id_reponse = ?";
+        $deleteStmt = $this->db->prepare($deleteQuery);
+        $deleteStmt->execute([$id_reponse]);
+    }
+
+    public function deleteResponsesWithBadWords() {
+        // List of bad words to search for
+        $badWords = ['bad1', 'bad2', 'bad3'];
+
+        // Prepare the query to fetch responses containing bad words
+        $placeholders = implode(',', array_fill(0, count($badWords), '?'));
+        $query = "SELECT id_reponse, contenue FROM response WHERE " . implode(' OR ', array_map(fn($word) => "contenue LIKE ?", $badWords));
+        $stmt = $this->db->prepare($query);
+
+        // Bind the bad words with wildcards for partial matching
+        foreach ($badWords as $index => $word) {
+            $stmt->bindValue($index + 1, '%' . $word . '%');
+        }
+
+        $stmt->execute();
+        $response = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Loop through results and delete each response
+        foreach ($response as $response) {
+            $this->deleteResponseById($response['id_reponse']);
+        }
+
+        return count($response); // Return the count of deleted responses
+    }
+
 }

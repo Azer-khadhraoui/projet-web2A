@@ -15,7 +15,7 @@ if (!isset($_SESSION['user_id'])) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['id_quest']) && isset($_POST['contenue'])) {
-        $id_quest = intval($_POST['id_quest']);
+        $id_quest = intval(value: $_POST['id_quest']);
         $contenue = $_POST['contenue'];
         $id_user = $_SESSION['user_id']; // Ensure user ID is set
 

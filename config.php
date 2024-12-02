@@ -1,38 +1,16 @@
 <?php
-class config
-{   private static $pdo = null;
-    public static function getConnexion()
-    {
-        if (!isset(self::$pdo)) {
-            $servername="localhost";
-            $username="root";
-            $password ="";
-            $dbname="travelbooking";
-            try {
-                self::$pdo = new PDO("mysql:host=$servername;dbname=$dbname",
-                        $username,
-                        $password
-                   
-                );
-                self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                self::$pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-               
-               
-            } catch (Exception $e) {
-                die('Erreur: ' . $e->getMessage());
-            }
+class Config {
+    public static function getConnexion() {
+        try {
+            // Replace with your own database credentials
+            $dsn = 'mysql:host=localhost;dbname=dbquestion';
+            $username = 'root';
+            $password = '';
+            return new PDO($dsn, $username, $password);
+        } catch (PDOException $e) {
+            die("Error: " . $e->getMessage());
         }
-        return self::$pdo;
     }
 }
-config::getConnexion();
 ?>
-
-
-
-
-
-
-
-
 

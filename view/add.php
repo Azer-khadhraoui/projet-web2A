@@ -71,31 +71,6 @@
         .sidebar a:hover {
             background-color: #218838;
         }
-        
-        /* Add styles for the voice input buttons */
-        #voice-buttons {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        #start-voice-input, #stop-voice-input {
-            background-color: #28a745;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin: 0 5px;
-        }
-
-        #stop-voice-input {
-            display: none;
-        }
-
-        #start-voice-input:hover, #stop-voice-input:hover {
-            background-color: #218838;
-        }
     </style>
 </head>
 <body>
@@ -106,7 +81,7 @@
     require_once '../config.php';
     require_once '../model/QuestionModel.php';
     require_once '../controller/QuestionController.php';
-
+    
     $error = "";
     $success_message = "";
 
@@ -132,79 +107,13 @@
         <?php if (!empty($success_message)) { echo '<div style="color: green;">' . $success_message . '</div>'; } ?>
         <form class="question-form" action="" method="post">
             <input type="text" name="titre_quest" placeholder="Question Title" required>
-            <textarea id="contenue" name="contenue" placeholder="Your Question Content" rows="5" required></textarea>
+            <textarea name="contenue" placeholder="Your Question Content" rows="5" required></textarea>
             <input type="number" name="id_user" placeholder="User ID" required>
             <button type="submit">Submit</button>
         </form>
         <div class="sidebar">
             <a href="ind.php" class="return-button">Return</a>
         </div>
-
-        <!-- Voice input buttons -->
-        <div id="voice-buttons">
-            <button id="start-voice-input">Start Voice Input</button>
-            <button id="stop-voice-input">Stop Voice Input</button>
-        </div>
     </div>
-
-    <script>
-        // Get references to the title input field and buttons
-        const titleInput = document.querySelector('input[name="titre_quest"]'); // The title input field
-        const startButton = document.getElementById('start-voice-input');
-        const stopButton = document.getElementById('stop-voice-input');
-
-        // Speech Recognition API setup
-        if ('webkitSpeechRecognition' in window) {
-            let recognition = new webkitSpeechRecognition();
-            recognition.continuous = true;  // Keep listening until stopped
-            recognition.lang = 'en-US';  // Set language to English
-            recognition.interimResults = true;  // Allow partial results
-            recognition.maxAlternatives = 3;  // Allow multiple alternatives
-
-            // Start voice input on button click
-            startButton.addEventListener('click', function() {
-                recognition.start();  // Start speech recognition
-                titleInput.value = "This is recorded chat";  // Set the title of the question
-                startButton.style.display = 'none';
-                stopButton.style.display = 'inline-block';  // Show stop button
-            });
-
-            // Handle speech input result
-            recognition.onresult = function(event) {
-                var transcript = event.results[0][0].transcript;
-                document.getElementById('contenue').value = transcript;  // Put the result in the textarea
-            };
-
-            // Stop voice input on button click
-            stopButton.addEventListener('click', function() {
-                recognition.stop();  // Stop recognition
-            });
-
-            // Handle speech recognition errors
-            recognition.onerror = function(event) {
-                if (event.error === 'no-speech') {
-                    alert("No speech detected. Please try again.");
-                } else {
-                    alert("Speech recognition error: " + event.error);
-                }
-            };
-
-            // Handle the end of the recognition process
-            recognition.onend = function() {
-                document.getElementById('start-voice-input').style.display = 'inline-block';
-                document.getElementById('stop-voice-input').style.display = 'none';
-            };
-        } else {
-            alert("Speech Recognition API is not supported in your browser.");
-        }
-    </script>
 </body>
 </html>
-
-
-
-
-
-
-
-

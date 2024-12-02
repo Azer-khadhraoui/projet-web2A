@@ -29,6 +29,17 @@ class QuestionController {
             return null;
         }
     }
+    public function countQuestions() {
+        try {
+            $query = $this->db->prepare("SELECT COUNT(*) AS total FROM question");
+            $query->execute();
+            $result = $query->fetch(PDO::FETCH_ASSOC);
+            return $result['total'];
+        } catch (PDOException $e) {
+            die("Error counting questions: " . $e->getMessage());
+        }
+    }
+    
 
     public function addQuestion($question)
 {
