@@ -90,9 +90,9 @@
                 fetchUsers(filters);
             });
 
-            fetchUsers(); // Initial fetch without filters
+            fetchUsers(); 
 
-            // Voice recognition setup
+            //voice 
             const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
             recognition.lang = 'en-US';
             recognition.interimResults = false;
