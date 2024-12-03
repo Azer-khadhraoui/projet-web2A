@@ -7,7 +7,7 @@ class config
             $servername="localhost";
             $username="root";
             $password ="";
-            $dbname="travelbooking";
+            $dbname="bd_user";
             try {
                 self::$pdo = new PDO("mysql:host=$servername;dbname=$dbname",
                         $username,

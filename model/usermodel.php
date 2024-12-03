@@ -2,76 +2,86 @@
 
 class User {
     private $cin;
-    private $name;
-    private $prenom;
-    private $email;
-    private $password;
+    private $fname;
+    private $lname;
+    private $pwd;
     private $num;
     private $role;
+    private $mail; // Nouveau champ
+    private $statut; // Nouveau champ
 
-    // Constructor
-    public function __construct($cin, $name, $prenom, $email, $password, $num, $role) {
+    // Constructeur
+    public function __construct($cin, $fname, $lname, $pwd, $num, $role, $mail, $statut) {
         $this->cin = $cin;
-        $this->name = $name;
-        $this->prenom = $prenom;
-        $this->email = $email;
-        $this->password = $password;
+        $this->fname = $fname;
+        $this->lname = $lname;
+        $this->pwd = $pwd;
         $this->num = $num;
         $this->role = $role;
+        $this->mail = $mail;
+        $this->statut = $statut;
     }
 
-    // Getters
+    // Getters et setters pour les nouveaux champs
+    public function getMail() {
+        return $this->mail;
+    }
+
+    public function setMail($mail) {
+        $this->mail = $mail;
+    }
+
+    public function getStatut() {
+        return $this->statut;
+    }
+
+    public function setStatut($statut) {
+        $this->statut = $statut;
+    }
+
+    // Autres getters et setters...
     public function getCin() {
         return $this->cin;
     }
 
-    public function getName() {
-        return $this->name;
+    public function setCin($cin) {
+        $this->cin = $cin;
     }
 
-    public function getPrenom() {
-        return $this->prenom;
+    public function getFname() {
+        return $this->fname;
     }
 
-    public function getEmail() {
-        return $this->email;
+    public function setFname($fname) {
+        $this->fname = $fname;
+    }
+
+    public function getLname() {
+        return $this->lname;
+    }
+
+    public function setLname($lname) {
+        $this->lname = $lname;
     }
 
     public function getPassword() {
-        return $this->password;
+        return $this->pwd;
+    }
+
+    public function setPassword($pwd) {
+        $this->pwd = $pwd;
     }
 
     public function getNum() {
         return $this->num;
     }
 
-    public function getRole() {
-        return $this->role;
-    }
-
-    // Setters
-    public function setCin($cin) {
-        $this->cin = $cin;
-    }
-
-    public function setName($name) {
-        $this->name = $name;
-    }
-
-    public function setPrenom($prenom) {
-        $this->prenom = $prenom;
-    }
-
-    public function setEmail($email) {
-        $this->email = $email;
-    }
-
-    public function setPassword($password) {
-        $this->password = $password;
-    }
-
     public function setNum($num) {
         $this->num = $num;
+    }
+
+    public function getRole() {
+        return $this->role;
     }
 
     public function setRole($role) {
