@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- basic -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- mobile metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <!-- site metas -->
+    <title>Sign In</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- bootstrap css -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- style css -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Responsive-->
+    <link rel="stylesheet" href="css/responsive.css">
+    <!-- fevicon -->
+    <link rel="icon" href="images/fevicon.png" type="image/gif" />
+    <!-- Scrollbar Custom CSS -->
+    <link rel="stylesheet" href="css/jquery.mCustomScrollbar.min.css">
+    <!-- Tweaks for older IEs-->
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+    <style>
+        .inspiring-section {
+            background: url('images/inspiring-bg.jpg') no-repeat center center;
+            background-size: cover;
+            padding: 60px 0;
+            color: #fffcfc; /* Adjusted for better visibility on yellow background */
+            text-align: center;
+        }
+        .inspiring-section h2 {
+            font-size: 46px;
+            margin-bottom: 20px;
+            color: #fffafa; /* Adjusted for better visibility on yellow background */
+        }
+        .inspiring-section p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #ffffff; /* Adjusted for better visibility on yellow background */
+        }
+        .social-icons a {
+            color: #ffffff; /* Adjusted for better visibility on yellow background */
+            font-size: 24px;
+            margin: 0 10px;
+            transition: color 0.3s;
+        }
+        .social-icons a:hover {
+            color: #4CAF50;
+        }
+    </style>
+</head>
+<!-- body -->
+<body class="main-layout">
+    <!-- loader  -->
+    <div class="loader_bg">
+        <div class="loader"><img src="images/loading.gif" style="width: 50px; height: auto;" alt="Loading..." /></div>
+    </div>
+    <!-- end loader -->
+    <!-- header -->
+    <header>
+        <!-- header inner -->
+        <div class="header" style="padding: 10px 0; background-color: #000;">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col logo_section">
+                        <div class="full">
+                            <div class="center-desk">
+                                <div class="logo">
+                                    <a href="index.html"><img src="images/logoweb.jpg" style="width: 50px; height: auto;" alt="Logo" /></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-9 col-lg-9 col-md-9 col-sm-9">
+                        <nav class="navigation navbar navbar-expand-md navbar-dark">
+                            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+                            <div class="collapse navbar-collapse" id="navbarsExample04">
+                                <ul class="navbar-nav mr-auto">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="index.html"> Home  </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="about.html">About</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="products.html">Products </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="blog.html">Blog</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="contact.html">Sign up</a>
+                                    </li>
+                                    <li class="nav-item active">
+                                        <a class="nav-link" href="signin.html">Sign In</a>
+                                    </li>
+                                    <li class="nav-item d_none">
+                                        <a class="nav-link" href="#"><i class="fa fa-search" aria-hidden="true"></i></a>
+                                    </li>
+                                    <li class=" d_none get_btn">
+                                        <a href="#">Get a quote</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- end header inner -->
+    <!-- end header -->
+
+    <!-- Sign In Form -->
+    <section class="contact_section">
+        <div class="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="titlepage" style="text-align: center;">
+                            <h2>Sign In</h2>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <form id="signin_form" class="main_form" action="login.php" method="POST">
+                            <div class="row">
+                                <div class="col-md-6" style="margin-bottom: 40px;">
+                                    <label for="cin">CIN</label>
+                                    <input class="contactus" id="cin" placeholder="CIN" type="text" name="cin" required>
+                                    <p id="cin_error" style="color: red;"></p>
+                                </div>
+                                <div class="col-md-6" style="margin-bottom: 40px;">
+                                    <label for="password">Password</label>
+                                    <input class="contactus" id="password" placeholder="Password" type="password" name="password" required>
+                                    <p id="password_error" style="color: red;"></p>
+                                </div>
+                                <div class="col-md-12" style="text-align: center; margin-top: 20px;">
+                                    <button class="send_btn" type="submit">Sign In</button>
+                                </div>
+                            </div>
+                        </form>
+                        <div id="message" style="text-align: center; color: red; margin-top: 20px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- end Sign In Form -->
+
+    <!-- Inspiring Section -->
+    <section class="inspiring-section">
+        <div class="container">
+            <h2>Welcome to GREEN & PURE</h2>
+            <p>Your trusted partner in agricultural excellence.</p>
+            <div class="social-icons">
+                <a href="#"><i class="fa fa-facebook"></i></a>
+                <a href="#"><i class="fa fa-twitter"></i></a>
+                <a href="#"><i class="fa fa-linkedin"></i></a>
+                <a href="#"><i class="fa fa-instagram"></i></a>
+            </div>
+        </div>
+    </section>
+    <!-- end Inspiring Section -->
+
+    <!-- JQUERY SCRIPTS -->
+    <script src="js/jquery.min.js"></script>
+    <!-- BOOTSTRAP SCRIPTS -->
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <!-- CUSTOM SCRIPTS -->
+    <script src="js/custom.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const message = urlParams.get('message');
+            const cinError = urlParams.get('cin_error');
+            const passwordError = urlParams.get('password_error');
+
+            if (message) {
+                alert(message);
+            }
+            if (cinError) {
+                document.getElementById('cin_error').innerText = cinError;
+            }
+            if (passwordError) {
+                document.getElementById('password_error').innerText = passwordError;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -30,24 +30,24 @@ $query = "SELECT p.*, c.nom_categorie
           FROM produits p 
           JOIN categorie c ON p.categorie = c.id_categorie";
 
-// Appliquer la recherche
+//  la recherche
 if ($search !== '') {
     $query .= " WHERE p.nom_prod LIKE :search";
 }
 
-// Appliquer le tri
+// tri
 if ($sortBy === 'nom_categorie') {
     $query .= " ORDER BY c.nom_categorie " . ($sortOrder === 'desc' ? 'DESC' : 'ASC');
 } else {
     $query .= " ORDER BY p." . $sortBy . " " . ($sortOrder === 'desc' ? 'DESC' : 'ASC');
 }
 
-// Ajouter la pagination
+//  pagination
 $query .= " LIMIT :limit OFFSET :offset";
 
 $stmt = $conn->prepare($query);
 
-// Liaison des paramètres
+// Liaison 
 if ($search !== '') {
     $stmt->bindValue(':search', '%' . $search . '%');
 }
@@ -62,7 +62,7 @@ try {
     echo "Erreur lors de la récupération des produits : " . $e->getMessage();
 }
 
-// Calcul du nombre total de produits pour la pagination
+// Calcul  pour la pagination
 $countQuery = "SELECT COUNT(*) as total 
                FROM produits p 
                JOIN categorie c ON p.categorie = c.id_categorie";
@@ -93,28 +93,43 @@ foreach ($filteredProducts as $product) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Green&Pure - Products</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="script_prod.js">
-        
-    document.querySelectorAll('.add-to-cart').forEach(button => {
-        button.onclick = function () {
-            const productName = this.getAttribute('data-product-name');
-            const messageBox = document.getElementById('messageBox');
-            const messageContent = document.getElementById('messageContent');
+    <script src="script_prod.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.rating').forEach(ratingElement => {
+        const productId = ratingElement.getAttribute('data-product-id');
+        const ratingDisplay = document.getElementById(`rating-${productId}`);
 
-           
-            messageContent.textContent = `The product "${productName}" has been added to your cart!`;
+        // Add click event listener to each star
+        ratingElement.querySelectorAll('span').forEach(star => {
+            star.addEventListener('click', () => {
+                const selectedRating = parseInt(star.getAttribute('data-value'), 10);
 
-          
-            messageBox.style.display = 'block';
-        };
+                console.log("Selected Rating:", selectedRating); // Debugging
+
+                // Highlight stars based on the selected rating
+                updateStars(ratingElement, selectedRating);
+
+                // Update the displayed rating
+                if (ratingDisplay) {
+                    ratingDisplay.textContent = `You rated this product: ${selectedRating} star${selectedRating > 1 ? 's' : ''}`;
+                }
+            });
+        });
     });
 
-   
-    function closeMessageBox() {
-        const messageBox = document.getElementById('messageBox');
-        messageBox.style.display = 'none';
+    // Function to update star colors
+    function updateStars(ratingElement, rating) {
+        const stars = ratingElement.querySelectorAll('span');
+        stars.forEach(star => {
+            const starValue = parseInt(star.getAttribute('data-value'), 10);
+            star.style.color = starValue <= rating ? '#ffa500' : '#ddd'; // Highlight selected stars
+        });
     }
-    </script>
+});
+
+</script>
+
     <style>
         .pagination {
             display: flex;
@@ -216,6 +231,38 @@ foreach ($filteredProducts as $product) {
     .message-box button:hover {
         background-color: #efa55b;
     }
+    .rating {
+    display: inline-block;
+    font-size: 1.5rem;
+    color: #ddd;
+    cursor: pointer;
+}
+
+.rating span {
+    margin-right: 5px;
+    transition: color 0.3s;
+}
+
+.rating span:hover,
+.rating span:hover ~ span {
+    color: #ffa500; /* Highlight color */
+}
+
+.rating[data-selected] span {
+    color: #ffa500; /* Default selected color */
+}
+
+.rating[data-selected] span:hover,
+.rating[data-selected] span:hover ~ span {
+    color: #ffd700; /* Hover effect after selection */
+}
+.selected-rating {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+    font-style: italic;
+}
+
 
     </style>
 </head>
@@ -224,7 +271,7 @@ foreach ($filteredProducts as $product) {
 <nav>
         <img src="images/green&purelogo.png" alt="Green & Pure Logo" class="logo">
         <ul>
-            <li><a href="index.php">HOME</a></li>
+            <li><a href="index.html">HOME</a></li>
             <li><a href="products.php">PRODUCTS</a></li>
             <li><a href="../frontoffice/PROJET MODULE/views/front office/index.php">FORUM</a></li>
             <li><a href="#about">ABOUT</a></li>
@@ -269,7 +316,19 @@ foreach ($filteredProducts as $product) {
                         <p><?= htmlspecialchars($product['description']) ?></p>
                         <p><strong>Price:</strong> $<?= htmlspecialchars($product['prix']) ?></p>
                         <button class="add-to-cart" data-product-name="<?= htmlspecialchars($product['nom_prod']) ?>">Add to Cart</button>
+                    <!-- Rating Bar -->
+    <div class="rating" data-product-id="<?= $product['id_prod'] ?>">
+        <span data-value="5">★</span>
+        <span data-value="4">★</span>
+        <span data-value="3">★</span>
+        <span data-value="2">★</span>
+        <span data-value="1">★</span>
+    </div>
+    <!-- Selected Rating Display -->
+    <p class="selected-rating" id="rating-<?= $product['id_prod'] ?>">No rating yet</p>
+                        </div>
                     </div>
+                    
                 <?php endforeach; ?>
             </div>
         </section>
@@ -289,7 +348,17 @@ foreach ($filteredProducts as $product) {
                             <h3><?= htmlspecialchars($product['nom_prod']) ?></h3>
                             <p><?= htmlspecialchars($product['description']) ?></p>
                             <p><strong>Price:</strong> $<?= htmlspecialchars($product['prix']) ?></p>
-                            <button class="add-to-cart" data-product-name="<?= htmlspecialchars($product['nom_prod']) ?>" >Add to Cart</button>
+                            <button class="add-to-cart" data-product-name="<?= htmlspecialchars($product['nom_prod']) ?>">Add to Cart</button>
+    <!-- Rating Bar -->
+    <div class="rating" data-product-id="<?= $product['id_prod'] ?>">
+        <span data-value="5">★</span>
+        <span data-value="4">★</span>
+        <span data-value="3">★</span>
+        <span data-value="2">★</span>
+        <span data-value="1">★</span>
+    </div>
+    <!-- Selected Rating Display -->
+    <p class="selected-rating" id="rating-<?= $product['id_prod'] ?>">No rating yet</p>
                         </div>
                     <?php endforeach; ?>
                 </div>
@@ -322,7 +391,28 @@ foreach ($filteredProducts as $product) {
     <p id="messageContent"></p>
     <button onclick="closeMessageBox()">Close</button>
 </div>
+<script>
+        
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+        button.onclick = function () {
+            const productName = this.getAttribute('data-product-name');
+            const messageBox = document.getElementById('messageBox');
+            const messageContent = document.getElementById('messageContent');
 
+           
+            messageContent.textContent = `The product "${productName}" has been added to your cart!`;
+
+          
+            messageBox.style.display = 'block';
+        };
+    });
+
+   
+    function closeMessageBox() {
+        const messageBox = document.getElementById('messageBox');
+        messageBox.style.display = 'none';
+    }
+</script>
     <footer>
         <p>&copy; 2024 Green&Pure - All rights reserved.</p>
     </footer>
