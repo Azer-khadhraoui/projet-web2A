@@ -2,6 +2,8 @@
   "dependencies": {
     "@google/generative-ai": "^0.21.0",
     "axios": "^1.7.8",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
     "express": "^4.21.1"
   },
   "name": "projet-module",
@@ -13,5 +15,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "type": "module"
 }

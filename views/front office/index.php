@@ -15,7 +15,6 @@ if (!in_array($sortBy, $allowedSortColumns)) {
     $sortBy = 'is_suggestion'; // Default sorting column
 }
 
-// Initialize controllers
 $questionController = new QuestionController();
 $responseController = new ResponseController();
 
@@ -54,6 +53,10 @@ switch ($action) {
             include __DIR__ . '/forum.php'; // In case no question text is provided
         }
         break;
+        
+        case 'AI':
+            include __DIR__ . '/AI.php'; 
+            break;
 
     case 'addSuggestion':
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['suggestion_text'])) {

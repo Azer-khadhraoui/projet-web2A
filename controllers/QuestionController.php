@@ -25,10 +25,7 @@ class QuestionController {
     // Récupérer toutes les questions sans pagination ni tri
     public function getAllQuestions() {
         $pdo = config::getConnexion();
-
-        // Requête SQL pour récupérer toutes les questions sans tri ni pagination
         $stmt = $pdo->query("SELECT * FROM question ORDER BY created_at DESC");
-        
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
@@ -98,42 +95,74 @@ class QuestionController {
     // Get questions sorted by a specific field (use only valid sorting criteria)
     public function getQuestionsSorted($sortBy) {
         $pdo = config::getConnexion();
-
-        // Ensure we are only sorting by valid fields
         $allowedSortColumns = ['is_suggestion', 'created_at', 'question_text'];
         if (!in_array($sortBy, $allowedSortColumns)) {
             $sortBy = 'is_suggestion'; // Default to sorting by 'is_suggestion' if an invalid sort is passed
         }
-
-        // Prepare the SQL query with dynamic sorting
         $stmt = $pdo->prepare("SELECT * FROM question ORDER BY $sortBy DESC");
-
-        // Execute the query
         $stmt->execute();
-
-        // Fetch and return all the rows
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     // Get all suggestions (fixed)
     public function getSuggestions() {
-        // Use the PDO connection instead of $this->db
         $pdo = config::getConnexion();
-        // Query to fetch all questions marked as suggestions
         $sql = "SELECT * FROM question WHERE is_suggestion = 1";
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
     public function updateQuestionStatus($questionId, $status) {
         $validStatuses = ['open', 'answered', 'closed'];
         if (!in_array($status, $validStatuses)) {
             throw new Exception('Invalid status');
         }
-    
         $pdo = config::getConnexion();
         $stmt = $pdo->prepare("UPDATE question SET status = ? WHERE id_question = ?");
         $stmt->execute([$status, $questionId]);
+    }
+
+    // Like a question
+   // Dans QuestionController.php (méthode likeQuestion)
+public function likeQuestion($id_question, $id_client) {
+    try {
+        $pdo = config::getConnexion();
+ 
+        // Vérifier si l'utilisateur a déjà liké cette question
+        $stmt = $pdo->prepare("SELECT COUNT(*) FROM likes WHERE id_question = :id_question AND id_client = :id_client");
+        $stmt->execute(['id_question' => $id_question, 'id_client' => $id_client]);
+        if ($stmt->fetchColumn() > 0) {
+            throw new Exception('Vous avez déjà liké cette question.');
+        }
+ 
+        // Ajouter un nouveau like
+        $stmt = $pdo->prepare("INSERT INTO likes (id_question, id_client) VALUES (:id_question, :id_client)");
+        $stmt->execute(['id_question' => $id_question, 'id_client' => $id_client]);
+ 
+        // Mettre à jour le nombre de likes pour la question
+        $stmt = $pdo->prepare("UPDATE question SET likes_count = likes_count + 1 WHERE id_question = :id_question");
+        $stmt->execute(['id_question' => $id_question]);
+ 
+        // Redirection après avoir liké
+        header('Location: ' . BASE_URL . 'views/front office/index.php?action=discussion');
+        exit;
+    } catch (Exception $e) {
+        echo "Erreur: " . $e->getMessage();
+    }
+}
+
+    public function incrementLikes($question_id) {
+        // Get the database connection from the model
+        $pdo = config::getConnexion();
+
+        // Call the method from the Question model to increment the like count
+        try {
+            $stmt = $pdo->prepare("UPDATE question SET likes_count = likes_count + 1 WHERE id_question = ?");
+            $stmt->execute([$question_id]);
+        } catch (Exception $e) {
+            throw new Exception("Error updating like count: " . $e->getMessage());
+        }
     }
     
 }

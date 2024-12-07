@@ -22,9 +22,9 @@ require_once __DIR__ . '/../../config.php';
     <main class="forum-main">
         <div class="forum-options">
             <!-- Existing links for the forum sections -->
-            <a href="<?= BASE_URL ?>views/front office/index.php?action=discussion" class="forum-link">Partie Discussion</a>
-            <a href="<?= BASE_URL ?>views/front office/index.php?action=suggestion" class="forum-link">Partie Suggestion</a>
-            <a href="<?= BASE_URL ?>views/front office/index.php?action=AI" class="forum-link">Partie AI</a>
+            <a href="<?= BASE_URL ?>views/front office/index.php?action=discussion" class="forum-link"> Discussion</a>
+            <a href="<?= BASE_URL ?>views/front office/index.php?action=suggestion" class="forum-link"> Suggestion</a>
+            <a href="<?= BASE_URL ?>views/front office/index.php?action=AI" class="forum-link">conseil </a>
         </div>
 
         

@@ -17,10 +17,20 @@ if (!in_array($sortBy, $allowedSortColumns)) {
 }
 
 // Fetch regular questions (non-suggestions)
-$questions = $questionController->getQuestionsSorted('is_suggestion'); // Assuming 'is_suggestion' is the flag
+$questions = $questionController->getQuestionsSorted('is_suggestion');
 
 // Fetch suggestions (which are flagged as 'is_suggestion' = 1)
-$suggestions = $questionController->getSuggestions(); // Assuming you have a method for fetching suggestions
+$suggestions = $questionController->getSuggestions();
+
+// Check if the like action is triggered
+if (isset($_GET['action']) && $_GET['action'] == 'likeQuestion' && isset($_GET['question_id'])) {
+    $question_id = $_GET['question_id'];
+    // Increment the likes count for the specific question
+    $questionController->incrementLikes($question_id);
+    // Redirect back to the discussion page to reflect the updated like count
+    header("Location: " . $_SERVER['REQUEST_URI']);
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -61,21 +71,20 @@ $suggestions = $questionController->getSuggestions(); // Assuming you have a met
 
     <main class="discussion-main">
         <h2>Liste des Questions</h2>
-        
+
         <!-- Display regular questions first -->
         <h3>Questions normales</h3>
         <ul>
             <?php foreach ($questions as $q): ?>
-                <?php if ($q['is_suggestion'] == 0): // Only display non-suggestions ?>
+                <?php if ($q['is_suggestion'] == 0): ?>
                     <li>
                         <strong>Question #<?= $q['id_question'] ?>:</strong> <?= htmlspecialchars($q['question_text']) ?>
                         <em>(Posté le : <?= $q['created_at'] ?>)</em>
                         <a href="<?= BASE_URL ?>views/back office/bs-simple-admin/updateQuestion.php?id=<?= $q['id_question'] ?>&context=user" class="btn btn-primary">Modifier</a>
                         <a href="<?= BASE_URL ?>views/back office/bs-simple-admin/deleteQuestion.php?id=<?= $q['id_question'] ?>" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette question ?');">Supprimer</a>
 
-                        <!-- Check if the question status is 'open' before showing the reply form -->
+                        <!-- Display responses and add response form -->
                         <?php if ($q['status'] != 'closed' && $q['status'] != 'answered'): ?>
-                            <!-- Display responses -->
                             <?php
                             $responses = $responseController->getResponsesByQuestion($q['id_question']);
                             if (!empty($responses)):
@@ -84,12 +93,15 @@ $suggestions = $questionController->getSuggestions(); // Assuming you have a met
                                     <?php foreach ($responses as $response): ?>
                                         <li>
                                             <strong>Réponse : </strong> <?= htmlspecialchars($response['response_text']) ?>
+                                            
+                                            <!-- Update and Delete buttons for response -->
+                                            <a href="<?= BASE_URL ?>views/back office/bs-simple-admin/updateResponse.php?id=<?= $response['id_response'] ?>&question_id=<?= $q['id_question'] ?>" class="btn btn-primary">Modifier</a>
+                                            <a href="<?= BASE_URL ?>views/back office/bs-simple-admin/deleteResponse.php?id=<?= $response['id_response'] ?>&question_id=<?= $q['id_question'] ?>" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette réponse ?');">Supprimer</a>
                                         </li>
                                     <?php endforeach; ?>
                                 </ul>
                             <?php endif; ?>
 
-                            <!-- Add a response form -->
                             <form action="<?= BASE_URL ?>views/front office/index.php?action=addResponse&question_id=<?= $q['id_question'] ?>" method="POST">
                                 <textarea name="response_text" placeholder="Votre réponse..." required></textarea>
                                 <button type="submit" class="btn btn-success">Répondre</button>
@@ -102,20 +114,20 @@ $suggestions = $questionController->getSuggestions(); // Assuming you have a met
             <?php endforeach; ?>
         </ul>
 
-        <!-- Display suggestions below -->
+        <!-- Display suggestions -->
         <h3>Suggestions</h3>
         <ul>
             <?php foreach ($suggestions as $q): ?>
-                <?php if ($q['is_suggestion'] == 1): // Only display suggestions ?>
+                <?php if ($q['is_suggestion'] == 1): ?>
                     <li>
                         <strong>Suggestion #<?= $q['id_question'] ?>:</strong> <?= htmlspecialchars($q['question_text']) ?>
                         <em>(Posté le : <?= $q['created_at'] ?>)</em>
+                        
                         <a href="<?= BASE_URL ?>views/back office/bs-simple-admin/updateQuestion.php?id=<?= $q['id_question'] ?>&context=user" class="btn btn-primary">Modifier</a>
                         <a href="<?= BASE_URL ?>views/back office/bs-simple-admin/deleteQuestion.php?id=<?= $q['id_question'] ?>" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette suggestion ?');">Supprimer</a>
 
-                        <!-- Check if the question status is 'open' before showing the reply form -->
+                        <!-- Display responses and add response form -->
                         <?php if ($q['status'] != 'closed' && $q['status'] != 'answered'): ?>
-                            <!-- Display responses -->
                             <?php
                             $responses = $responseController->getResponsesByQuestion($q['id_question']);
                             if (!empty($responses)):
@@ -124,12 +136,15 @@ $suggestions = $questionController->getSuggestions(); // Assuming you have a met
                                     <?php foreach ($responses as $response): ?>
                                         <li>
                                             <strong>Réponse : </strong> <?= htmlspecialchars($response['response_text']) ?>
+
+                                            <!-- Update and Delete buttons for response -->
+                                            <a href="<?= BASE_URL ?>views/back office/bs-simple-admin/updateResponse.php?id=<?= $response['id_response'] ?>&question_id=<?= $q['id_question'] ?>" class="btn btn-primary">Modifier</a>
+                                            <a href="<?= BASE_URL ?>views/back office/bs-simple-admin/deleteResponse.php?id=<?= $response['id_response'] ?>&question_id=<?= $q['id_question'] ?>" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette réponse ?');">Supprimer</a>
                                         </li>
                                     <?php endforeach; ?>
                                 </ul>
                             <?php endif; ?>
 
-                            <!-- Add a response form -->
                             <form action="<?= BASE_URL ?>views/front office/index.php?action=addResponse&question_id=<?= $q['id_question'] ?>" method="POST">
                                 <textarea name="response_text" placeholder="Votre réponse..." required></textarea>
                                 <button type="submit" class="btn btn-success">Répondre</button>

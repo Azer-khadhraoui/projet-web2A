@@ -1,42 +1,36 @@
 <?php
-$aiResponse = "";  // Variable to store the AI response
+$aiResponse = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['category'])) {
-    $category = $_POST['category']; // Get the selected category from the form
-
-    // Send the category to the Node.js server using cURL (POST request)
-    $url = 'http://localhost:3000/generate'; // Your Node.js server URL
-
-    // Create the payload (category)
+    $category = $_POST['category'];
+    $url = 'http://localhost:3000/generate';
     $data = json_encode(['category' => $category]);
 
     // Initialize cURL session
     $ch = curl_init($url);
 
-    // Set cURL options
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);  // Return response as string
-    curl_setopt($ch, CURLOPT_POST, true);  // Use POST method
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);  // Send the data (category)
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Content-Type: application/json'  // Set content type to JSON
-    ]);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
 
-    error_log("Sending data: " . $data);
-    // Execute the request and get the response
+    // Execute cURL request
     $aiResponse = curl_exec($ch);
-    error_log("Raw Response: " . $aiResponse);  // This will log the response from Node.js
 
-
-    // Check for errors
     if (curl_errno($ch)) {
+        // If cURL fails, show the error
         $aiResponse = 'Error: ' . curl_error($ch);
     } else {
-        // Decode and check if the response is valid JSON
+        // Check if the response is a valid JSON
         $responseData = json_decode($aiResponse, true);
         if (isset($responseData['text'])) {
-            $aiResponse = $responseData['text'];  // Get AI's response text
+            $aiResponse = $responseData['text'];
+        } else if (isset($responseData['error'])) {
+            // If there's an error from the API, display it
+            $aiResponse = 'Error from AI: ' . htmlspecialchars($responseData['error']);
         } else {
-            $aiResponse = 'Error: Invalid response from AI';
+            // If the response format is invalid
+            $aiResponse = 'Error: Invalid response format';
         }
     }
 
@@ -50,49 +44,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['category'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="<?= BASE_URL ?>css/AI.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>css/background-animation.css">
     <title>Partie AI - Suggestions pour votre culture</title>
-    <link rel="stylesheet" href="<?= BASE_URL ?>css/forum.css">
 </head>
 <body>
-    <header class="forum-header">
-        
-        <div class="header-text">
-            <h1>Partie AI - Suggestions pour votre culture</h1>
-            <p>Choisissez une catégorie pour recevoir des conseils sur la plantation :</p>
-        </div>
-    </header>
-    
-    <main class="forum-main">
-        <div class="forum-options">
-            <form method="POST" action="">
-                <select name="category" class="ai-category-select">
-                    <option value="potatoes">Pommes de Terre</option>
-                    <option value="tomatoes">Tomates</option>
-                    <option value="carrots">Carottes</option>
-                </select>
-                  <button type="submit" class="ai-submit-btn" id="submitButton">Recevoir des conseils</button>
-            </form>
-            <div id="loading" style="display:none;">Chargement...</div>
+    <h1>Partie AI - Suggestions pour votre culture</h1>
+    <form method="POST" action="">
+        <select name="category">
+            <option value="potatoes">Pommes de Terre</option>
+            <option value="tomatoes">Tomates</option>
+            <option value="carrots">Carottes</option>
+        </select>
+        <button type="submit">GENERATE</button>
+    </form>
 
-            <script>
-                const form = document.querySelector('form');
-                const loading = document.getElementById('loading');
-                const submitButton = document.getElementById('submitButton');
-
-                 form.addEventListener('submit', function () {
-                     submitButton.disabled = true;  // Disable button
-                     loading.style.display = 'block';  // Show loading
-                    });
-<           /script>
-
-            <?php if (!empty($aiResponse)): ?>
-                <div class="ai-response">
-                    <h2>Conseils pour <?= htmlspecialchars($category) ?>:</h2>
-                    <p><?= htmlspecialchars($aiResponse) ?></p>
-                    <!-- Display the AI response here -->
-                </div>
-            <?php endif; ?>
-        </div>
-    </main>
+    <?php if (!empty($aiResponse)): ?>
+        <h2>Conseils pour <?= htmlspecialchars($category) ?>:</h2>
+        <p><?= htmlspecialchars($aiResponse) ?></p>
+    <?php endif; ?>
 </body>
 </html>
