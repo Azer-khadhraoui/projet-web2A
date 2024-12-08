@@ -1,9 +1,14 @@
 <?php
 include('../../controller/prod_controller.php'); 
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require_once 'PHPMailer.php';
+require_once 'SMTP.php';
+require_once 'Exception.php';
+
 $controller = new TravelOfferController();
-
-
 $conn = config::getConnexion();
 
 if (isset($_GET['id'])) {
@@ -31,6 +36,39 @@ try {
     exit();
 }
 
+function sendEmailNotification($subject, $message, $to) {
+    $mail = new PHPMailer(true);
+
+    try {
+        // SMTP configuration
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com'; // Gmail SMTP server
+        $mail->SMTPAuth = true;
+        $mail->Username = 'benmaleksarra62@gmail.com'; // Replace with your email
+        $mail->Password = 'urgargejdggthaos'; // Replace with your app-specific password
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = 587;
+
+        // Sender details
+        $mail->setFrom('benmaleksarra62@gmail.com', 'GREEN&PURE');
+        $mail->addAddress($to); // Recipient
+
+        // Email content
+        $mail->isHTML(true);
+        $mail->Subject = $subject;
+        $mail->Body    = nl2br($message); // Convert newlines to <br> for HTML format
+
+        // Send email
+        if ($mail->send()) {
+            return true;
+        } else {
+            return false;
+        }
+    } catch (Exception $e) {
+        echo "Mailer Error: " . $mail->ErrorInfo;
+        return false;
+    }
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = $_POST['id_prod'];
@@ -38,14 +76,62 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $description = $_POST['description'];
     $prix = $_POST['prix'];
     $qte = $_POST['qte'];
-    $url_img = $_POST['url_img'];
-    $cat = $_POST['categorie'];
+    $cat = isset($_POST['categorie']) ? $_POST['categorie'] : null;
+    
+    // Handle file upload for image
+    if (isset($_FILES['url_img']) && $_FILES['url_img']['error'] == 0) {
+        $targetDir = "uploads/";
+        $fileName = basename($_FILES['url_img']['name']);
+        $targetFilePath = $targetDir . $fileName;
+        if (move_uploaded_file($_FILES['url_img']['tmp_name'], $targetFilePath)) {
+            $url_img = $fileName;
+        } else {
+            $url_img = null;
+        }
+    } else {
+        $url_img = null;
+    }
 
+    // Check if category exists
+    $queryCheckCategory = "SELECT COUNT(*) FROM categorie WHERE id_categorie = :cat";
+    $stmtCheckCategory = $conn->prepare($queryCheckCategory);
+    $stmtCheckCategory->execute(['cat' => $cat]);
+    $categoryExists = $stmtCheckCategory->fetchColumn() > 0;
+
+    if (!$categoryExists) {
+        echo "Error: Selected category does not exist.";
+        exit();
+    }
+
+    // Update the product
     $controller->updateProduct($id, $nom_prod, $description, $prix, $qte, $url_img, $cat);
+
+    // Prepare email content
+    $subject = "Product Updated: " . $nom_prod;
+    $message = "<h1>Product Updated</h1>";
+    $message .= "<p>The product <strong>" . htmlspecialchars($nom_prod) . "</strong> has been updated.</p>";
+    $message .= "<p>Product ID: " . $id . "</p>";
+    $message .= "<p>Description: " . htmlspecialchars($description) . "</p>";
+    $message .= "<p>Price: " . $prix . " €</p>";
+    $message .= "<p>Quantity: " . $qte . "</p>";
+    $message .= "<p>Category: " . htmlspecialchars($cat) . "</p>";
+
+    // Send email to admin
+    $email = "benmaleksarra62@gmail.com";  // Replace with your email
+    if (sendEmailNotification($subject, $message, $email)) {
+        echo "Email sent successfully!";
+    } else {
+        echo "Email sending failed!";
+    }
+
+    // Redirect to the product list after update
     header('Location: list_products.php');
     exit();
 }
 ?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -129,12 +215,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <input type="file" name="url_img" value="<?= htmlspecialchars($product['url_img']); ?>">
 
         <label for="cat">Category:</label>
-        <select name="cat" id="cat">
-            <option value="">-- Select a Category --</option>
-            <?php foreach ($categories as $id => $name): ?>
-                <option value="<?= htmlspecialchars($id) ?>"><?= htmlspecialchars($name) ?></option>
-            <?php endforeach; ?>
-        </select>
+        <select name="categorie" id="cat">
+    <option value="">-- Select a Category --</option>
+    <?php foreach ($categories as $id => $name): ?>
+        <option value="<?= htmlspecialchars($id) ?>" <?= $id == $product['categorie'] ? 'selected' : '' ?>>
+            <?= htmlspecialchars($name) ?>
+        </option>
+    <?php endforeach; ?>
+</select>
 
         <button type="submit">Update Product</button>
         <script src="script.js"></script>

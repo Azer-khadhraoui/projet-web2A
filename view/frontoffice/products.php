@@ -3,7 +3,7 @@ include_once '../../config.php';
 
 $conn = config::getConnexion();
 
-// Récupération des catégories
+// Fetch categories
 $categories = [];
 $query = "SELECT id_categorie, nom_categorie FROM categorie ORDER BY nom_categorie";
 $stmt = $conn->prepare($query);
@@ -17,74 +17,80 @@ try {
     echo "Erreur lors de la récupération des catégories : " . $e->getMessage();
 }
 
-// Récupération des paramètres pour la recherche, tri et pagination
+// Get parameters for search, sort, and pagination
 $search = $_GET['search'] ?? '';
 $sortOrder = $_GET['sort_order'] ?? 'asc';
 $sortBy = $_GET['sort_by'] ?? 'prix';
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-$limit = 6;
+$limit = 6; // Products per page per category
 $offset = ($page - 1) * $limit;
 
-// Requête principale
-$query = "SELECT p.*, c.nom_categorie 
-          FROM produits p 
-          JOIN categorie c ON p.categorie = c.id_categorie";
-
-//  la recherche
-if ($search !== '') {
-    $query .= " WHERE p.nom_prod LIKE :search";
-}
-
-// tri
-if ($sortBy === 'nom_categorie') {
-    $query .= " ORDER BY c.nom_categorie " . ($sortOrder === 'desc' ? 'DESC' : 'ASC');
-} else {
-    $query .= " ORDER BY p." . $sortBy . " " . ($sortOrder === 'desc' ? 'DESC' : 'ASC');
-}
-
-//  pagination
-$query .= " LIMIT :limit OFFSET :offset";
-
-$stmt = $conn->prepare($query);
-
-// Liaison 
-if ($search !== '') {
-    $stmt->bindValue(':search', '%' . $search . '%');
-}
-$stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
-$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-
-$filteredProducts = [];
-try {
-    $stmt->execute();
-    $filteredProducts = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (Exception $e) {
-    echo "Erreur lors de la récupération des produits : " . $e->getMessage();
-}
-
-// Calcul  pour la pagination
-$countQuery = "SELECT COUNT(*) as total 
+// Fetch total products for pagination
+$totalQuery = "SELECT COUNT(*) as total 
                FROM produits p 
                JOIN categorie c ON p.categorie = c.id_categorie";
 
-if ($search !== '') {
-    $countQuery .= " WHERE p.nom_prod LIKE :search";
+if (!empty($search)) {
+    $totalQuery .= " WHERE p.nom_prod LIKE :search";
 }
 
-$countStmt = $conn->prepare($countQuery);
-if ($search !== '') {
-    $countStmt->bindValue(':search', '%' . $search . '%');
+$totalStmt = $conn->prepare($totalQuery);
+if (!empty($search)) {
+    $totalStmt->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
 }
-$countStmt->execute();
-$totalProducts = $countStmt->fetch(PDO::FETCH_ASSOC)['total'];
+
+$totalStmt->execute();
+$totalProducts = $totalStmt->fetch(PDO::FETCH_ASSOC)['total'];
 $totalPages = ceil($totalProducts / $limit);
 
-// Regroupement des produits par catégorie
+// Fetch products for all categories with search filter applied
 $productsByCategory = [];
-foreach ($filteredProducts as $product) {
-    $productsByCategory[$product['categorie']][] = $product;
+foreach ($categories as $categoryId => $categoryName) {
+    // Prepare query for each category
+    $query = "SELECT p.*, c.nom_categorie 
+              FROM produits p 
+              JOIN categorie c ON p.categorie = c.id_categorie
+              WHERE p.categorie = :categoryId";
+
+    // Apply the search filter if present
+    if (!empty($search)) {
+        $query .= " AND p.nom_prod LIKE :search";
+    }
+
+    // Apply ordering and pagination
+    if ($sortBy) {
+        if ($sortBy === 'nom_categorie') {
+            
+            $query .= " ORDER BY p.nom_prod " . ($sortOrder === 'desc' ? 'DESC' : 'ASC');
+        } else {
+            $query .= " ORDER BY p." . $sortBy . " " . ($sortOrder === 'desc' ? 'DESC' : 'ASC');
+        }
+    }
+    
+    
+    $query .= " LIMIT :limit OFFSET :offset";
+
+    // Prepare and execute the query
+    $stmt = $conn->prepare($query);
+    $stmt->bindValue(':categoryId', $categoryId, PDO::PARAM_INT);
+    $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+
+    // Bind search parameter if present
+    if (!empty($search)) {
+        $stmt->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
+    }
+
+    try {
+        $stmt->execute();
+        $productsByCategory[$categoryId] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+        echo "Erreur lors de la récupération des produits : " . $e->getMessage();
+    }
 }
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -304,35 +310,43 @@ foreach ($filteredProducts as $product) {
         <?php endforeach; ?>
     </section>
 
-    <!-- la recherche -->
-    <?php if ($search !== ''): ?>
-        <h1>Résultats de recherche pour "<?= htmlspecialchars($search) ?>" :</h1>
-        <section class="search-results">
-            <div class="product-catalog">
-                <?php foreach ($filteredProducts as $product): ?>
-                    <div class="product-card">
-                        <img src="images/<?= htmlspecialchars($product['url_img']) ?>" alt="<?= htmlspecialchars($product['nom_prod']) ?>" class="product-image">
-                        <h3><?= htmlspecialchars($product['nom_prod']) ?></h3>
-                        <p><?= htmlspecialchars($product['description']) ?></p>
-                        <p><strong>Price:</strong> $<?= htmlspecialchars($product['prix']) ?></p>
-                        <button class="add-to-cart" data-product-name="<?= htmlspecialchars($product['nom_prod']) ?>">Add to Cart</button>
-                    <!-- Rating Bar -->
-    <div class="rating" data-product-id="<?= $product['id_prod'] ?>">
-        <span data-value="5">★</span>
-        <span data-value="4">★</span>
-        <span data-value="3">★</span>
-        <span data-value="2">★</span>
-        <span data-value="1">★</span>
-    </div>
-    <!-- Selected Rating Display -->
-    <p class="selected-rating" id="rating-<?= $product['id_prod'] ?>">No rating yet</p>
+ <!-- la recherche -->
+<?php if ($search !== ''): ?>
+    <h1>Résultats de recherche pour "<?= htmlspecialchars($search) ?>" :</h1>
+
+    <?php foreach ($productsByCategory as $categoryId => $products): ?>
+        <!-- Check if there are any products in the category -->
+        <?php if (!empty($products)): ?>
+            <section class="search-results">
+                <h2><?= htmlspecialchars($categories[$categoryId]) ?> :</h2>
+                <div class="product-catalog">
+                    <?php foreach ($products as $product): ?>
+                        <div class="product-card">
+                            <img src="images/<?= htmlspecialchars($product['url_img']) ?>" alt="<?= htmlspecialchars($product['nom_prod']) ?>" class="product-image">
+                            <h3><?= htmlspecialchars($product['nom_prod']) ?></h3>
+                            <p><?= htmlspecialchars($product['description']) ?></p>
+                            <p><strong>Price:</strong> $<?= htmlspecialchars($product['prix']) ?></p>
+                            <button class="add-to-cart" data-product-name="<?= htmlspecialchars($product['nom_prod']) ?>">Add to Cart</button>
+
+                            <!-- Rating Bar -->
+                            <div class="rating" data-product-id="<?= $product['id_prod'] ?>">
+                                <span data-value="5">★</span>
+                                <span data-value="4">★</span>
+                                <span data-value="3">★</span>
+                                <span data-value="2">★</span>
+                                <span data-value="1">★</span>
+                            </div>
+                            <!-- Selected Rating Display -->
+                            <p class="selected-rating" id="rating-<?= $product['id_prod'] ?>">No rating yet</p>
                         </div>
-                    </div>
-                    
-                <?php endforeach; ?>
-            </div>
-        </section>
-    <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+            </section>
+        <?php endif; ?>
+    <?php endforeach; ?>
+
+
+<?php endif; ?>
 
     <!-- Affichage des produits par catégories sans recherche -->
 <?php if ($search === ''): ?>
@@ -368,7 +382,7 @@ foreach ($filteredProducts as $product) {
 <?php endif; ?>
 
 
-    <!-- Pagination -->
+<!-- HTML Pagination -->
 <div class="pagination">
     <?php if ($page > 1): ?>
         <a href="?page=<?= $page - 1 ?>&limit=<?= $limit ?>&search=<?= htmlspecialchars($search) ?>&sort_by=<?= htmlspecialchars($sortBy) ?>&sort_order=<?= htmlspecialchars($sortOrder) ?>">Previous</a>
@@ -385,6 +399,7 @@ foreach ($filteredProducts as $product) {
         <a href="?page=<?= $page + 1 ?>&limit=<?= $limit ?>&search=<?= htmlspecialchars($search) ?>&sort_by=<?= htmlspecialchars($sortBy) ?>&sort_order=<?= htmlspecialchars($sortOrder) ?>">Next</a>
     <?php endif; ?>
 </div>
+
 
     <!-- Message Box -->
 <div class="message-box" id="messageBox">

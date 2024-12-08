@@ -1,12 +1,18 @@
 <?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require_once 'PHPMailer.php';
+require_once 'SMTP.php';
+require_once 'Exception.php';
+
 include('../../controller/prod_controller.php'); 
 include_once('../../config.php');
 
 $conn = config::getConnexion();
-
 $controller = new TravelOfferController();
 
-
+// Fetch categories
 $categories = [];
 $query2 = "SELECT id_categorie, nom_categorie FROM categorie ORDER BY nom_categorie";
 $stmt2 = $conn->prepare($query2);
@@ -21,7 +27,6 @@ try {
     exit();
 }
 
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nom_prod = $_POST['nom_prod'] ?? '';
     $description = $_POST['description'] ?? '';
@@ -29,7 +34,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $qte = $_POST['qte'] ?? '';
     $cat = $_POST['cat'] ?? '';
 
-  
     if (empty($nom_prod) || empty($description) || empty($prix) || empty($qte) || empty($cat)) {
         echo "All fields must be filled out.";
         exit();
@@ -38,17 +42,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $file = $_FILES['url_img'] ?? null;
 
     if ($file && $file['error'] == 0) {
-     
         $controller->createProduct($nom_prod, $description, $prix, $qte, $file, $cat);
 
-        header('Location: list_products.php');
-        exit();
+        // Send Email after product is added
+        $subject = "New Product Added: " . $nom_prod;
+        $message = "<h1>New Product Added</h1>";
+        $message .= "<p>A new product has been added to the system:</p>";
+        $message .= "<p><strong>Name:</strong> " . htmlspecialchars($nom_prod) . "</p>";
+        $message .= "<p><strong>Description:</strong> " . htmlspecialchars($description) . "</p>";
+        $message .= "<p><strong>Price:</strong> " . $prix . " €</p>";
+        $message .= "<p><strong>Quantity:</strong> " . $qte . "</p>";
+        $message .= "<p><strong>Category:</strong> " . htmlspecialchars($cat) . "</p>";
+
+        // Sending email to the admin or manager
+        $email = "benmaleksarra62@gmail.com"; // Replace with your admin email
+        $mail = new PHPMailer(true);
+
+        try {
+            // SMTP configuration
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com';
+            $mail->SMTPAuth = true;
+            $mail->Username = 'benmaleksarra62@gmail.com'; // Replace with your email
+            $mail->Password = 'urgargejdggthaos'; // Replace with your app-specific password
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port = 587;
+
+            // Set sender and recipient
+            $mail->setFrom('benmaleksarra62@gmail.com', 'GREEN&PURE');
+            $mail->addAddress($email); // Admin email address
+
+            // Email content
+            $mail->isHTML(true);
+            $mail->Subject = $subject;
+            $mail->Body    = $message;
+
+            // Send the email
+            $mail->send();
+
+            // Redirect to the product list
+            header('Location: list_products.php');
+            exit();
+        } catch (Exception $e) {
+            echo "Mailer Error: " . $mail->ErrorInfo;
+            exit();
+        }
     } else {
         echo "Error: No file uploaded or file upload failed.";
         exit();
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
