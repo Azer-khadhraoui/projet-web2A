@@ -20,9 +20,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['question_id']) && iss
         echo "Error updating status: " . $e->getMessage();
     }
 }
+// Handle search functionality
+$searchedQuestion = null;
+if (isset($_GET['search_id']) && !empty($_GET['search_id'])) {
+    $searchId = $_GET['search_id'];
+    $searchedQuestion = $questionController->searchQuestionById($searchId);
+}
 
-// Fetch questions and responses
-$questions = $questionController->getAllQuestions();
+// Fetch all questions if no search or search result
+if (!$searchedQuestion) {
+    $questions = $questionController->getAllQuestions();
+} else {
+    // Display only the searched questions
+    $questions = [$searchedQuestion];
+}
+
+// Fetch responses
 $responses = $responseController->getAllResponses();
 ?>
 
@@ -69,6 +82,12 @@ $responses = $responseController->getAllResponses();
                     <div class="col-md-12">
                         <h2>Forum Management</h2>
                         <hr />
+                        <form method="GET" action="forum_admin.php" class="form-inline">
+                           <input type="text" name="search_id" class="form-control" placeholder="Search by Question ID" />
+                          <button type="submit" class="btn btn-primary">Search</button>
+                        </form>
+
+
                         
                         <!-- Questions Management -->
                         <div class="panel panel-default">

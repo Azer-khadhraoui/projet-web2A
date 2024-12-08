@@ -164,5 +164,13 @@ public function likeQuestion($id_question, $id_client) {
             throw new Exception("Error updating like count: " . $e->getMessage());
         }
     }
+    public function searchQuestionById($id) {
+        $pdo = config::getConnexion();
+        $stmt = $pdo->prepare("SELECT * FROM question WHERE id_question = :id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    
     
 }
