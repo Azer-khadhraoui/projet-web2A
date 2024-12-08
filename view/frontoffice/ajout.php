@@ -35,8 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $controller = new UserController();
     $controller->addUser($usr);
-
-    echo "Utilisateur ajouté avec succès.";
+    header("Location: products.php ");
 } else {
     echo "Aucune donnée reçue.";
 }

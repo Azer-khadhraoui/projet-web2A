@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 exit();
             } else {
                 $message = "Login successful! Welcome, $fname $lname.";
-                header("Location: signin.html?message=" . urlencode($message));
+                header("Location: products.php ");
                 exit();
             }
         } else {
@@ -41,4 +41,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             Méthode de requête non valide.
           </div>";
 }
+
 ?>
