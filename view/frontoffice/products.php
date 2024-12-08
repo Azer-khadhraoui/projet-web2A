@@ -269,7 +269,52 @@ foreach ($categories as $categoryId => $categoryName) {
     font-style: italic;
 }
 
-
+/* Product Category and Main Content */
+.product-main {
+    margin: 20px;
+}
+.product-category {
+    display: none; /* Hidden by default, shown on category button click */
+}
+.product-catalog {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+.product-card {
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    padding: 15px;
+    text-align: center;
+    border-radius: 8px;
+}
+.product-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+.product-card h3 {
+    margin: 10px 0;
+    font-size: 18px;
+}
+.product-card p {
+    color: #555;
+    font-size: 14px;
+}
+.product-card button {
+    background-color: #d57b20;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    border-radius: 4px;
+}
+.product-card button:hover {
+    background-color: #efa55b;
+}
     </style>
 </head>
 <body>
