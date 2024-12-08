@@ -1,6 +1,6 @@
 <?php
 
-include 'C:\xampp2\htdocs\test\projet-web2A\controller\prod_controller.php'; 
+include 'D:\apache xampp\htdocs\projet-web2A\controller\prod_controller.php'; 
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;

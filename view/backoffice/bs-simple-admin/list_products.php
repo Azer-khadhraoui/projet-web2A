@@ -1,7 +1,7 @@
 <?php
-include 'C:\xampp2\htdocs\test\projet-web2A\config.php' ;  
-include 'C:\xampp2\htdocs\test\projet-web2A\model\products_mod.php'; 
-include 'C:\xampp2\htdocs\test\projet-web2A\controller\prod_controller.php'; 
+include '../../../config.php' ;  
+include 'D:\apache xampp\htdocs\projet-web2A\model\products_mod.php'; 
+include 'D:\apache xampp\htdocs\projet-web2A\controller\prod_controller.php'; 
 
 $controller = new TravelOfferController();
 

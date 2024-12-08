@@ -6,8 +6,8 @@ require_once 'PHPMailer.php';
 require_once 'SMTP.php';
 require_once 'Exception.php';
 
-include 'C:\xampp2\htdocs\test\projet-web2A\config_prod.php' ;  
-include 'C:\xampp2\htdocs\test\projet-web2A\controller\prod_controller.php'; 
+include '../../../config.php' ;  
+include 'D:\apache xampp\htdocs\projet-web2A\controller\prod_controller.php'; 
 
 $conn = config::getConnexion();
 $controller = new TravelOfferController();
