@@ -1,5 +1,5 @@
 <?php
-include_once 'C:\xampp2\htdocs\test\projet-web2A\config.php' ;
+include_once '../../config.php';
 
 $conn = config::getConnexion();
 
@@ -275,7 +275,7 @@ foreach ($categories as $categoryId => $categoryName) {
 <body>
     
 <nav>
-        <img src="images/logoweb.jpg" alt="Green & Pure Logo" class="logo">
+        <img src="images/green&purelogo.png" alt="Green & Pure Logo" class="logo">
         <ul>
             <li><a href="index.html">HOME</a></li>
             <li><a href="products.php">PRODUCTS</a></li>
@@ -433,4 +433,3 @@ foreach ($categories as $categoryId => $categoryName) {
     </footer>
 </body>
 </html>
-

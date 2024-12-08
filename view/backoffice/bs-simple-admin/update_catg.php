@@ -1,6 +1,6 @@
 <?php
 
-include 'C:\xampp2\htdocs\test\projet-web2A\controller\categorie_controller.php'; 
+include 'D:\apache xampp\htdocs\projet-web2A\controller\categorie_controller.php'; 
 
 $controller = new CategoriesController();
 
