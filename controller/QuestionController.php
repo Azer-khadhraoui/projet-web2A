@@ -1,14 +1,17 @@
 <?php
 require_once '../config.php';
 
-class QuestionController {
+class QuestionController
+{
     private $db;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->db = Config::getConnexion(); // Assuming Config::getConnexion() returns a PDO instance
     }
 
-    public function listPublicationsSortedByTitle($sortOrder) {
+    public function listPublicationsSortedByTitle($sortOrder)
+    {
         try {
             $sql = "SELECT * FROM question ORDER BY titre_quest $sortOrder";
             $list = $this->db->query($sql);
@@ -18,7 +21,8 @@ class QuestionController {
         }
     }
 
-    public function getQuestionById($id_quest) {
+    public function getQuestionById($id_quest)
+    {
         try {
             $query = $this->db->prepare('SELECT * FROM question WHERE id_quest = :id_quest');
             $query->bindValue(':id_quest', $id_quest, PDO::PARAM_INT);
@@ -29,7 +33,8 @@ class QuestionController {
             return null;
         }
     }
-    public function countQuestions() {
+    public function countQuestions()
+    {
         try {
             $query = $this->db->prepare("SELECT COUNT(*) AS total FROM question");
             $query->execute();
@@ -39,27 +44,28 @@ class QuestionController {
             die("Error counting questions: " . $e->getMessage());
         }
     }
-    
+
 
     public function addQuestion($question)
-{
-    $sql = "INSERT INTO question (titre_quest, contenue, date, id_user) VALUES (:titre_quest, :contenue, CURDATE(), :id_user)";
-    try {
-        $query = $this->db->prepare($sql);
-        
+    {
+        $sql = "INSERT INTO question (titre_quest, contenue, date, id_user) VALUES (:titre_quest, :contenue, CURDATE(), :id_user)";
+        try {
+            $query = $this->db->prepare($sql);
 
-        $query->execute([
-            'titre_quest' => $question->getTitreQuest(),
-            'contenue' => $question->getContenue(),
-            'id_user' => $question->getUserId(),
-        ]);
-    } catch (Exception $e) {
-        echo 'Error: ' . $e->getMessage();
+
+            $query->execute([
+                'titre_quest' => $question->getTitreQuest(),
+                'contenue' => $question->getContenue(),
+                'id_user' => $question->getUserId(),
+            ]);
+        } catch (Exception $e) {
+            echo 'Error: ' . $e->getMessage();
+        }
     }
-}
 
 
-    public function deleteQuestion1($id) {
+    public function deleteQuestion1($id)
+    {
         try {
             $sql = "DELETE FROM question WHERE id_quest = :id";
             $req = $this->db->prepare($sql);
@@ -69,68 +75,101 @@ class QuestionController {
             die('Error: ' . $e->getMessage());
         }
     }
-    public function deleteQuestion($id) {
+    public function deleteQuestion($id)
+    {
         try {
             // First, delete all responses associated with the question
             $sqlDeleteResponses = "DELETE FROM response WHERE id_quest = :id_quest";
             $reqResponses = $this->db->prepare($sqlDeleteResponses);
             $reqResponses->bindValue(':id_quest', $id, PDO::PARAM_INT);
             $reqResponses->execute();
-    
+
             // Then, delete the question itself
             $sqlDeleteQuestion = "DELETE FROM question WHERE id_quest = :id_quest";
             $reqQuestion = $this->db->prepare($sqlDeleteQuestion);
             $reqQuestion->bindValue(':id_quest', $id, PDO::PARAM_INT);
             $reqQuestion->execute();
-    
+
         } catch (PDOException $e) {
             die('Error: ' . $e->getMessage());
         }
     }
 
-   
-        public function getQuestionsByUserId($id_user)
-        {
-            $sql = "SELECT * FROM question WHERE id_user = :id_user";
-            try {
-                $query = $this->db->prepare($sql);
-                $query->bindParam(':id_user', $id_user, PDO::PARAM_INT);
-                $query->execute();
-                return $query->fetchAll(PDO::FETCH_ASSOC);
-            } catch (Exception $e) {
-                echo 'Error: ' . $e->getMessage();
-            }
-        }
-        public function updateQuestionContent($id_quest, $newContent)
-        {
-            $sql = "UPDATE question SET contenue = :contenue WHERE id_quest = :id_quest";
-            try {
-                $query = $this->db->prepare($sql);
-                $query->bindParam(':contenue', $newContent, PDO::PARAM_STR);
-                $query->bindParam(':id_quest', $id_quest, PDO::PARAM_INT);
-                $query->execute();
-            } catch (Exception $e) {
-                echo 'Error: ' . $e->getMessage();
-            }
-        }
-        public function searchquestion($recherche) {
-            $sql = "SELECT * FROM question
-                    WHERE titre_quest LIKE :recherche "
-                   ;
-            $db = config::getConnexion();
-            
-            try {
-                $query = $db->prepare($sql);
-                $query->bindValue(':recherche', '%' . $recherche . '%');
-                $query->execute();
-                $question = $query->fetchAll();
-                return $question;
-            } catch (Exception $e) {
-                die('Error: ' . $e->getMessage());
-            }
-        }
 
-   
+    public function getQuestionsByUserId($id_user)
+    {
+        $sql = "SELECT * FROM question WHERE id_user = :id_user";
+        try {
+            $query = $this->db->prepare($sql);
+            $query->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+            $query->execute();
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            echo 'Error: ' . $e->getMessage();
+        }
+    }
+
+    public function searchquestion($recherche)
+    {
+        $sql = "SELECT * FROM question
+                    WHERE titre_quest LIKE :recherche "
+        ;
+        $db = config::getConnexion();
+
+        try {
+            $query = $db->prepare($sql);
+            $query->bindValue(':recherche', '%' . $recherche . '%');
+            $query->execute();
+            $question = $query->fetchAll();
+            return $question;
+        } catch (Exception $e) {
+            die('Error: ' . $e->getMessage());
+        }
+    }
+    public function updateQuestion($id_quest, $new_content)
+    {
+        // Check if the question ID exists
+        $stmt = $this->db->prepare("SELECT id_quest FROM question WHERE id_quest = :id_quest");
+        $stmt->execute(['id_quest' => $id_quest]);
+        $question = $stmt->fetch();
+
+        if ($question) {
+            // Update the content of the question
+            $updateStmt = $this->db->prepare("UPDATE question SET contenue = :new_content WHERE id_quest = :id_quest");
+            $updateStmt->execute([
+                'new_content' => $new_content,
+                'id_quest' => $id_quest
+            ]);
+
+            return "Question updated successfully.";
+        } else {
+            return "Question not found.";
+        }
+    }
+    public function updateQuestionContent($id_quest, $new_title, $new_content)
+    {
+        // Check if the question ID exists
+        $stmt = $this->db->prepare("SELECT id_quest FROM question WHERE id_quest = :id_quest");
+        $stmt->execute(['id_quest' => $id_quest]);
+        $question = $stmt->fetch();
+    
+        if ($question) {
+            // Update both the title and content of the question
+            $updateStmt = $this->db->prepare("UPDATE question SET titre_quest = :new_title, contenue = :new_content WHERE id_quest = :id_quest");
+            $updateStmt->execute([
+                'new_title' => $new_title,
+                'new_content' => $new_content,
+                'id_quest' => $id_quest
+            ]);
+    
+            return "Question updated successfully.";
+        } else {
+            return "Question not found.";
+        }
+    }
+    
+
+
+
 }
 ?>
-

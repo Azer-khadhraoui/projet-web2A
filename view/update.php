@@ -1,3 +1,34 @@
+<?php
+session_start(); // Start the session to access session variables
+
+require_once '../controller/QuestionController.php';
+
+$error = "";
+$success_message = "";
+$questionController = new QuestionController();
+$questions = [];
+
+// Get the user ID from the session
+$user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
+
+// Fetch the user's questions
+if ($user_id !== null) {
+    $questions = $questionController->getQuestionsByUserId($user_id);
+}
+
+// Update a question's content
+if (isset($_POST['update_id']) && isset($_POST['new_content'])) {
+    if ($user_id !== null) {
+        $questionController->updateQuestion($_POST['update_id'], $_POST['new_content']);
+        $success_message = "Question updated successfully!";
+        header("Location: update.php"); // Refresh the page to reflect the update
+        exit();
+    } else {
+        $error = "You must be logged in to update a question.";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,30 +54,6 @@
             text-align: center;
             color: #333;
             margin-bottom: 20px;
-        }
-        .filter-form {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-        .filter-form label {
-            margin-right: 10px;
-        }
-        .filter-form input,
-        .filter-form button {
-            padding: 10px;
-            margin: 0 5px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .filter-form button {
-            background-color: #28a745;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-        }
-        .filter-form button:hover {
-            background-color: #218838;
         }
         table {
             width: 100%;
@@ -106,35 +113,20 @@
     </style>
 </head>
 <body>
-    <?php
-    require_once '../controller/QuestionController.php';
-    $questionController = new QuestionController();
-    $questions = [];
-
-    if (isset($_POST['filter_id'])) {
-        $id_user = (int)$_POST['filter_id'];
-        $questions = $questionController->getQuestionsByUserId($id_user);
-    }
-
-    if (isset($_POST['update_id'])) {
-        $questionController->updateQuestionContent($_POST['update_id'], $_POST['new_content']);
-        header("Location: update.php"); // Refresh the page
-        exit();
-    }
-    ?>
     <div class="container">
         <h1>Update Your Question</h1>
-        <form class="filter-form" action="update.php" method="post">
-            <label for="filter_id">Client ID:</label>
-            <input type="number" name="filter_id" id="filter_id" required>
-            <button type="submit">Filter</button>
-        </form>
+
+        <!-- Show success or error message -->
+        <?php if (!empty($success_message)) { echo '<div style="color: green;">' . $success_message . '</div>'; } ?>
+        <?php if (!empty($error)) { echo '<div style="color: red;">' . $error . '</div>'; } ?>
+
         <?php if (count($questions) > 0): ?>
             <table>
                 <thead>
                     <tr>
                         <th>Title</th>
                         <th>Content</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -153,8 +145,9 @@
                 </tbody>
             </table>
         <?php else: ?>
-            <p class="no-questions">No questions found for this client ID.</p>
+            <p class="no-questions">No questions found for this user.</p>
         <?php endif; ?>
+        
         <div class="sidebar">
             <a href="ind.php" class="return-button">Return</a>
         </div>

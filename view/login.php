@@ -23,7 +23,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['user_role'] = $user['role'];
         
         // Redirect to ind.php after successful login
-        header("Location: ind.php");
+        if ($user['role'] === 'admin') {
+            header("Location: admin.php"); // Redirect to admin page if the role is admin
+        } else {
+            header("Location: ind.php"); // Redirect to regular user page if not an admin
+        }
         exit();
     } else {
         // Handle invalid login
@@ -105,5 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 </body>
 </html>
+
+
 
 

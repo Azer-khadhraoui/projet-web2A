@@ -254,28 +254,35 @@ button:hover {
 
     <script>
         function addResponse(questionId) {
-            var responseText = document.getElementById('response-text-' + questionId).value;
-            console.log("Response text: " + responseText);  // Debugging
+            var responseText = document.getElementById('response-text-' + questionId).value.trim();
+
+            if (!responseText) {
+                alert("Response cannot be empty.");
+                return;
+            }
 
             var xhr = new XMLHttpRequest();
-            xhr.open("POST", "../controller/addresponse.php", true);  // Ensure the path is correct
+            xhr.open("POST", "../controller/addresponse.php", true);
             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4) {
-                    console.log("AJAX call made, state: " + xhr.readyState);  // Debugging
                     if (xhr.status === 200) {
-                        console.log("Response from server: " + xhr.responseText);  // Debugging
-                        var responseDiv = document.createElement('div');
-                        responseDiv.className = 'response';
-                        responseDiv.innerHTML = '<p><strong>Response:</strong> ' + responseText + '</p>';
-                        document.getElementById('responses-' + questionId).appendChild(responseDiv);
-                        document.getElementById('response-text-' + questionId).value = '';
+                        alert(xhr.responseText);
+
+                        // If response was added successfully, update UI
+                        if (xhr.responseText === "Response added successfully.") {
+                            var responseDiv = document.createElement('div');
+                            responseDiv.className = 'response';
+                            responseDiv.innerHTML = '<p><strong>Response:</strong> ' + responseText + '</p>';
+                            document.getElementById('responses-' + questionId).appendChild(responseDiv);
+                            document.getElementById('response-text-' + questionId).value = '';
+                        }
                     } else {
-                        console.log("Error: " + xhr.status);  // Debugging
+                        alert("An error occurred. Please try again.");
                     }
                 }
             };
-            console.log("Sending data: id_quest=" + questionId + "&contenue=" + encodeURIComponent(responseText));  // Debugging
+
             xhr.send("id_quest=" + questionId + "&contenue=" + encodeURIComponent(responseText));
         }
 

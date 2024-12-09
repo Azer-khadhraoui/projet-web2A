@@ -4,41 +4,60 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 session_start();
-require_once '../controller/ReponseController.php';
-require_once '../model/ReponseModel.php';
+require_once 'reponseController.php';
+require_once '../Model/reponseModel.php';
 
-// Debugging: Check if session is started and user_id is set
+// Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
-    echo "Error: User ID is not set in session.";
+    echo "Error: User not logged in.";
     exit();
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['id_quest']) && isset($_POST['contenue'])) {
-        $id_quest = intval(value: $_POST['id_quest']);
-        $contenue = $_POST['contenue'];
-        $id_user = $_SESSION['user_id']; // Ensure user ID is set
+        $id_quest = intval($_POST['id_quest']);
+        $contenue = trim($_POST['contenue']);
+        $id_user = $_SESSION['user_id'];
 
-        // Debugging: Check if data is received correctly
-        echo "ID Quest: $id_quest, Content: $contenue, User ID: $id_user";
+        if (empty($contenue)) {
+            echo "Error: Response cannot be empty.";
+            exit();
+        }
 
         $reponseController = new ReponseController();
-        $response = new ReponseModel($contenue, $id_quest, $id_user);
-        $reponseController->addResponse($response);
 
-        echo "Response added successfully!";
+        // Check if the user has already posted 3 responses for this question
+        $responseCount = $reponseController->countUserResponsesToQuestion($id_quest, $id_user);
+        if ($responseCount >= 3) {
+            echo "Error: You can only post up to 3 responses for this question.";
+            exit();
+        }
+
+        // Create a new response and add it
+        $response = new ReponseModel($contenue, $id_quest, $id_user);
+        $responseAdded = $reponseController->addResponse($response);
+
+        if ($responseAdded) {
+            // Fetch the question owner's email
+            $questionOwnerEmail = $reponseController->getQuestionOwnerEmail($id_quest);
+
+            if ($questionOwnerEmail) {
+                // Send an email notification to the question owner
+                $subject = "New Response to Your Question";
+                $message = "Hello,\n\nYour question has received a new response:\n\n" . $contenue . "\n\nRegards,\nYour Application Team";
+
+                // Use PHPMailer for sending the email
+                $reponseController->sendEmailNotification($questionOwnerEmail, $subject, $message);
+            }
+
+            echo "Response added successfully, and notification sent!";
+        } else {
+            echo "Error: Failed to add the response.";
+        }
     } else {
-        echo "Error: Missing data.";
+        echo "Error: Missing question ID or response content.";
     }
 } else {
     echo "Error: Invalid request method.";
 }
-
-exit();
-
-
-
 ?>
-
-
-

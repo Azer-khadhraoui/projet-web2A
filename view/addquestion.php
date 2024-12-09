@@ -1,3 +1,35 @@
+<?php
+session_start(); // Start the session to access session variables
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+require_once '../config.php';
+require_once '../model/QuestionModel.php';
+require_once '../controller/QuestionController.php';
+
+$error = "";
+$success_message = "";
+
+// Check if the user is logged in and retrieve the user ID from the session
+$user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
+
+if (isset($_POST["titre_quest"]) && isset($_POST["contenue"]) && $user_id !== null) {
+    if (!empty($_POST["titre_quest"]) && !empty($_POST["contenue"])) {
+        try {
+            // Create an instance of the QuestionModel
+            $question = new QuestionModel($_POST['titre_quest'], $_POST['contenue'], (int)$user_id);
+            $questionController = new QuestionController();
+            $questionController->addQuestion($question);
+            $success_message = "Question added successfully!";
+        } catch (Exception $e) {
+            $error = "Error: " . $e->getMessage();
+        }
+    } else {
+        $error = "All fields are required.";
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -99,33 +131,6 @@
     </style>
 </head>
 <body>
-    <?php
-    error_reporting(E_ALL);
-    ini_set('display_errors', 1);
-
-    require_once '../config.php';
-    require_once '../model/QuestionModel.php';
-    require_once '../controller/QuestionController.php';
-
-    $error = "";
-    $success_message = "";
-
-    if (isset($_POST["titre_quest"]) && isset($_POST["contenue"]) && isset($_POST["id_user"])) {
-        if (!empty($_POST["titre_quest"]) && !empty($_POST["contenue"]) && !empty($_POST["id_user"])) {
-            try {
-                // Create an instance of the QuestionModel
-                $question = new QuestionModel($_POST['titre_quest'], $_POST['contenue'], (int)$_POST['id_user']);
-                $questionController = new QuestionController();
-                $questionController->addQuestion($question);
-                $success_message = "Question added successfully!";
-            } catch (Exception $e) {
-                $error = "Error: " . $e->getMessage();
-            }
-        } else {
-            $error = "All fields are required.";
-        }
-    }
-    ?>
     <div class="container">
         <h1>Add a New Question</h1>
         <?php if (!empty($error)) { echo '<div style="color: red;">' . $error . '</div>'; } ?>
@@ -133,7 +138,10 @@
         <form class="question-form" action="" method="post">
             <input type="text" name="titre_quest" placeholder="Question Title" required>
             <textarea id="contenue" name="contenue" placeholder="Your Question Content" rows="5" required></textarea>
-            <input type="number" name="id_user" placeholder="User ID" required>
+            
+            <!-- Hidden field for user ID, automatically filled from session -->
+            <input type="hidden" name="id_user" value="<?php echo htmlspecialchars($user_id); ?>">
+            
             <button type="submit">Submit</button>
         </form>
         <div class="sidebar">
@@ -200,6 +208,7 @@
     </script>
 </body>
 </html>
+
 
 
 
