@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id']) && isset($_POST
         
         // Redirect based on context (admin or user)
         if (isset($_GET['context']) && $_GET['context'] === 'admin') {
-            header('Location: ../forum_admin.php'); // Back Office
+            header('Location: forum_admin.php'); // Back Office
         } else {
             header('Location: ../../frontoffice/discussion.php'); // Front Office
         }
