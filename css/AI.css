@@ -1,0 +1,140 @@
+/* General Body Styling */
+body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #6e7dff, #5f5fff);
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header Styling */
+header {
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 40px 20px;
+    text-align: center;
+    color: white;
+}
+
+header h1 {
+    font-size: 2.5em;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: white;
+}
+
+header p {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    color: #f1f1f1;
+}
+
+/* Forum Main Text */
+.forum-main {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.85); /* Slight transparency for a modern look */
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    font-size: 1.2em; /* Slightly larger font size for body text */
+    line-height: 1.6; /* Add more space between lines for readability */
+    text-align: left;
+}
+
+/* Form Section Styling */
+.forum-options {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.ai-category-label {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+/* Select Box Styling */
+.ai-category-select {
+    padding: 12px;
+    margin: 20px 0;
+    font-size: 1.2em;
+    width: 100%;
+    max-width: 400px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    transition: 0.3s ease;
+}
+
+.ai-category-select:focus {
+    border-color: #5f5fff;
+    outline: none;
+}
+
+/* Button Styling */
+.ai-submit-btn {
+    background-color: #a1c3c6;
+    color: white;
+    padding: 12px 25px;
+    font-size: 1.3em;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.ai-submit-btn:hover {
+    background-color: #4a4ef9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Response Section Text */
+.ai-response {
+    margin-top: 40px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.ai-response h2 {
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #5f5fff; /* Accent color for headers */
+}
+
+.ai-response p {
+    font-size: 1.3em;
+    line-height: 1.8;
+    color: #444;
+}
+
+/* Loading Indicator */
+#loading {
+    display: none;
+    font-size: 1.5em;
+    color: #666;
+    text-align: center;
+}
+
+/* Media Query for Mobile */
+@media (max-width: 600px) {
+    .ai-category-select {
+        width: 80%;
+    }
+
+    .ai-submit-btn {
+        width: 80%;
+    }
+
+    .ai-response h2 {
+        font-size: 1.5em;
+    }
+
+    .ai-response p {
+        font-size: 1.1em;
+    }
+}
