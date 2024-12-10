@@ -1,4 +1,6 @@
 <?php
+define('BASE_URL', '/projet-web2A/'); // Update this if your project path changes
+
 class config
 {   private static $pdo = null;
     public static function getConnexion()
