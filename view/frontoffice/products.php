@@ -326,8 +326,8 @@ foreach ($categories as $categoryId => $categoryName) {
             <li><a href="products.php">PRODUCTS</a></li>
             <li><a href="forum.php">FORUM</a></li>
             <li><a href="#about">ABOUT</a></li>
-            <li><a href="#contact">RECLAMATION</a></li>
-            <li><a href="reclamation.php" id="gq">GET A QUOTE</a></li>
+            <li><a href="../login.php">RECLAMATION</a></li>
+            <li><a href="../ind.php" id="gq">GET A QUOTE</a></li>
             <li><a href="panier.php"><img src="images/cart_icon.jpg" alt="Panier" class="cart-icon"></a></li>
         </ul>
     </nav>

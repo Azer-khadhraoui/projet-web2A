@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../config.php';
-require_once __DIR__ . '/../../controller/QuestionController.php';
+require_once __DIR__ . '/../../controller/QuestionControlleradem.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['suggestion_text'])) {
     $suggestion_text = $_POST['suggestion_text'];
