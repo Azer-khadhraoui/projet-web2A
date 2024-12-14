@@ -47,9 +47,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errors[] = "La description de la commande est obligatoire.";
     }
 
-    if (empty($paniers)) {
+    /*if (empty($paniers)) {
         $errors[] = "Aucun panier sélectionné.";
-    } else {
+    } */else {
         foreach ($paniers as $panier_id) {
             $sql_panier = "SELECT pr.prix, p.qt_prod FROM pannier p 
                            JOIN produit pr ON p.id_prod = pr.id_produit 
@@ -91,7 +91,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmt_panier->execute();
             }
 
-            try {
+            /*try {
                 $mail = new PHPMailer(true);
                 $mail->isSMTP();
                 $mail->Host = 'smtp.gmail.com';  
@@ -156,7 +156,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 exit;
             } catch (Exception $e) {
                 $errors[] = "Erreur lors de l'envoi de l'email: " . $mail->ErrorInfo;
-            }
+            }*/
             
         } else {
             $errors[] = "Erreur lors de l'insertion de la commande.";
@@ -213,10 +213,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="collapse navbar-collapse" id="navbarsExample04">
                                 <ul class="navbar-nav mr-auto">
                                     <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="products.html">Products</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
-                                    <li class="nav-item active"><a class="nav-link" href="commande.html">Commande</a>
+                                    
+                                    <li class="nav-item"><a class="nav-link" href="products.php">Products</a></li>
+                                    
+                                    
                                     </li>
                                 </ul>
                             </div>
@@ -231,7 +231,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="row">
             <div class="col-md-12">
                 <div class="titlepage">
-                    <h2>Ajouter commande</h2>
+                    <h2>Add command</h2>
                 </div>
             </div>
         </div>
@@ -239,9 +239,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="col-md-8">
                 <form action="" method="POST" class="main_form">
                     <div class="form-group">
-                        <label for="calendarToggle" style="cursor: pointer;">Sélectionner une date de commande</label>
-                        <button id="calendarToggle" type="button" class="btn btn-primary">Afficher/Masquer le
-                            Calendrier</button>
+                        <label for="calendarToggle" style="cursor: pointer;">select a date</label>
+                        <button id="calendarToggle" type="button" class="btn btn-primary">show
+                            Calendar</button>
 
                         <div id="calendarContainer" style="display: none; margin-top: 10px;">
                             <div id="calendar"></div>
@@ -288,28 +288,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </script>
 
                     <div class="form-group">
-                        <label for="stat_cmd">Statut de commande</label>
+                        <label for="stat_cmd">Status of the command</label>
                         <select id="stat_cmd" name="stat_cmd" class="form-control contactus">
-                            <option value="En attente" selected>En attente</option>
+                            <option value="En attente" selected>waiting</option>
                         </select>
                     </div>
 
                     <div class="form-group">
-                        <label for="adress_cmd">Adresse de livraison</label>
+                        <label for="adress_cmd">Adress</label>
                         <input type="text" id="adress_cmd" name="adress_cmd" class="form-control contactus"
                             placeholder="Entrez l'adresse de livraison">
                     </div>
 
                     <div class="form-group">
-                        <label for="desc_cmd">Information supplémentaire</label>
+                        <label for="desc_cmd">other information</label>
                         <input type="text" id="desc_cmd" name="desc_cmd" class="form-control contactus"
                             placeholder="Entrez une information supplémentaire">
                     </div>
 
                     <div class="form-group">
-                        <label for="paniers">Sélectionner les paniers</label><br>
+                        <!--<label for="paniers">Sélectionner les paniers</label><br>-->
                         <?php
-                        $sql = "SELECT p.id_pannier, pr.nom, pr.images, pr.prix, p.qt_prod 
+                        /*$sql = "SELECT p.id_pannier, pr.nom, pr.images, pr.prix, p.qt_prod 
 FROM pannier p
 JOIN produit pr ON p.id_prod = pr.id_produit";
                         $stmt = $pdo->query($sql);
@@ -339,7 +339,7 @@ JOIN produit pr ON p.id_prod = pr.id_produit";
                             echo '</div>';
                         } else {
                             echo '<p>Aucun produit trouvé.</p>';
-                        }
+                        }*/
                         ?>
                         <style>
                             .product-list {
@@ -420,7 +420,7 @@ JOIN produit pr ON p.id_prod = pr.id_produit";
                         </div>
                     <?php endif; ?>
                     <div class="form-group text-center">
-                        <button type="submit" class="send_btn">Confirmer la commande</button>
+                        <button type="submit" class="send_btn">Confirm </button>
                     </div>
                 </form>
                 
