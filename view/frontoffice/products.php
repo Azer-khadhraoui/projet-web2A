@@ -328,7 +328,7 @@ foreach ($categories as $categoryId => $categoryName) {
             <li><a href="#about">ABOUT</a></li>
             <li><a href="../login.php">RECLAMATION</a></li>
             <li><a href="index.html" id="gq">logout</a></li>
-            <li><a href="panier.php"><img src="images/cart_icon.jpg" alt="Panier" class="cart-icon"></a></li>
+            <li><a href="pannier.php"><img src="images/cart_icon.jpg" alt="Panier" class="cart-icon"></a></li>
         </ul>
     </nav>
 
@@ -366,12 +366,12 @@ foreach ($categories as $categoryId => $categoryName) {
                 <h2><?= htmlspecialchars($categories[$categoryId]) ?> :</h2>
                 <div class="product-catalog">
                     <?php foreach ($products as $product): ?>
-                        <div class="product-card">
+                        <div class="product-card"  data-product-id="<?= $product['id_prod'] ?>">
                             <img src="images/<?= htmlspecialchars($product['url_img']) ?>" alt="<?= htmlspecialchars($product['nom_prod']) ?>" class="product-image">
                             <h3><?= htmlspecialchars($product['nom_prod']) ?></h3>
                             <p><?= htmlspecialchars($product['description']) ?></p>
                             <p><strong>Price:</strong> $<?= htmlspecialchars($product['prix']) ?></p>
-                            <button class="add-to-cart" data-product-name="<?= htmlspecialchars($product['nom_prod']) ?>">Add to Cart</button>
+                          <button><a href="pannier.php?id_prod=<?= $product['id_prod'] ?>" id="sub">Add to Cart</a></button>
 
                             <!-- Rating Bar -->
                             <div class="rating" data-product-id="<?= $product['id_prod'] ?>">
@@ -402,12 +402,13 @@ foreach ($categories as $categoryId => $categoryName) {
                 <h2><?= htmlspecialchars($categoryName) ?></h2>
                 <div class="product-catalog">
                     <?php foreach ($productsByCategory[$categoryId] ?? [] as $product): ?>
-                        <div class="product-card">
+                        <div class="product-card"  data-product-id="<?= $product['id_prod'] ?>">
                             <img src="images/<?= htmlspecialchars($product['url_img']) ?>" alt="<?= htmlspecialchars($product['nom_prod']) ?>" class="product-image">
                             <h3><?= htmlspecialchars($product['nom_prod']) ?></h3>
                             <p><?= htmlspecialchars($product['description']) ?></p>
                             <p><strong>Price:</strong> $<?= htmlspecialchars($product['prix']) ?></p>
-                            <button class="add-to-cart" data-product-name="<?= htmlspecialchars($product['nom_prod']) ?>">Add to Cart</button>
+                            <button><a href="pannier.php?id_prod=<?= $product['id_prod'] ?>" id="sub">Add to Cart</a></button>
+
     <!-- Rating Bar -->
     <div class="rating" data-product-id="<?= $product['id_prod'] ?>">
         <span data-value="5">★</span>
@@ -451,28 +452,32 @@ foreach ($categories as $categoryId => $categoryName) {
     <p id="messageContent"></p>
     <button onclick="closeMessageBox()">Close</button>
 </div>
+
 <script>
-        
-        document.querySelectorAll('.add-to-cart').forEach(button => {
-        button.onclick = function () {
-            const productName = this.getAttribute('data-product-name');
-            const messageBox = document.getElementById('messageBox');
-            const messageContent = document.getElementById('messageContent');
+    document.querySelectorAll('.add-to-cart').forEach(button => {
+        button.addEventListener('click', function() {
+            const productId = this.getAttribute('data-id'); // Get product ID
 
-           
-            messageContent.textContent = `The product "${productName}" has been added to your cart!`;
-
-          
-            messageBox.style.display = 'block';
-        };
+            // Send the product ID to pannier.php using AJAX
+            fetch('pannier.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'id_prod=' + productId
+            })
+            .then(response => response.text())
+            .then(data => {
+                // Optionally, display a message or update the UI (e.g., show an alert or update cart count)
+                alert(data); // Display success message returned by pannier.php
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
     });
-
-   
-    function closeMessageBox() {
-        const messageBox = document.getElementById('messageBox');
-        messageBox.style.display = 'none';
-    }
 </script>
+
     <footer>
         <p>&copy; 2024 Green&Pure - All rights reserved.</p>
     </footer>
