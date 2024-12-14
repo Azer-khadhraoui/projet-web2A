@@ -371,8 +371,17 @@ foreach ($categories as $categoryId => $categoryName) {
                             <h3><?= htmlspecialchars($product['nom_prod']) ?></h3>
                             <p><?= htmlspecialchars($product['description']) ?></p>
                             <p><strong>Price:</strong> $<?= htmlspecialchars($product['prix']) ?></p>
-                            <button class="add-to-cart" data-product-name="<?= htmlspecialchars($product['nom_prod']) ?>">Add to Cart</button>
-
+                            <form action="../ajouter_pannier.php" method="POST">
+                                <input type="hidden" name="id_prod" value="<?= $product['id_prod'] ?>">
+                                <input type="hidden" name="qt_prod" value="1"> <!-- Default quantity to 1 -->
+                                <input type="hidden" name="prix" value="<?= $product['prix'] ?>">
+                                <label for="mode_paiement">Mode de paiement:</label>
+                                <select name="mode_paiement" required>
+                                    <option value="credit_card">Credit Card</option>
+                                    <option value="paypal">PayPal</option>
+                                </select>
+                                <button type="submit">Add to Cart</button>
+                            </form>
                             <!-- Rating Bar -->
                             <div class="rating" data-product-id="<?= $product['id_prod'] ?>">
                                 <span data-value="5">★</span>
@@ -407,17 +416,27 @@ foreach ($categories as $categoryId => $categoryName) {
                             <h3><?= htmlspecialchars($product['nom_prod']) ?></h3>
                             <p><?= htmlspecialchars($product['description']) ?></p>
                             <p><strong>Price:</strong> $<?= htmlspecialchars($product['prix']) ?></p>
-                            <button class="add-to-cart" data-product-name="<?= htmlspecialchars($product['nom_prod']) ?>">Add to Cart</button>
-    <!-- Rating Bar -->
-    <div class="rating" data-product-id="<?= $product['id_prod'] ?>">
-        <span data-value="5">★</span>
-        <span data-value="4">★</span>
-        <span data-value="3">★</span>
-        <span data-value="2">★</span>
-        <span data-value="1">★</span>
-    </div>
-    <!-- Selected Rating Display -->
-    <p class="selected-rating" id="rating-<?= $product['id_prod'] ?>">No rating yet</p>
+                            <form action="../ajouter_pannier.php" method="POST">
+                                <input type="hidden" name="id_prod" value="<?= $product['id_prod'] ?>">
+                                <input type="hidden" name="qt_prod" value="1"> <!-- Default quantity to 1 -->
+                                <input type="hidden" name="prix" value="<?= $product['prix'] ?>">
+                                <label for="mode_paiement">Mode de paiement:</label>
+                                <select name="mode_paiement" required>
+                                    <option value="credit_card">Credit Card</option>
+                                    <option value="paypal">PayPal</option>
+                                </select>
+                                <button type="submit">Add to Cart</button>
+                            </form>
+                            <!-- Rating Bar -->
+                            <div class="rating" data-product-id="<?= $product['id_prod'] ?>">
+                                <span data-value="5">★</span>
+                                <span data-value="4">★</span>
+                                <span data-value="3">★</span>
+                                <span data-value="2">★</span>
+                                <span data-value="1">★</span>
+                            </div>
+                            <!-- Selected Rating Display -->
+                            <p class="selected-rating" id="rating-<?= $product['id_prod'] ?>">No rating yet</p>
                         </div>
                     <?php endforeach; ?>
                 </div>
