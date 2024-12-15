@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Update the commande in the database
         $commandeC->updateCommande($commande, $id_cmd);
         // Redirect to the list of commandes after successful update
-        header('Location: liste_commande.php');
+        header('Location: D:\apache xampp\htdocs\projet-web2A\view\backoffice\bs-simple-admin\liste_pannier.php');
         exit(); // Ensure that the header is sent after processing
     }
 }
@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Modifier commande</title>
+    <title>Modify command</title>
     <!-- BOOTSTRAP STYLES-->
     <link href="assets/css/bootstrap.css" rel="stylesheet" />
     <!-- FONTAWESOME STYLES-->
@@ -81,8 +81,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <nav class="navbar-default navbar-side" role="navigation">
             <div class="sidebar-collapse">
                 <ul class="nav" id="main-menu">
-                    <li><a href="#"><i class="fa fa-qrcode"></i>Gestion des commandes</a></li>
-                    <li><a href="#"><i class="fa fa-bar-chart-o"></i>Gestion des panniers</a></li>
+                    <li><a href="#"><i class="fa fa-qrcode"></i>Gestion of command</a></li>
+                    <li><a href="#"><i class="fa fa-bar-chart-o"></i>Gestion of carts</a></li>
                 </ul>
             </div>
         </nav>
@@ -92,14 +92,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div id="page-inner">
                 <div class="row">
                     <div class="col-md-12">
-                        <h2>Modifier commande</h2>
+                        <h2>Modify command</h2>
                     </div>
                 </div>
                 <hr />
                 <br />
                 <div class="row">
                     <div class="col-lg-6 col-md-6">
-                        <h5>Modifier les détails du commande</h5>
+                        <h5>Modify  details of command</h5>
                         <?php
                         // Check if panier data was fetched
                         if ($commande) {
@@ -107,44 +107,44 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <form action="" method="POST">
                                 <table class="table table-striped table-bordered table-hover">
                                     <tr>
-                                        <td><label for="id_cmd">ID comande:</label></td>
+                                        <td><label for="id_cmd">ID command:</label></td>
                                         <td><input type="text" id="id_cmd" name="id_cmd"
                                                 value="<?php echo $commande['id_cmd']; ?>"    readonly/></td>
                                     </tr>
                                     <tr>
-                                        <td><label for="date_cmd">Date commande:</label></td>
+                                        <td><label for="date_cmd">Date of command:</label></td>
                                         <td><input type="date" id="date_cmd" name="date_cmd"
                                                 value="<?php echo $commande['date_cmd']; ?>" required /></td>
                                     </tr>
                                     <tr>
-                                        <td><label for="adress_cmd">Adress commande:</label></td>
+                                        <td><label for="adress_cmd">Adress of command:</label></td>
                                         <td><input type="text" id="adress_cmd" name="adress_cmd"
                                                 value="<?php echo $commande['adress_cmd']; ?>" required /></td>
                                     </tr>
                                     <tr>
-                                        <td><label for="desc_cmd">description commande:</label></td>
+                                        <td><label for="desc_cmd">description of command:</label></td>
                                         <td><input type="text" id="desc_cmd" name="desc_cmd"
                                                 value="<?php echo $commande['desc_cmd']; ?>" required /></td>
                                     </tr>
                                     <tr>
-                                        <td><label for="stat_cmd">Statut de Commande:</label></td>
+                                        <td><label for="stat_cmd">Status of Command:</label></td>
                                         <td>
                                             <select id="stat_cmd" name="stat_cmd">
                                                 <option value="en_attente" <?php if ($commande['stat_cmd'] == 'en_attente')
-                                                    echo 'selected'; ?>>En attente</option>
+                                                    echo 'selected'; ?>>waiting</option>
                                                 <option value="valide" <?php if ($commande['stat_cmd'] == 'valide')
-                                                    echo 'selected'; ?>>Validée</option>
+                                                    echo 'selected'; ?>>done</option>
                                                 <option value="annule" <?php if ($commande['stat_cmd'] == 'annule')
-                                                    echo 'selected'; ?>>Annulée</option>
+                                                    echo 'selected'; ?>>discard</option>
                                                 <option value="termine" <?php if ($commande['stat_cmd'] == 'termine')
-                                                    echo 'selected'; ?>>Terminée</option>
+                                                    echo 'selected'; ?>>finished</option>
                                             </select>
                                         </td>
                                     </tr>
 
                                 </table>
                                 <input class="btn btn-outline-primary btn-sm mb-0" type="submit" value="Mettre à jour" />
-                                <a class="btn btn-outline-danger btn-sm mb-0" href="liste_pannier.php">Annuler</a>
+                                <a class="btn btn-outline-danger btn-sm mb-0" href="liste_pannier.php">discard</a>
                             </form>
                             <?php
                         } else {

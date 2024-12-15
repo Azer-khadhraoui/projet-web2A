@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gestion des Commandes</title>
+    <title>Gestion of Commandes</title>
     <!-- BOOTSTRAP STYLES -->
     <link href="assets/css/bootstrap.css" rel="stylesheet" />
     <!-- FONTAWESOME STYLES -->
@@ -33,8 +33,8 @@
         <nav class="navbar-default navbar-side" role="navigation">
             <div class="sidebar-collapse">
                 <ul class="nav" id="main-menu">
-                    <li><a href="#"><i class="fa fa-qrcode"></i> Gestion des commandes</a></li>
-                    <li><a href="liste_pannier.php"><i class="fa fa-bar-chart-o"></i> Gestion des paniers</a></li>
+                    <li><a href="#"><i class="fa fa-qrcode"></i> Gestion of command</a></li>
+                    <li><a href="liste_pannier.php"><i class="fa fa-bar-chart-o"></i> Gestion ofcarts</a></li>
                 </ul>
             </div>
         </nav>
@@ -43,7 +43,7 @@
             <div id="page-inner">
                 <div class="row">
                     <div class="col-md-12">
-                        <h2>Manipulation des commandes</h2>
+                        <h2>Manipulation of command</h2>
                     </div>
                 </div>
                 <hr />
@@ -71,7 +71,7 @@
                 <form method="GET" action="">
                     <div class="row">
                         <div class="col-lg-6">
-                            <label for="sort">Trier par prix total :</label>
+                            <label for="sort">sort by price :</label>
                             <select name="sort" id="sort" class="form-control" onchange="this.form.submit()">
                                 <option value="asc" <?php if ($sortOrder == 'ASC') echo 'selected'; ?>>Croissant</option>
                                 <option value="desc" <?php if ($sortOrder == 'DESC') echo 'selected'; ?>>Décroissant</option>
@@ -84,19 +84,19 @@
                 <!-- Tableau des commandes -->
                 <div class="row">
                     <div class="col-lg-12">
-                        <h5>Table des commandes</h5>
+                        <h5>Table of command</h5>
                         <table class="table table-striped table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    <th>ID commande</th>
-                                    <th>Date commande</th>
-                                    <th>Statut commande</th>
-                                    <th>Adresse commande</th>
-                                    <th>Description commande</th>
-                                    <th>Prix total</th>
-                                    <th>Affichage détaillé</th>
-                                    <th>Modifier</th>
-                                    <th>Supprimer</th>
+                                    <th>ID </th>
+                                    <th>Date </th>
+                                    <th>Statut </th>
+                                    <th>Adress</th>
+                                    <th>Description </th>
+                                    <th>Price</th>
+                                    <th>details</th>
+                                    <th>Modify</th>
+                                    <th>delete</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -109,8 +109,8 @@
                                         <td><?= htmlspecialchars($commande['desc_cmd']) ?></td>
                                         <td><?= htmlspecialchars($commande['prix_total']) ?></td>
                                         <td><a href="show_commande.php?id_cmd=<?= $commande['id_cmd'] ?>">Détails</a></td>
-                                        <td><a href="modifier_commande.php?id_cmd=<?= $commande['id_cmd'] ?>">Modifier</a></td>
-                                        <td><a href="supprimer_commande.php?id_cmd=<?= $commande['id_cmd'] ?>">Supprimer</a></td>
+                                        <td><a href="modifier_commande.php?id_cmd=<?= $commande['id_cmd'] ?>">Modify</a></td>
+                                        <td><a href="supprimer_commande.php?id_cmd=<?= $commande['id_cmd'] ?>">delete</a></td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
