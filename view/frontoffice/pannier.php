@@ -144,8 +144,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <?php foreach ($produits as $produit): ?>
                                 <option value="<?= $produit['id_prod'] ?>" data-content="
                                     <div style='display: flex; align-items: center;'>
-                                        <img src='<?= $produit['image_prod'] ?>' alt='<?= $produit['nom_prod'] ?>' 
-                                             style='width:80px; height:80px; margin-right: 10px; border-radius: 2px;'>
+                                       
                                         <span><?= $produit['nom_prod'] ?></span>
                                     </div>
                                 ">
