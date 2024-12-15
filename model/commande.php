@@ -2,7 +2,7 @@
 
 use PHPMailer\PHPMailer\Exception;
 
-require '../../vendor/autoload.php'; 
+require 'D:\apache xampp\htdocs\projet-web2A\vendor\autoload.php'; 
 
 $host = 'localhost';
 $dbname = 'greenandpure';

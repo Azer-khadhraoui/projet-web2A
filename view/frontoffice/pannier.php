@@ -53,10 +53,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $error = "La quantité doit être un nombre entier positif.";
             }
         } else {
-            $error = "Tous les champs doivent être remplis.";
+            $error = "You must fill all..";
         }
     } else {
-        $error = "Veuillez remplir tous les champs du formulaire.";
+        $error = "you must fill all.";
     }
 }
 ?>
@@ -67,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panier</title>
+    <title>Cart</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/responsive.css">
@@ -109,13 +109,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         <a class="nav-link" href="about.html">About</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="products.html">Products</a>
+                                        <a class="nav-link" href="products.php">Products</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="contact.html">Contact</a>
                                     </li>
                                     <li class="nav-item active">
-                                        <a class="nav-link" href="pannier.php">Panier</a>
+                                        <a class="nav-link" href="pannier.php">cart</a>
                                     </li>
                                 </ul>
                             </div>
@@ -130,7 +130,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="row">
             <div class="col-md-12">
                 <div class="titlepage">
-                    <h2>Ajouter au Panier</h2>
+                    <h2>Add to Cart</h2>
                 </div>
             </div>
         </div>
@@ -138,7 +138,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="col-md-8">
                 <form action="pannier.php" method="POST" class="main_form">
                     <div class="form-group">
-                        <label for="id_prod">Produit</label>
+                        <label for="id_prod">Products</label>
                         <select id="id_prod" name="id_prod" class="form-control selectpicker" data-live-search="true"
                             border-raduis="none">
                             <?php foreach ($produits as $produit): ?>
@@ -156,17 +156,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                     <br><br>
                     <div class="form-group">
-                        <label for="qt_prod">Quantité</label>
+                        <label for="qt_prod">Quantity</label>
                         <input type="text" id="qt_prod" name="qt_prod" class="form-control contactus"
-                            placeholder="Entrez la quantité">
+                            placeholder="Add Quantity">
                     </div>
 
                     <div class="form-group">
-                        <label for="mode_paiement">Mode de Paiement</label>
+                        <label for="mode_paiement">Payment method</label>
                         <select id="mode_paiement" name="mode_paiement" class="form-control contactus">
-                            <option value="carte">Carte</option>
+                            <option value="carte">Card</option>
                             <option value="paypal">PayPal</option>
-                            <option value="espece">Espèces</option>
+                            <option value="espece">money</option>
                         </select>
                     </div>
                     <?php if (!empty($error)): ?>
@@ -179,7 +179,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </div>
                     <?php endif; ?>
                     <div class="form-group text-center">
-                        <button type="submit" class="send_btn">Ajouter au Panier</button>
+                        <button type="submit" class="send_btn">Add to Cart</button>
                     </div>
                 </form>
             </div>

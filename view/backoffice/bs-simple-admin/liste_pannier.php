@@ -47,10 +47,10 @@
                         <a href="index.html"><i class="fa fa-bar-chart-o"></i>return to dashboard</a>
                     </li>
                      <li>
-                        <a href="#"><i class="fa fa-qrcode "></i>Gestion des panniers</a>
+                        <a href="#"><i class="fa fa-qrcode "></i>Gestion of Cart</a>
                     </li>
                     <li>
-                        <a href="liste_commande.php"><i class="fa fa-bar-chart-o"></i>Gestion des commandes</a>
+                        <a href="liste_commande.php"><i class="fa fa-bar-chart-o"></i>Gestion of command</a>
                     </li>
 
                  
@@ -63,7 +63,7 @@
           <div id="page-inner">
                 <div class="row">
                     <div class="col-md-12">
-                        <h2>Manipulation des panniers </h2>
+                        <h2>Manipulation of carts </h2>
                     </div>
                 </div>
                 <!-- /. ROW  -->
@@ -73,7 +73,7 @@
  
                 <div class="row">
                     <div class="col-lg-6 col-md-6">
-                        <h5>Table des paniers ajoutés récemment </h5>
+                        <h5>Table of carts added </h5>
                         <table class="table table-striped table-bordered table-hover">
     <thead>
         <tr>
@@ -104,9 +104,9 @@
             echo '<td>' . htmlspecialchars($pannier['qt_prod']) . '</td>';
             echo '<td>' . htmlspecialchars($pannier['mode_paiement']) . '</td>';
             echo '<td>' . htmlspecialchars($pannier['statut_pannier']) . '</td>';
-            echo '<td><a href="show_pannier.php?id_pannier=' . $pannier['id_pannier'] . '">Détails</a></td>';
-            echo '<td><a href="modifier_pannier.php?id_pannier=' . $pannier['id_pannier'] . '">Modifier</a></td>';
-            echo '<td><a href="supprimer_pannier.php?id_pannier=' . $pannier['id_pannier'] . '">Supprimer</a></td>';
+            echo '<td><a href="show_pannier.php?id_pannier=' . $pannier['id_pannier'] . '">Details</a></td>';
+            echo '<td><a href="modifier_pannier.php?id_pannier=' . $pannier['id_pannier'] . '">Modify</a></td>';
+            echo '<td><a href="supprimer_pannier.php?id_pannier=' . $pannier['id_pannier'] . '">Delete</a></td>';
             echo '</tr>';
         }
         ?>

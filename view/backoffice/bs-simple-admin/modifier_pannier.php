@@ -78,8 +78,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <nav class="navbar-default navbar-side" role="navigation">
             <div class="sidebar-collapse">
                 <ul class="nav" id="main-menu">
-                    <li><a href="#"><i class="fa fa-qrcode"></i>Gestion des paniers</a></li>
-                    <li><a href="#"><i class="fa fa-bar-chart-o"></i>Gestion des commandes</a></li>
+                    <li><a href="#"><i class="fa fa-qrcode"></i>Gestion of carts</a></li>
+                    <li><a href="#"><i class="fa fa-bar-chart-o"></i>Gestion of command</a></li>
                 </ul>
             </div>
         </nav>
@@ -89,14 +89,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div id="page-inner">
                 <div class="row">
                     <div class="col-md-12">
-                        <h2>Modifier Panier</h2>
+                        <h2>Modify cart</h2>
                     </div>
                 </div>
                 <hr />
                 <br />
                 <div class="row">
                     <div class="col-lg-6 col-md-6">
-                        <h5>Modifier les détails du panier</h5>
+                        <h5>Modify details</h5>
                         <?php
                         // Check if panier data was fetched
                         if ($pannier) {
@@ -108,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <td><input type="text" id="id_prod" name="id_prod" value="<?php echo $pannier['id_prod']; ?>" required /></td>
                                     </tr>
                                     <tr>
-                                        <td><label for="qt_prod">Quantité:</label></td>
+                                        <td><label for="qt_prod">Quantity:</label></td>
                                         <td><input type="number" id="qt_prod" name="qt_prod" value="<?php echo $pannier['qt_prod']; ?>" required /></td>
                                     </tr>
                                     <tr>
