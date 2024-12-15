@@ -232,6 +232,7 @@ button:hover {
                     <div id="responses-<?php echo $question['id_quest']; ?>">
                         <?php 
                         $responses = $reponseController->getResponsesByQuestionId($question['id_quest']);
+                       // $_SESSION['user_id']=11;
                         foreach ($responses as $response): ?>
                             <div class="response" id="response-<?php echo $response['id_reponse']; ?>">
                                 <p class="response-content"><strong>Response:</strong> <?php echo htmlspecialchars($response['contenue']); ?></p>
