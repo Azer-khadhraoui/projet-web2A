@@ -142,10 +142,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <select id="id_prod" name="id_prod" class="form-control selectpicker" data-live-search="true"
                             border-raduis="none">
                             <?php foreach ($produits as $produit): ?>
-                                <option value="<?= $produit['id_produit'] ?>" data-content="
+                                <option value="<?= $produit['id_prod'] ?>" data-content="
                                     <div style='display: flex; align-items: center;'>
-                                        <img src='<?= $produit['image_prod'] ?>' alt='<?= $produit['nom_prod'] ?>' 
-                                             style='width:80px; height:80px; margin-right: 10px; border-radius: 2px;'>
+                                       
                                         <span><?= $produit['nom_prod'] ?></span>
                                     </div>
                                 ">
