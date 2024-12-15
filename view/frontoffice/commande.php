@@ -3,7 +3,7 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require 'D:\apache xampp\htdocs\projet-web2A\vendor\autoload.php'; 
+require '../../vendor/autoload.php'; 
 
 $host = 'localhost';
 $dbname = 'greenandpure';
@@ -158,6 +158,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $errors[] = "Erreur lors de l'envoi de l'email: " . $mail->ErrorInfo;
             }*/
             
+            header('Location: thank_you.html');
+            exit;
+            
         } else {
             $errors[] = "Erreur lors de l'insertion de la commande.";
         }
@@ -297,13 +300,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="form-group">
                         <label for="adress_cmd">Adress</label>
                         <input type="text" id="adress_cmd" name="adress_cmd" class="form-control contactus"
-                            placeholder="Entrez l'adresse de livraison">
+                            placeholder="add address">
                     </div>
 
                     <div class="form-group">
                         <label for="desc_cmd">other information</label>
                         <input type="text" id="desc_cmd" name="desc_cmd" class="form-control contactus"
-                            placeholder="Entrez une information supplémentaire">
+                            placeholder="other information">
                     </div>
 
                     <div class="form-group">
@@ -420,7 +423,7 @@ JOIN produit pr ON p.id_prod = pr.id_produit";
                         </div>
                     <?php endif; ?>
                     <div class="form-group text-center">
-                        <button type="submit" class="send_btn">Confirm </button>
+                        <button type="submit" class="send_btn">Confirmer la commande</button>
                     </div>
                 </form>
                 
